@@ -7,7 +7,7 @@ Quite some time ago I started writing a book. It was about how to write enterpri
 
 I ended up realizing that my book was about how to architect a system and, honestly, that topic is just too big for one book. I also realized that I wasn't as advanced in some topics as I needed to be, such as continuous integration. The most I could say is "you should be doing this". Otherwise, I would have needed to explain how to configure TeamCity or Jenkins step-by-step on a separate server.
 
-My book was centered around developing ASP.NET MVC project, gradually introducing different problems and how to solve them. I am publishing the code that was the result. Even if you think you're an expect MVC developer, I can almost guarantee there is some code contained here that will excite you. Some of this code will seem fairly boilerplate. Other code could very well change your whole approach to software development.
+My book was centered around developing ASP.NET MVC project, gradually introducing different problems and how to solve them. I am publishing the code that was the result. Even if you think you're an expert MVC developer, I can almost guarantee there is some code contained here that will excite you. Other code can be carried over to any project, MVC or not. Some of this code will seem fairly boilerplate. Other code could very well change your whole approach to software development.
 
 ## Points of Interest
 To save you time from pouring over hundreds of lines of code, I will try to direct your attention to features that will be helpful to you.
