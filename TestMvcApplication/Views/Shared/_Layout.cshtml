@@ -1,0 +1,36 @@
+﻿@using System.Web.Optimization;
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <title>@RenderSection("Title", true)</title>
+        @Styles.Render("~/Content/bootstrap")
+        @Styles.Render("~/Content/themes/base/jquery-ui")
+        <link rel="Stylesheet" type="text/css" href="@Url.Content("~/Content/Shared/layout.css")" />
+        @RenderSection("Styles", required: false)
+        @Scripts.Render("~/bundles/base")
+        <script id="base-url" type="text/javascript" src="@Url.Content("~/Scripts/Shared/layout.js")" data-base-url="@Url.Content("~")"></script>
+        @RenderSection("Scripts", required: false)
+    </head>
+    <body>
+        <header>
+        </header>
+        @RenderBody()
+        <footer>
+        </footer>
+        <!-- Common Modal -->
+        <div id="modal-common" class="modal hide fade">
+            <header class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h1 id="title"></h1>
+            </header>
+            <div id="content" class="modal-body">
+            </div>
+            <footer class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Close</a>
+            </footer>
+        </div>
+    </body>
+</html>

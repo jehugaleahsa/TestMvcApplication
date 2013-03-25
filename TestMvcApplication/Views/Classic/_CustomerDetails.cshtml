@@ -1,0 +1,20 @@
+﻿@model Adapters.Models.CustomerData
+
+<div class="control-group">
+    <label for="txtName" class="control-label">Name:</label>
+    <div class="controls">
+        <input id="txtName" name="txtName" type="text" placeholder="Enter a name..." @if (Model != null) {<text>value="@Model.Name"</text>} />
+    </div>
+</div>
+<div class="control-group">
+    <label for="dpBirthDate" class="control-label">Birth Date:</label>
+    <div class="controls">
+        <input id="dpBirthDate" name="dpBirthDate" type="text" @if (Model != null) {<text>value="@Model.BirthDate"</text>} />
+    </div>
+</div>
+<div class="control-group">
+    <label for="txtHeight" class="control-label">Height:</label>
+    <div class="controls">
+        <input id="txtHeight" name="txtHeight" type="text" @if (Model != null) {<text>value="@Model.Height"</text>} />
+    </div>
+</div>

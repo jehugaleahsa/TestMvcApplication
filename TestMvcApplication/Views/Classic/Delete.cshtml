@@ -1,0 +1,19 @@
+﻿@model Adapters.Models.CustomerData
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Title { Delete Customer }
+<div class="row">
+    <div class="span4"></div>
+    <div class="span8">
+        <form action="@Url.Action(MVC.Classic.Delete())" method="post" class="form-horizontal">
+            <h2>Are you sure you want to delete @(Model.Name)?</h2>
+            <input name="hdnCustomerId" type="hidden" value="@Model.CustomerId" />
+            <div class="form-actions">
+                <input id="btnSubmit" name="btnSubmit" type="submit" value="Yes" class="btn btn-warning" />
+                <a id="btnCancel" href="@Url.Action(MVC.Classic.Index())" class="btn">No</a>
+            </div>
+        </form>
+    </div>
+</div>

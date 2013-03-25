@@ -1,0 +1,20 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Title { Create Customer }
+<script type="text/javascript" src="@Url.Content("~/Scripts/Classic/CustomerDetails.js")"></script>
+<div class="row">
+    <div class="span4"></div>
+    <div class="span8">
+        <form action="@Url.Action(MVC.Classic.Create())" method="post" class="form-horizontal">
+            <fieldset>
+            <legend>Customer Details</legend>
+            @{Html.RenderPartial("_CustomerDetails");}
+            </fieldset>
+            <div class="form-actions">
+                <input id="btnSubmit" name="btnSubmit" type="submit" value="Save" class="btn btn-primary" />
+                <a id="btnCancel" href="@Url.Action(MVC.Classic.Index())" class="btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

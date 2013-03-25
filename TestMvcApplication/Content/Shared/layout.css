@@ -1,0 +1,10 @@
+﻿#modal-common #title 
+{
+    font-size: large;
+    font-weight: bold;
+    line-height: normal;
+}
+table caption
+{
+    display: none;
+}

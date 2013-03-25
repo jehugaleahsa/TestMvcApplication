@@ -1,0 +1,16 @@
+﻿@model TestMvcApplication.Models.Error
+@{
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+@section Title { Error }
+<div class="row">
+    <div class="span4"></div>
+    <div class="span8">
+        <form action="@Model.ReturnUrl" method="get" class="form-horizontal">
+            <h2>@Model.ErrorMessage</h2>
+            <div class="form-actions">
+                <input id="btnSubmit" name="btnSubmit" type="submit" value="OK" class="btn" />
+            </div>
+        </form>
+    </div>
+</div>
