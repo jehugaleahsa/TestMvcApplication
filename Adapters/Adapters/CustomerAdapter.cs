@@ -22,36 +22,6 @@ namespace Adapters.Adapters
             this.customerRepository = customerRepository;
         }
 
-        [Synchronize]
-        [ErrorMessage("An error occurred while adding the customer.")]
-        public virtual CustomerData AddCustomer(CustomerData customerData)
-        {
-            Customer customer = new Customer();
-            customer.Name = customerData.Name;
-            customer.BirthDate = parseDateTime(customerData.BirthDate);
-            customer.Height = customerData.Height;
-            customerRepository.Add(customer);
-            return toCustomerData(customer);
-        }
-
-        [Synchronize]
-        [ErrorMessage("An error occurred while updating the customer.")]
-        public virtual void UpdateCustomer(CustomerData customerData)
-        {
-            Customer customer = getCustomer(parseGuid(customerData.CustomerId));
-            customer.Name = customerData.Name;
-            customer.BirthDate = parseDateTime(customerData.BirthDate);
-            customer.Height = customerData.Height;
-        }
-
-        [Synchronize]
-        [ErrorMessage("An error occurred while removing the customer.")]
-        public virtual void RemoveCustomer(string customerId)
-        {
-            Customer customer = getCustomer(parseGuid(customerId));
-            customerRepository.Remove(customer);
-        }
-
         [ErrorMessage("An error occurred while retrieving the customer.")]
         public virtual CustomerData GetCustomer(string customerId)
         {
@@ -65,6 +35,29 @@ namespace Adapters.Adapters
             return customerRepository.GetCustomers().Select(toCustomerData).ToList();
         }
 
+        [ErrorMessage("An error occurred while adding the customer.")]
+        public virtual CustomerData AddCustomer(CustomerData customerData)
+        {
+            Customer customer = toCustomer(customerData);
+            customerRepository.Add(customer);
+            return toCustomerData(customer);
+        }
+
+        [ErrorMessage("An error occurred while updating the customer.")]
+        public virtual void UpdateCustomer(CustomerData customerData)
+        {
+            Customer original = getCustomer(parseGuid(customerData.CustomerId));
+            Customer modified = toCustomer(customerData);
+            customerRepository.Update(original, modified);
+        }
+
+        [ErrorMessage("An error occurred while removing the customer.")]
+        public virtual void RemoveCustomer(string customerId)
+        {
+            Customer customer = getCustomer(parseGuid(customerId));
+            customerRepository.Remove(customer);
+        }
+
         private Customer getCustomer(Guid customerId)
         {
             Customer customer = customerRepository.GetCustomer(customerId);
@@ -72,6 +65,15 @@ namespace Adapters.Adapters
             {
                 throw new AdapterException(HttpStatusCode.NotFound, "A customer with the given ID was not found.");
             }
+            return customer;
+        }
+
+        private static Customer toCustomer(CustomerData customerData)
+        {
+            Customer customer = new Customer();
+            customer.Name = customerData.Name;
+            customer.BirthDate = parseDateTime(customerData.BirthDate);
+            customer.Height = customerData.Height;
             return customer;
         }
 

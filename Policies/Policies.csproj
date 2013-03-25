@@ -47,8 +47,6 @@
     <Compile Include="ExceptionInterceptor.cs" />
     <Compile Include="ErrorMessageAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SynchronizeAttribute.cs" />
-    <Compile Include="SynchronizeInterceptor.cs" />
     <Compile Include="TransactionAttribute.cs" />
     <Compile Include="TransactionInterceptor.cs" />
   </ItemGroup>

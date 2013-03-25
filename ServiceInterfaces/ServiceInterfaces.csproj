@@ -43,7 +43,6 @@
     <Compile Include="Entities\Customer.cs" />
     <Compile Include="Repositories\ICustomerRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\ISynchronizer.cs" />
     <Compile Include="ServiceException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

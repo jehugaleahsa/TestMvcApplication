@@ -6,11 +6,13 @@ namespace ServiceInterfaces.Repositories
 {
     public interface ICustomerRepository
     {
-        void Add(Customer customer);
+        Customer GetCustomer(Guid customerId);
 
         IEnumerable<Customer> GetCustomers();
 
-        Customer GetCustomer(Guid customerId);
+        void Add(Customer customer);
+
+        void Update(Customer original, Customer modified);
 
         void Remove(Customer customer);
     }

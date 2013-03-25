@@ -76,13 +76,9 @@ namespace TestMvcApplication
             var customerRepositoryBinding = Bind<ICustomerRepository>().To<CustomerRepository>();
             customerRepositoryBinding.Intercept().With<DataExceptionInterceptor>();
 
-            var synchronizerBinding = Bind<ISynchronizer>().To<Synchronizer>();
-            synchronizerBinding.Intercept().With<DataExceptionInterceptor>();
-
             var adapterBinding = Bind<ICustomerAdapter>().To<CustomerAdapter>();
             adapterBinding.Intercept().With<AdapterExceptionInterceptor>().InOrder(1);
             adapterBinding.Intercept().With<TransactionInterceptor>().InOrder(2);
-            adapterBinding.Intercept().With<SynchronizeInterceptor>().InOrder(3);
 
 
             Bind<ClassicController>().ToSelf();
