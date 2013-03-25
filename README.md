@@ -42,3 +42,5 @@ The `SynchronizeInterceptor` and the `TransactionInterceptor` classes have a lot
 
 ### Data Modeling
 This project contains an implementation for the `ICustomerRepository` and `ISynchronizer` interfaces.
+
+### TODO - Finishing highlights.
