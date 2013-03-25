@@ -3,7 +3,7 @@
 A repository for ASP.NET MVC patterns and best practices.
 
 ## Purpose
-Quite some time ago I started writing a book. It was about how to write enterprise applications using ASP.NET MVC and back-end services. However, it didn't focus on teaching the technologies involved. Instead it focused on how to properly configure a solution, how to minimize dependencies and how to build a system that is both configurable and testable. Basically, it covered topics that would have saved me years of trail and error.
+Quite some time ago I started writing a book. It was about how to write enterprise applications using ASP.NET MVC and back-end services. However, it didn't focus on teaching the technologies involved. Instead it focused on how to properly configure a solution, how to minimize dependencies and how to build a system that is both configurable and testable. Basically, it covered topics that would have saved me years of trial and error.
 
 I ended up realizing that my book was about how to architect a system and, honestly, that topic is just too big for one book. I also realized that I wasn't as advanced in some topics as I needed to be, such as continuous integration. The most I could say is "you should be doing this". Otherwise, I would have needed to explain how to configure TeamCity or Jenkins step-by-step on a separate server.
 
