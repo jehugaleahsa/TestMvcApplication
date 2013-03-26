@@ -25,9 +25,6 @@ namespace TestMvcApplication.Controllers
     public partial class ErrorController
     {
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ErrorController() { }
-
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         protected ErrorController(Dummy d) { }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -44,12 +41,6 @@ namespace TestMvcApplication.Controllers
             return RedirectToRoutePermanent(callInfo.RouteValueDictionary);
         }
 
-        [NonAction]
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public virtual System.Web.Mvc.ActionResult Index()
-        {
-            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Index);
-        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ErrorController Actions { get { return MVC.Error; } }
@@ -67,12 +58,14 @@ namespace TestMvcApplication.Controllers
         public class ActionNamesClass
         {
             public readonly string Index = "Index";
+            public readonly string NotFound = "NotFound";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants
         {
             public const string Index = "Index";
+            public const string NotFound = "NotFound";
         }
 
 
@@ -95,8 +88,10 @@ namespace TestMvcApplication.Controllers
             public class _ViewNamesClass
             {
                 public readonly string Index = "Index";
+                public readonly string NotFound = "NotFound";
             }
             public readonly string Index = "~/Views/Error/Index.cshtml";
+            public readonly string NotFound = "~/Views/Error/NotFound.cshtml";
         }
     }
 
@@ -112,6 +107,15 @@ namespace TestMvcApplication.Controllers
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Index);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "error", error);
             IndexOverride(callInfo, error);
+            return callInfo;
+        }
+
+        partial void NotFoundOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
+
+        public override System.Web.Mvc.ActionResult NotFound()
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.NotFound);
+            NotFoundOverride(callInfo);
             return callInfo;
         }
 

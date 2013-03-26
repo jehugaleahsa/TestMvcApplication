@@ -80,7 +80,7 @@ namespace TestMvcApplication
             adapterBinding.Intercept().With<AdapterExceptionInterceptor>().InOrder(1);
             adapterBinding.Intercept().With<TransactionInterceptor>().InOrder(2);
 
-
+            Bind<ErrorController>().ToSelf();
             Bind<ClassicController>().ToSelf();
             Bind<KnockoutController>().ToSelf();
         }

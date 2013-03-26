@@ -71,6 +71,10 @@ namespace Adapters.Adapters
         private static Customer toCustomer(CustomerData customerData)
         {
             Customer customer = new Customer();
+            if (!String.IsNullOrWhiteSpace(customerData.CustomerId))
+            {
+                customer.CustomerId = parseGuid(customerData.CustomerId);
+            }
             customer.Name = customerData.Name;
             customer.BirthDate = parseDateTime(customerData.BirthDate);
             customer.Height = customerData.Height;

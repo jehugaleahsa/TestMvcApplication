@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Web;
 using System.Web.Routing;
+using System.Web.Mvc;
 
 namespace TestMvcApplication
 {
@@ -28,6 +29,12 @@ namespace TestMvcApplication
                 ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings["EntityFramework"];
                 return settings.ConnectionString;
             }
+        }
+
+        public string Action(ActionResult result)
+        {
+            UrlHelper helper = new UrlHelper(context);
+            return helper.Action(result);
         }
     }
 }
