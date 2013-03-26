@@ -55,4 +55,5 @@ Designing a repository can be tricky. Like most classes, creating the wrong inte
 
 Along the same lines, look at the `Update` method. It takes two objects - the original object and the updated object. Coming from a background where I worked on many different data layers, this method signature is the most universal. In some systems, I only passed the modified object, assuming that the primary key is unmodified. However, this approach doesn't work in some systems using natural keys. In dynamic languages, the modified object can be a dictionary just containing the properties that changed. In this system, EF requires us to first retrieve the object to update, modify it and then save the changes. This means I will receive a copy of the original. How you implement `Update` will depend on your environment. You may choose to simply pass the primary key to identify the record in the database. You may choose to just pass the updated values. It really depends on your situation. But remember if you ever move your implementation to a different tier, you shouldn't need to modify every piece of coding doing an update.
 
+
 ### TODO - Finishing highlights.
