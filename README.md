@@ -84,4 +84,11 @@ One thing to keep in mind is that some view models are extremely complex. While 
 
 Another option to building large view models is to use ASP.NET MVC's `Html.Action` and `Html.RenderAction` to build complex screens out of smaller parts. This is a great solution for decomposing large screens into little, reusable chunks. The only problem is that you can end up grabbing the same data multiple times in some cases.
 
-### TODO - Finishing highlights.
+### TestMvcApplication
+The actual MVC project is a treasure trove of useful utilities. I wanted to provide an example of how to build an ASP.NET MVC application following the "classic" model and another following a more client-driven approach. The classic model is what you will read about in books about ASP.NET MVC and on the Internet. The more client-driven approach involves using JavaScript and RESTful services to avoid redirecting the user between screens.
+
+The term classis isn't meant to be derogatory. Most web-based business applications can be implementing using the classic approach. It's for web applications that don't need the "wow" effect and consist mostly of form entry. The classic approach is also easier because the tools are built with it in mind. To be clear, ASP.NET MVC also provides tools for doing some fancy client-side processing, but it isn't quite as flexible as grappling with raw JavaScript.
+
+The more client-driven approach relies heavily on JavaScript libraries to perform actions on the client's behalf without redirecting them to a dozen different screens. Instead, it uses [Knockout.js](http://knockoutjs.com/) to perform data binding and [Twitter Bootstrap](http://twitter.github.com/bootstrap/) to control the layout and display modals. Interactions with the server are coordinated using [jQuery's AJAX](http://api.jquery.com/jQuery.ajax/) capabilities. I was liberal with my use of JavaScript in this code because I wanted to demonstrate that realistic tasks can be performed with JavaScript without needing to buy third-party control libraries.
+
+The reality is that most projects will combine these techniques. For instance, it might make sense to provide client-heavy UIs for related actions (for instance, CRUD oeprations) and have separate screens for unrelated concerns. Tools like CSS3 and [jQuery transition effects](http://jqueryui.com/effect/) can aid in replacing screen flicker with smooth transitions. That's why you should spend time looking at both the classic and the Knockout.js versions of this application.
