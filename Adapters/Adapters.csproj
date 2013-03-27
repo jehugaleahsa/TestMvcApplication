@@ -48,6 +48,8 @@
     <Compile Include="Binders\FieldNameAttribute.cs" />
     <Compile Include="Binders\ModelBinderBuilder.cs" />
     <Compile Include="Adapters\CustomerAdapter.cs" />
+    <Compile Include="Mappers\CustomerMapper.cs" />
+    <Compile Include="Mappers\PrimitiveMapper.cs" />
     <Compile Include="Models\CustomerData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
