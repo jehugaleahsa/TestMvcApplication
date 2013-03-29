@@ -142,7 +142,7 @@ Here's one example. Most applications have screens that allow you to create or u
 As I mentioned earlier, take a hard look at the `Html.Partial`, `Html.RenderPartial`, `Html.Action` and the `Html.RenderAction` extension methods. They're extremely useful. They give you the flexibility of WebForm's user-defined controls without all the complexity.
 
 #### HTML Helpers Aren't Always Your Friend
-Some people might call me crazy, but I tend to limit my use of the `Html` extension methods. Some good examples of `Html` extensions methods are `BeginForm`, `EditorFor` or any of the other `*For` methods. Personally, my experience is that these always start out being big time savers in the beginning and slowly become a maintenance issue over time.
+Some people might call me crazy, but I tend to limit my use of the `Html` extension methods. Some good examples of `Html` extensions methods are `BeginForm`, `EditorFor` or any of the other `*For` methods. Personally, my experience is that these are big time savers in the beginning and slowly become a maintenance issue over time.
 
 Some of the benefits include:
 
@@ -161,4 +161,4 @@ Some of the negatives are:
  * anonymous types for route data and CSS styles become eye sores
  * it can make it harder to switch to a more client-driven application
 
-You'll find that I still rely on the `Url` extensions and many of the `Html` extensions heavily. I just don't like entire tags to be created for me.
+You'll find that I still rely on the `Url` extensions and many of the `Html` extensions. This save me from hard-coding URLs in a lot of places. I just don't like entire tags to be created for me. Embrace the tags.
