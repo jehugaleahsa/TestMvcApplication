@@ -91,22 +91,22 @@ The term classic isn't meant to be derogatory. Most web-based business applicati
 
 The more client-driven approach relies heavily on JavaScript libraries to perform actions on the client's behalf without redirecting them to a dozen different screens. Instead, it uses [Knockout.js](http://knockoutjs.com/) to perform data binding and [Twitter Bootstrap](http://twitter.github.com/bootstrap/) to control the layout and display modals. Interactions with the server are coordinated using [jQuery's AJAX](http://api.jquery.com/jQuery.ajax/) capabilities. I was liberal with my use of JavaScript in this code because I wanted to demonstrate that realistic tasks can be performed with JavaScript without needing to buy third-party control libraries. The Knockout.js code can be executed by navigating to the `Knockout` controller/URL.
 
-The reality is that most projects will combine these techniques. For instance, it might make sense to provide client-heavy UIs for related actions (for instance, CRUD oeprations) and have separate screens for each datbase table. Tools like CSS3 and [jQuery transition effects](http://jqueryui.com/effect/) can aid in replacing jarring screen loads with smooth transitions. Because both approaches have their place in modern web applications you should spend time looking at both the classic and the Knockout.js versions of this application.
+The reality is that most projects will combine these techniques. For instance, it might make sense to provide client-heavy UIs for related actions (for instance, CRUD oeprations) and have separate screens for each database table. Tools like CSS3 and [jQuery transition effects](http://jqueryui.com/effect/) can aid in replacing jarring screen loads with smooth transitions. Because both approaches have their place in modern web applications you should spend time looking at both the classic and the Knockout.js versions of this application.
 
 #### Controllers Should Be Small
-Regardless of the examples from your favorite ASP.NET MVC book, your controller methods should be quite small. Most examples I've found do the following in their controllers: perform validation, query repositories, manipulate the session, build view models, do exception handling and much, much more. If your controller methods get much large than 10 lines of code, you might consider changing your approach. Your controller also shouldn't be littered with a dozen little helper methods either. This suggests you are performing business logic in your controllers, which is not where it belongs.
+Regardless of the examples from your favorite ASP.NET MVC book, your controller methods should be quite small. Most examples I've found do the following in their controllers: perform validation, query repositories, manipulate the session, build view models, do exception handling and much, much more. If your controller methods get much larger than 10 lines of code, you might consider changing your approach. Your controller also shouldn't be littered with a dozen little, private helper methods either. This suggests you are performing business logic in your controllers, which is not where it belongs.
 
-Earlier I mentioned that creating a separate Adapters-like project may be overkill. However, that doesn't necessarily mean you should shove that code into your controller. The more time you spend inside your controller, the more likely you'll build brittle software. There's nothing wrong with creating a new folder in your MVC project to hold additional code. If you do decide to combine your code with a controller, strong use of policies, MVC's [Action Filters](http://msdn.microsoft.com/en-us/library/dd410209(v=vs.100).aspx) and custom model binders can keep your controllers fit. I'd still recommend moving view model building off into its own code somewhere.
+Earlier I mentioned that creating a separate Adapters-like project may be overkill. However, that doesn't necessarily mean you should shove all that code into your controller. The more time you spend inside your controller, the more likely you'll build brittle software. There's nothing wrong with creating a new folder in your MVC project to hold additional code. If you do decide to combine your code with a controller, MVC's [Action Filters](http://msdn.microsoft.com/en-us/library/dd410209.aspx) and custom model binders can keep your controllers fit. I'd still recommend moving view model building off into its own code somewhere.
 
 #### Know Your ActionResults
-MVC uses the really generic `ActionResult` class to represent the results of a request. There are a lot of built-in `ActionResult`s. I see a lot of developers essentially rewriting existing `ActionResult` code in their controllers. For instance `HttpStatusCodeResult` is a simple `ActionResult` for returning an HTTP status code. However, I see people setting `Response.StatusCode` all the time (which isn't testable). I also see actions returning `string` whenever JSON is being returned. The `JsonResult` is much better equipped to do this.
+MVC uses the really generic `ActionResult` class to represent the results of a request. There are a lot of built-in `ActionResult`s. I see a lot of developers essentially rewriting existing `ActionResult` code in their controllers. For instance `HttpStatusCodeResult` is a simple `ActionResult` for returning an HTTP status code. However, I see people setting `Response.StatusCode` all the time (which makes the controller hard to test). I also see actions returning `string` whenever JSON is being returned. The `JsonResult` is much better equipped to do this.
 
 In the `TestMvcApplication/ActionResults` folder, the `JsonWithHttpStatusCodeResult` demonstrates extending the `JsonResult` class to send a different HTTP status code. Writing this class is ridiculously easy, but people just repeat the same code throughout their code anyway.
 
 #### Action Filters Should Make You Happy
-If you think writing Policy classes using Ninject is just too bizarre, you'll be glad to know there is something built into ASP.NET MVC for achieving pretty much the same thing with controllers. ASP.NET MVC was built with enough insight to support AOP out of the gate, via action filters. The cool thing is you can get away with sub-classing an existing filter, so you don't even need to write that much code.
+If you think writing Policy classes using Ninject is just too bizarre, you'll be glad to know there is something built-in to ASP.NET MVC for achieving pretty much the same thing with controllers. ASP.NET MVC was built with enough insight to support AOP out of the gate, via action filters. The cool thing is you can get away with sub-classing an existing filter, so you don't even need to write that much code.
 
-In the `TestMvcApplication/FilterAttributes` folder, you'll find some simple filters. `HttpStatusCodeErrorHandlerAttribute` will respond to exceptions by returning an HTTP status code. This saves you from needing to put `try/catch` blocks in every controller method, only to return an `HttpStatusCodeResult`. The `RedirectOnErrorAttribute` is similar in that it will catch exceptions and send the user to an error screen. If you were writing a client-heavy front-end with JSON end-points, you'll probably use `HttpStatusCodeErrorHandlerAttribute`. If you're following a more classic approach, `RedirectOnErrorAttribute` will do the trick.
+In the `TestMvcApplication/FilterAttributes` folder you'll find some simple filters. `HttpStatusCodeErrorHandlerAttribute` will respond to exceptions by returning an HTTP status code. This saves you from needing to put `try/catch` blocks in every controller method, only to return an `HttpStatusCodeResult`. The `RedirectOnErrorAttribute` is similar in that it will catch exceptions and send the user to an error screen. If you were writing a client-heavy front-end with JSON end-points, you'll probably use `HttpStatusCodeErrorHandlerAttribute`. If you're following a more classic approach, `RedirectOnErrorAttribute` will do the trick.
 
 There are a ton of existing filters. You should definitely know about: the `Authorize` filter; the `HttpPost`, `HttpPut`, `HttpDelete`, etc. filters; the `HandlerError` filter and the `OutputCache` filter.
 
@@ -116,7 +116,7 @@ The usefulness of filter attributes is only limited to your imagination. Here is
  * I redirected the user to a change password screen when their passwords expired.
  * I required some screens to be HTTPS-only unless working locally.
  * I authorized users against system-managed permissions.
- * I made it possible for support staff to access customer information.
+ * I made it possible for user-support to access customer information.
 
 Basically, any time more than one action involved the same code, I moved it into a filter attribute. You can apply as many filter attributes to one action as you want, so go crazy.
 
@@ -126,36 +126,37 @@ If you have high load, you will want to minify your JavaScript and CSS. In the p
 #### Gluing Everything Together with Ninject
 There is a considerable amount of magic involved in how Ninject configures this system. Manually connecting all the different pieces by hand would be a nightmare. Fortunately, installing Ninject's MVC extension via NuGet automates most of this process. Don't worry if looking at the `TestMvcApplication/App_Start/NinjectWebCommon.cs` file hurts your brain - it hurts mine too! The only important thing in this file is the `TestModule` class. In this class we specify how to build our dependencies.
 
-First we specify that we want to create a `ContextManager`. The `ContextManager` provides access to our `HttpContext`, which contains request, response, user, profile, session and cache data (and some other stuff, too). It also provides access to any configuration settings. In this example, I also provide convenience methods for building URLs.
+First we specify that we want to create a `ContextManager`. The `ContextManager` provides access to our `HttpContext`, which contains request, response, user, profile, session and cache data. It also provides access to any configuration settings. In this example, I also provide convenience methods for building URLs.
 
-Typically, I would break out this class' responsibilities by creating separate interfaces that it then inherits from - a case of multiple interface inheritance. In this example, the only code Ninject needs to create a `ContextManager` is the line: `Bind<ContextManager>().ToSelf().InRequestScope();`. This line says call the default constructor whenever a `ContextManager` is needed and reuse it for the rest of the request. If we wanted to break it out into interfaces, we'd have to tell Ninject to reuse the original `ContextManager` instance: `Bind<IConfigurationManager>().To<ContextManager>();`. Ninject is pretty smart and will reuse the same instance.
+Typically, I would break out `ContextManager`'s responsibilities by creating separate interfaces that it can then inherit from - a case of multiple interface inheritance. In this example, the only code Ninject needs to create a `ContextManager` is the line: `Bind<ContextManager>().ToSelf().InRequestScope();`. This line says call the default constructor whenever a `ContextManager` is first requested and reuse it for the rest of the request. If we wanted to break it out into interfaces, we'd have to tell Ninject to reuse the original `ContextManager` instance: `Bind<IConfigurationManager>().To<ContextManager>();`. Ninject is pretty smart and will reuse the same instance.
 
-The `EntitySet` class is also scoped to a single request. This is important for making sure database connections are not left open. The `EntitySet` creation is interesting because we need to pass the connection string configuration setting, which comes from the `ContextManager`.
+The `EntitySet` class is also scoped to a single request. This is important for making sure database connections are not left open. The `EntitySet` creation is interesting because we need to pass the connection string configuration setting, which comes from the `ContextManager` we just configured.
 
-The `CustomerRepository` binding is interesting because we apply a policy for converting raw `Exception`s to `ServiceException`s. We then apply two policies to the `CustomerAdapter`. Ninject allows use to control the order than policies are executed, which is demonstated here. The order that policies take place can be really important. For the same reason, MVC's action filters support a similar feature.
+The `CustomerRepository` binding applies a policy for converting raw `Exception`s to `ServiceException`s. We then apply two policies to the `CustomerAdapter`. Ninject allows us to control the order than policies are executed, which is demonstated here. The order that policies take place can be really important. For the same reason, MVC's action filters support a similar feature.
 
 #### Using Partial Views
-When I first started building MVC applications, I repeated myself a lot. It took me a while to start using partial views. Once I did, I became a lot more productive *and* I suddenly found it a lot easier to switch between the classic approach and the rich client approach.
+When I first started building MVC applications, I repeated myself a lot. It took me a while to start using partial views. Once I did, I became a lot more productive *and* I suddenly found it a lot easier to switch between the classic approach and the rich-client approach.
 
-Here's one example. Most applications have screens that allow you to create or update a record. Most of the time, these screens are almost identical. Typically, the only differences are the form's action URL, what fields are populated and  maybe there's a hidden field for the primary key. Duplicating the HTML, JavaScript and the CSS for these pages would be crazy. Take a look at the `TestMvcApplication/Views/Classic/_CustomerDetails.cshtml` file and the corresponding `Create.cshtml` and `Edit.cshtml` files. You'll see I created my own extension method for optionally setting the value attributes of the controls.
+Here's one example. Most applications have screens that allow you to create and update a record. Most of the time, these screens are almost identical. Typically, the only differences are the form's action URL, what fields are populated and  maybe there's a hidden field for the primary key. Duplicating the HTML, JavaScript and the CSS for these pages would be crazy. Take a look at the `TestMvcApplication/Views/Classic/_CustomerDetails.cshtml` file and the corresponding `Create.cshtml` and `Edit.cshtml` files. You'll see I created my own extension method for optionally setting the value attributes of the controls.
 
-As I mentioned earlier, take a hard look at the `Html.Partial`, `Html.RenderPartial`, `Html.Action` and the `Html.RenderAction` extension methods. They're extremely useful. They give you the flexibility of WebForm's user-defined controls without all the complexity.
+As I mentioned earlier, take a hard look at the `Html.Partial`, `Html.RenderPartial`, `Html.Action` and the `Html.RenderAction` extension methods. They're extremely useful. They give you the flexibility of WebForm's User Controls without all the complexity.
 
 #### HTML Helpers Aren't Always Your Friend
-Some people might call me crazy, but I tend to limit my use of the `Html` extension methods. Some good examples of `Html` extensions methods are `BeginForm`, `EditorFor` or any of the other `*For` methods. Personally, my experience is that these are big time savers in the beginning and slowly become a maintenance issue over time.
+Some people might call me crazy, but I tend to limit my use of the `Html` extension methods. Some good examples of `Html` extensions methods are `BeginForm`, `EditorFor` or any of the other dozen `*For` methods. Personally, my experience is that these are big time savers in the beginning and slowly become a maintenance issue over time.
 
 Some of the benefits include:
 
  * consistent HTML generation
- * consistant <input> naming
+ * consistent <input> naming convention
  * usually less typing
- * use of DataAnnotation attributes to determine which tag to use
+ * the use of DataAnnotation attributes to determine which tag to use
  * some limited type safety
- * less of a need to know HTML
+ * automatic handling of unchecked check boxes and disabled controls
+ * less need to know HTML
 
 Some of the negatives are:
 
- * the generated HTML may violate company policy
+ * the generated HTML may violate existing coding conventions
  * the automatically generated HTML may cause unanticipated layout issues
  * it is harder for non-developer types to read and maintain
  * anonymous types for route data and CSS styles become eye sores
@@ -163,10 +164,10 @@ Some of the negatives are:
 
 You'll find that I still rely on the `Url` extensions and many of the `Html` extensions. This save me from hard-coding URLs in a lot of places. I just don't like entire tags to be created for me. Embrace the tags.
 
-#### Eliminate More Hard-Coding with T4MVC
-I am using a project called [T4MVC](http://t4mvc.codeplex.com/). At the start of a project, you will find yourself wanting to rename controllers and actions. But methods like `Url.Action` take strings. It is extremely difficult to go through all your views and controllers and update these strings without missing one or two. T4MVC will actually generate constants and extension methods excepting `ActionResult`s. When you change the names of your controllers and actions, you simply rerun the code generation tool and you'll receive compiler errors everywhere the old name is listed. It's not an ideal refactoring but it is much more safe.
+#### Eliminate Hard-Coding with T4MVC
+I am using a project called [T4MVC](http://t4mvc.codeplex.com/). At the start of a project, you will find yourself wanting to rename/move controllers and actions. But methods like `Url.Action` take strings. It is extremely difficult to go through all your views and controllers and update these strings without missing one or two. T4MVC will actually generate constants and extension methods excepting `ActionResult`s. When you change the names of your controllers and actions, you simply rerun the code generation tool and you'll receive compiler errors everywhere the old name is listed. It's not an ideal refactoring but it is much more safe.
 
-Just a fair warning, I ran into issues using the T4MVC project. Specifically, I created another route and somehow this broke the T4MVC code. The trick was to move all other custom routes to after the default route.
+Just a fair warning, I ran into issues using the T4MVC project. Specifically, I created another route and somehow this broke the T4MVC code. The trick was to move all other custom routes after the default route.
 
 ## Please Contribute
 I'd like to continue improving this project. If you have any awesome code snippets, contribute!
