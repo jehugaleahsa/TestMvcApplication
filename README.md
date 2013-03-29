@@ -162,3 +162,11 @@ Some of the negatives are:
  * it can make it harder to switch to a more client-driven application
 
 You'll find that I still rely on the `Url` extensions and many of the `Html` extensions. This save me from hard-coding URLs in a lot of places. I just don't like entire tags to be created for me. Embrace the tags.
+
+#### Eliminate More Hard-Coding with T4MVC
+I am using a project called [T4MVC](http://t4mvc.codeplex.com/). At the start of a project, you will find yourself wanting to rename controllers and actions. But methods like `Url.Action` take strings. It is extremely difficult to go through all your views and controllers and update these strings without missing one or two. T4MVC will actually generate constants and extension methods excepting `ActionResult`s. When you change the names of your controllers and actions, you simply rerun the code generation tool and you'll receive compiler errors everywhere the old name is listed. It's not an ideal refactoring but it is much more safe.
+
+Just a fair warning, I ran into issues using the T4MVC project. Specifically, I created another route and somehow this broke the T4MVC code. The trick was to move all other custom routes to after the default route.
+
+## Please Contribute
+I'd like to continue improving this project. If you have any awesome code snippets, contribute!
