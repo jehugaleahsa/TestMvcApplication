@@ -1,20 +1,32 @@
-﻿@model Adapters.Models.CustomerData
+﻿@using Adapters.Models
+@using TestMvcApplication.Helpers
+@model CustomerData
 
 <div class="control-group">
     <label for="txtName" class="control-label">Name:</label>
     <div class="controls">
-        <input id="txtName" name="txtName" type="text" placeholder="Enter a name..." @if (Model != null) {<text>value="@Model.Name"</text>} />
+        <input id="txtName" 
+               name="txtName" 
+               type="text" 
+               placeholder="Enter a name..." 
+               @Html.SetAttribute("value", model => model.Name) />
     </div>
 </div>
 <div class="control-group">
     <label for="dpBirthDate" class="control-label">Birth Date:</label>
     <div class="controls">
-        <input id="dpBirthDate" name="dpBirthDate" type="text" @if (Model != null) {<text>value="@Model.BirthDate"</text>} />
+        <input id="dpBirthDate" 
+               name="dpBirthDate" 
+               type="text"
+               @Html.SetAttribute("value", model => model.BirthDate) />
     </div>
 </div>
 <div class="control-group">
     <label for="txtHeight" class="control-label">Height:</label>
     <div class="controls">
-        <input id="txtHeight" name="txtHeight" type="text" @if (Model != null) {<text>value="@Model.Height"</text>} />
+        <input id="txtHeight" 
+               name="txtHeight" 
+               type="text"
+               @Html.SetAttribute("value", model => model.Height) />
     </div>
 </div>

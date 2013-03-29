@@ -139,7 +139,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionResults\HttpStatusCodeWithDataResult.cs" />
+    <Compile Include="ActionResults\JsonWithHttpStatusCodeResult.cs" />
     <Compile Include="App_Start\BindingConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\NinjectExtensions.cs" />
@@ -151,10 +151,12 @@
     <Compile Include="ErrorController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Compile Include="FilterAttributes\HttpsAttribute.cs" />
     <Compile Include="FilterAttributes\HttpStatusCodeErrorHandlerAttribute.cs" />
     <Compile Include="FilterAttributes\RedirectOnErrorAttribute.cs" />
     <Compile Include="Controllers\ClassicController.cs" />
     <Compile Include="ContextManager.cs" />
+    <Compile Include="Helpers\DisplayAttributeExtensions.cs" />
     <Compile Include="Interceptors\AdapterExceptionInterceptor.cs" />
     <Compile Include="Interceptors\DataExceptionInterceptor.cs" />
     <Compile Include="KnockoutController.generated.cs">

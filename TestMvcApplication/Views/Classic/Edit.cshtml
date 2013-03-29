@@ -11,7 +11,7 @@
         <form action="@Url.Action(MVC.Classic.Edit())" method="post" class="form-horizontal">
             <fieldset>
             <legend>Customer Details</legend>
-            @{Html.RenderPartial("_CustomerDetails", @Model);}
+            @{Html.RenderPartial("_CustomerDetails", Model);}
             <input name="hdnCustomerId" type="hidden" value="@Model.CustomerId" />
             </fieldset>
             <div class="form-actions">
