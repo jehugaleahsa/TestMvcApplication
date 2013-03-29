@@ -7,7 +7,7 @@ Quite some time ago I started writing a book. It was about how to write enterpri
 
 I eventually realized that my book was about how to architect a system and, honestly, that topic is just too big for one book. I also realized that I wasn't qualified to write about some topics, such as continuous integration. The most I could say is "you should be doing this". In the case of continuous integration I would have needed to explain how to configure TeamCity or Jenkins step-by-step on a separate server. I simply lacked a high-enough perspective on these topics as a whole.
 
-My book was centered around developing ASP.NET MVC project, gradually introducing different problems and ways to solve them. I am publishing the code that resulted from months of research. Even if you think you're an expert MVC developer, I can almost guarantee there is some code contained here that will interest you. A lot of best practices can be carried over to any project, MVC or not. Some of this code will seem fairly boilerplate. Other code could very well change your whole approach to software development.
+My book was centered around developing an ASP.NET MVC project, gradually introducing different problems and ways to solve them. I am publishing the code that resulted from months of research. Even if you think you're an expert MVC developer, I can almost guarantee there is some code contained here that will interest you. A lot of best practices can be carried over to any project, MVC or not. Some of this code will seem fairly boilerplate. Other code could very well change your whole approach to software development.
 
 ## Points of Interest
 To save you time from pouring over hundreds of lines of code, I will try to direct your attention to features that will be useful for you.
@@ -34,9 +34,9 @@ This project is extremely important for making an application configurable. This
 
 We can configure the system to look for methods with this attribute and decorate them so additional code is run before and/or after the method. In this case, we would create an instance of `TransactionScope` to create a database transaction.
 
-A common operation in a layered architecture is to simply capture exceptions from a lower layer and wrap them with a new exception. This is what `ExceptionInterceptor` does. The idea is that the cause of the exception can't be handled yet but we don't want to burden higher layers with handling low-level exception types. Allowing certain types of exceptions to bubble up could actually break our abstraction. `ExceptionInterceptor` will inspect the decorated method for an optional `ErrorMessage` attribute and use it as the new exception's message.
+`TransactionInterceptor` will start a transaction before executing the method and will commit it if it finishes without throwing an exception.
 
-`TransactionInterceptor` will start a transaction before executing the method and will commit if it finishes without throwing an exception.
+A common operation in a layered architecture is to simply capture exceptions from a lower layer and wrap them with a new exception. This is what `ExceptionInterceptor` does. The idea is that the cause of the exception can't be handled yet but we don't want to burden higher layers with handling low-level exception types. Allowing certain types of exceptions to bubble up could actually break our abstraction. `ExceptionInterceptor` will inspect the decorated method for an optional `ErrorMessage` attribute and use it as the new exception's message.
 
 Other common operations, such as logging can be performed in a declarative way. Just defining some arbitrary classes won't accomplish anything. Take a look at the `TestMvcApplication/App_Start/NinjectWebCommon` class - it will explain how these interceptors are hooked up.
 
