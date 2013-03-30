@@ -8,9 +8,9 @@ namespace TestMvcApplication.Interceptors
 {
     public class AdapterExceptionInterceptor : ExceptionInterceptor<ServiceException>
     {
-        protected override void Rethrow(ServiceException exception, string message)
+        protected override Exception Wrap(ServiceException exception, string message)
         {
-            throw new AdapterException(HttpStatusCode.InternalServerError, message, exception);
+            return new AdapterException(HttpStatusCode.InternalServerError, message, exception);
         }
     }
 }

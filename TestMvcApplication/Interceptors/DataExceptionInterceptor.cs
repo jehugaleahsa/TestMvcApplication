@@ -6,9 +6,9 @@ namespace TestMvcApplication.Interceptors
 {
     public class DataExceptionInterceptor : ExceptionInterceptor<Exception>
     {
-        protected override void Rethrow(Exception exception, string message)
+        protected override Exception Wrap(Exception exception, string message)
         {
-            throw new ServiceException(message, exception);
+            return new ServiceException(message, exception);
         }
     }
 }

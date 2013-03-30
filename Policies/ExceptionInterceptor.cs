@@ -21,13 +21,12 @@ namespace Policies
             }
             catch (TSourceException exception)
             {
-                MethodInfo method = invocation.Request.Method;
                 ErrorMessageAttribute attribute = GetAttributes(invocation).SingleOrDefault();
                 string message = attribute == null ? exception.Message : attribute.ErrorMessage;
-                Rethrow(exception, message);
+                throw Wrap(exception, message);
             }
         }
 
-        protected abstract void Rethrow(TSourceException exception, string message);
+        protected abstract Exception Wrap(TSourceException exception, string message);
     }
 }
