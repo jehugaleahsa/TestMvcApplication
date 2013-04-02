@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
-using TestMvcApplication.Models;
+using MvcUtilities.Models;
 
 namespace TestMvcApplication.Controllers
 {

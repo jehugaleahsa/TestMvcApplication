@@ -8,7 +8,7 @@ using Policies;
 using ServiceInterfaces.Entities;
 using ServiceInterfaces.Repositories;
 
-namespace Adapters.Adapters
+namespace Adapters
 {
     public class CustomerAdapter : ICustomerAdapter
     {
@@ -21,38 +21,41 @@ namespace Adapters.Adapters
                 throw new ArgumentNullException("customerRepository");
             }
             this.customerRepository = customerRepository;
+            CustomerMapper = new CustomerMapper();
+        }
+
+        public ICustomerMapper CustomerMapper
+        {
+            get;
+            set;
         }
 
         [ErrorMessage("An error occurred while retrieving the customer.")]
         public CustomerData GetCustomer(string customerId)
         {
-            CustomerMapper mapper = new CustomerMapper();
             Customer customer = getCustomer(customerId);
-            return mapper.Convert(customer);
+            return CustomerMapper.Convert(customer);
         }
 
         [ErrorMessage("An error occurred while retrieving the customers.")]
         public IEnumerable<CustomerData> GetCustomers()
         {
-            CustomerMapper mapper = new CustomerMapper();
-            return customerRepository.GetCustomers().Select(mapper.Convert).ToList();
+            return customerRepository.GetCustomers().Select(CustomerMapper.Convert).ToList();
         }
 
         [ErrorMessage("An error occurred while adding the customer.")]
         public CustomerData AddCustomer(CustomerData customerData)
         {
-            CustomerMapper mapper = new CustomerMapper();
-            Customer customer = mapper.Convert(customerData);
+            Customer customer = CustomerMapper.Convert(customerData);
             customerRepository.Add(customer);
-            return mapper.Convert(customer);
+            return CustomerMapper.Convert(customer);
         }
 
         [ErrorMessage("An error occurred while updating the customer.")]
         public void UpdateCustomer(CustomerData customerData)
         {
-            CustomerMapper mapper = new CustomerMapper();
             Customer original = getCustomer(customerData.CustomerId);
-            Customer modified = mapper.Convert(customerData);
+            Customer modified = CustomerMapper.Convert(customerData);
             customerRepository.Update(original, modified);
         }
 

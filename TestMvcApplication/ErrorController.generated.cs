@@ -100,9 +100,9 @@ namespace TestMvcApplication.Controllers
     {
         public T4MVC_ErrorController() : base(Dummy.Instance) { }
 
-        partial void IndexOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, TestMvcApplication.Models.Error error);
+        partial void IndexOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, MvcUtilities.Models.Error error);
 
-        public override System.Web.Mvc.ActionResult Index(TestMvcApplication.Models.Error error)
+        public override System.Web.Mvc.ActionResult Index(MvcUtilities.Models.Error error)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Index);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "error", error);

@@ -1,41 +1,25 @@
 ﻿using System;
 using System.Net;
-using System.Runtime.Serialization;
+using MvcUtilities;
 
 namespace Adapters
 {
     [Serializable]
-    public class AdapterException : Exception
+    public class AdapterException : CodedException
     {
         public AdapterException(HttpStatusCode statusCode)
+            : base(statusCode)
         {
-            StatusCode = statusCode;
         }
 
         public AdapterException(HttpStatusCode statusCode, string message)
-            : base(message)
+            : base(statusCode, message)
         {
-            StatusCode = statusCode;
         }
 
         public AdapterException(HttpStatusCode statusCode, string message, Exception innerException)
-            : base(message, innerException)
+            : base(statusCode, message, innerException)
         {
-            StatusCode = statusCode;
         }
-
-        protected AdapterException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            StatusCode = (HttpStatusCode)info.GetValue("StatusCode", typeof(HttpStatusCode));
-        }
-
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue("StatusCode", StatusCode);
-        }
-
-        public HttpStatusCode StatusCode { get; private set; }
     }
 }

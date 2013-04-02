@@ -1,10 +1,10 @@
 ﻿using System;
-using ServiceInterfaces.Entities;
 using Adapters.Models;
+using ServiceInterfaces.Entities;
 
 namespace Adapters.Mappers
 {
-    public class CustomerMapper
+    public class CustomerMapper : Adapters.Mappers.ICustomerMapper
     {
         public Customer Convert(CustomerData data)
         {

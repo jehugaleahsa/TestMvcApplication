@@ -120,7 +120,7 @@ function defineValidation() {
             txtName: {
                 required: 'Please provide a name.'
             },
-            dpDate: {
+            dpBirthDate: {
                 required: 'Please provide a birth date.',
                 date: 'Please enter a valid date.'
             },

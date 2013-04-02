@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 
-namespace Adapters.Binders
+namespace MvcUtilities.Binders
 {
     public class CustomFieldNameModelBinder : IModelBinder
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
-using Adapters.Binders;
 using Adapters.Models;
+using MvcUtilities.Binders;
 
 namespace TestMvcApplication
 {

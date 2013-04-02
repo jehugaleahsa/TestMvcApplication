@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Web.Mvc;
 
-namespace Adapters.Binders
+namespace MvcUtilities.Binders
 {
     public static class ModelBinderBuilder
     {

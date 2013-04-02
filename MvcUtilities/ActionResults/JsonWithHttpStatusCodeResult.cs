@@ -1,8 +1,7 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Web.Mvc;
 
-namespace TestMvcApplication.ActionResults
+namespace MvcUtilities.ActionResults
 {
     public class JsonWithHttpStatusCodeResult : JsonResult
     {

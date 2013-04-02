@@ -1,7 +1,6 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
-using Adapters.Binders;
+using MvcUtilities.Binders;
 
 namespace Adapters.Models
 {

@@ -1,6 +1,5 @@
-﻿using System;
-
-namespace TestMvcApplication.Models
+﻿
+namespace MvcUtilities.Models
 {
     public class Error
     {

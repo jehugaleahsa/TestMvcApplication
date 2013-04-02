@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0DD6657B-13C2-423C-8E28-FB702EAEB20B}</ProjectGuid>
+    <ProjectGuid>{6D334141-39BB-42F8-9E37-53C8F2B8614E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Adapters</RootNamespace>
-    <AssemblyName>Adapters</AssemblyName>
+    <RootNamespace>MvcUtilities</RootNamespace>
+    <AssemblyName>MvcUtilities</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,6 +34,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,28 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdapterException.cs" />
-    <Compile Include="ICustomerAdapter.cs" />
-    <Compile Include="CustomerAdapter.cs" />
-    <Compile Include="Mappers\CustomerMapper.cs" />
-    <Compile Include="Mappers\ICustomerMapper.cs" />
-    <Compile Include="Mappers\PrimitiveMapper.cs" />
-    <Compile Include="Models\CustomerData.cs" />
+    <Compile Include="ActionResults\JsonWithHttpStatusCodeResult.cs" />
+    <Compile Include="Binders\CustomFieldNameModelBinder.cs" />
+    <Compile Include="Binders\FieldNameAttribute.cs" />
+    <Compile Include="Binders\ModelBinderBuilder.cs" />
+    <Compile Include="CodedException.cs" />
+    <Compile Include="Models\Error.cs" />
+    <Compile Include="FilterAttributes\HttpsAttribute.cs" />
+    <Compile Include="FilterAttributes\HttpStatusCodeErrorHandlerAttribute.cs" />
+    <Compile Include="FilterAttributes\RedirectOnErrorAttribute.cs" />
+    <Compile Include="Helpers\DisplayAttributeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MvcUtilities\MvcUtilities.csproj">
-      <Project>{6D334141-39BB-42F8-9E37-53C8F2B8614E}</Project>
-      <Name>MvcUtilities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Policies\Policies.csproj">
-      <Project>{576AB159-E4F1-4E2E-A7A1-54166D3F974C}</Project>
-      <Name>Policies</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ServiceInterfaces\ServiceInterfaces.csproj">
-      <Project>{45C0C712-ECF5-41C8-989C-7D7F75E60B77}</Project>
-      <Name>ServiceInterfaces</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

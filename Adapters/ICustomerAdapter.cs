@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Adapters.Models;
-using Policies;
 
-namespace Adapters.Adapters
+namespace Adapters
 {
     public interface ICustomerAdapter
     {

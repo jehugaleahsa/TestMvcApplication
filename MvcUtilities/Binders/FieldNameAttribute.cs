@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Adapters.Binders
+namespace MvcUtilities.Binders
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple=true, Inherited=true)]
     public class FieldNameAttribute : Attribute

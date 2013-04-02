@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
-using Adapters;
-using TestMvcApplication.Models;
+using MvcUtilities.Models;
 
-namespace TestMvcApplication.FilterAttributes
+namespace MvcUtilities.FilterAttributes
 {
     public class RedirectOnErrorAttribute : ActionFilterAttribute
     {
@@ -51,7 +50,7 @@ namespace TestMvcApplication.FilterAttributes
         {
             if (String.IsNullOrWhiteSpace(ErrorMessage))
             {
-                AdapterException exception = filterContext.Exception as AdapterException;
+                CodedException exception = filterContext.Exception as CodedException;
                 if (exception == null)
                 {
                     viewModel.ErrorMessage = "An error occurred while processing your request.";

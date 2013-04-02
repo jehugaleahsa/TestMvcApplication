@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
-using Adapters.Adapters;
+using Adapters;
 using Adapters.Models;
-using TestMvcApplication.ActionResults;
-using TestMvcApplication.FilterAttributes;
+using MvcUtilities.ActionResults;
+using MvcUtilities.FilterAttributes;
 
 namespace TestMvcApplication.Controllers
 {

@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Linq.Expressions;
 using System.Web.Mvc;
 
-namespace TestMvcApplication.Helpers
+namespace MvcUtilities.Helpers
 {
     public static class DisplayAttributeExtensions
     {

@@ -1,6 +1,6 @@
 using System;
 using System.Web;
-using Adapters.Adapters;
+using Adapters;
 using DataModeling.DataModel;
 using DataModeling.Repositories;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;

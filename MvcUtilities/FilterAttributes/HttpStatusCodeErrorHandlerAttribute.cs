@@ -1,15 +1,13 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Web.Mvc;
-using Adapters;
 
-namespace TestMvcApplication.FilterAttributes
+namespace MvcUtilities.FilterAttributes
 {
     public class HttpStatusCodeErrorHandlerAttribute : HandleErrorAttribute
     {
         public override void OnException(ExceptionContext filterContext)
         {
-            AdapterException exception = filterContext.Exception as AdapterException;
+            CodedException exception = filterContext.Exception as CodedException;
             if (exception == null)
             {
                 filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.InternalServerError);

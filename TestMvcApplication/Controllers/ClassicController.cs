@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using Adapters.Adapters;
+using Adapters;
 using Adapters.Models;
-using TestMvcApplication.FilterAttributes;
+using MvcUtilities.FilterAttributes;
 
 namespace TestMvcApplication.Controllers
 {
