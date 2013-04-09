@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapters.Tests", "Adapters.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUtilities", "TestUtilities\TestUtilities.csproj", "{CB5041CA-89E5-4650-BA3F-411F5539EEF8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataModeling.Tests", "DataModeling.Tests\DataModeling.Tests.csproj", "{B3B699FC-DBA8-4F48-8B16-331EC76E6941}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = TestMvcApplication1.vsmdi
@@ -76,6 +78,10 @@ Global
 		{CB5041CA-89E5-4650-BA3F-411F5539EEF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB5041CA-89E5-4650-BA3F-411F5539EEF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB5041CA-89E5-4650-BA3F-411F5539EEF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3B699FC-DBA8-4F48-8B16-331EC76E6941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3B699FC-DBA8-4F48-8B16-331EC76E6941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3B699FC-DBA8-4F48-8B16-331EC76E6941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3B699FC-DBA8-4F48-8B16-331EC76E6941}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
