@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
 using Ninject.Extensions.Interception;
+using NSubstitute;
 
 namespace Policies.Tests
 {
@@ -12,7 +9,7 @@ namespace Policies.Tests
     public class ExceptionInterceptorTester
     {
         [TestMethod]
-        public void ShouldWrapException()
+        public void ShouldWrapExceptionAndUseItsMessageByDefault()
         {
             ExceptionWrapper wrapper = new ExceptionWrapper();
 
@@ -24,10 +21,11 @@ namespace Policies.Tests
             try
             {
                 wrapper.Intercept(invocation);
+                Assert.Fail("The exception was swallowed.");
             }
             catch (InvalidOperationException exception)
             {
-                Assert.AreEqual(message, exception.Message);
+                Assert.AreEqual(message, exception.Message, "Did not use wrapped exception's message.");
             }
         }
 
@@ -44,10 +42,11 @@ namespace Policies.Tests
             try
             {
                 wrapper.Intercept(invocation);
+                Assert.Fail("The exception was swallowed.");
             }
             catch (InvalidOperationException exception)
             {
-                Assert.AreEqual("A different error message.", exception.Message);
+                Assert.AreEqual(WithAttribute.ErrorMessage, exception.Message);
             }
         }
 
@@ -92,7 +91,9 @@ namespace Policies.Tests
 
         public class WithAttribute
         {
-            [ErrorMessage("A different error message.")]
+            public const string ErrorMessage = "A different error message.";
+
+            [ErrorMessage(ErrorMessage)]
             public void DoSomething()
             {
             }

@@ -21,7 +21,7 @@ namespace Adapters.Mappers
         {
             try
             {
-                return DateTime.Parse(value);
+                return DateTime.ParseExact(value, "d", null);
             }
             catch (Exception exception)
             {

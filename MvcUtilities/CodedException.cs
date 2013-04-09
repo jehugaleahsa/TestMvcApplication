@@ -30,12 +30,12 @@ namespace MvcUtilities
             StatusCode = (HttpStatusCode)info.GetValue("StatusCode", typeof(HttpStatusCode));
         }
 
+        public HttpStatusCode StatusCode { get; private set; }
+
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
             info.AddValue("StatusCode", StatusCode);
         }
-
-        public HttpStatusCode StatusCode { get; private set; }
     }
 }

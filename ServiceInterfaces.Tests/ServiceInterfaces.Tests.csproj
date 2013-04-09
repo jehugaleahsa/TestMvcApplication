@@ -53,6 +53,10 @@
       <Project>{45C0C712-ECF5-41C8-989C-7D7F75E60B77}</Project>
       <Name>ServiceInterfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestUtilities\TestUtilities.csproj">
+      <Project>{CB5041CA-89E5-4650-BA3F-411F5539EEF8}</Project>
+      <Name>TestUtilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

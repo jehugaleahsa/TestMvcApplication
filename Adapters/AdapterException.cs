@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using MvcUtilities;
+using System.Runtime.Serialization;
 
 namespace Adapters
 {
@@ -19,6 +20,11 @@ namespace Adapters
 
         public AdapterException(HttpStatusCode statusCode, string message, Exception innerException)
             : base(statusCode, message, innerException)
+        {
+        }
+
+        protected AdapterException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
     }

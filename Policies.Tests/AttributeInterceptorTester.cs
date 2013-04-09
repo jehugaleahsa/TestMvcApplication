@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ninject.Extensions.Interception;
 using NSubstitute;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace Policies.Tests
 {

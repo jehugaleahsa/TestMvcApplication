@@ -4,31 +4,31 @@ using ServiceInterfaces.Entities;
 
 namespace Adapters.Mappers
 {
-    public class CustomerMapper : Adapters.Mappers.ICustomerMapper
+    public class CustomerMapper : ICustomerMapper
     {
-        public Customer Convert(CustomerData data)
+        public Customer Convert(CustomerData viewModel)
         {
             PrimitiveMapper mapper = new PrimitiveMapper();
             Customer customer = new Customer();
-            if (!String.IsNullOrWhiteSpace(data.CustomerId))
+            if (!String.IsNullOrWhiteSpace(viewModel.CustomerId))
             {
-                customer.CustomerId = mapper.ToGuid(data.CustomerId);
+                customer.CustomerId = mapper.ToGuid(viewModel.CustomerId);
             }
-            customer.Name = data.Name;
-            customer.BirthDate = mapper.ToDateTime(data.BirthDate);
-            customer.Height = data.Height;
+            customer.Name = viewModel.Name;
+            customer.BirthDate = mapper.ToDateTime(viewModel.BirthDate);
+            customer.Height = viewModel.Height;
             return customer;
         }
 
         public CustomerData Convert(Customer customer)
         {
             PrimitiveMapper mapper = new PrimitiveMapper();
-            CustomerData result = new CustomerData();
-            result.CustomerId = mapper.ToString(customer.CustomerId);
-            result.Name = customer.Name;
-            result.BirthDate = mapper.ToString(customer.BirthDate);
-            result.Height = customer.Height;
-            return result;
+            CustomerData viewModel = new CustomerData();
+            viewModel.CustomerId = mapper.ToString(customer.CustomerId);
+            viewModel.Name = customer.Name;
+            viewModel.BirthDate = mapper.ToString(customer.BirthDate);
+            viewModel.Height = customer.Height;
+            return viewModel;
         }
     }
 }
