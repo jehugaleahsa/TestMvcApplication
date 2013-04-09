@@ -19,6 +19,7 @@
                 <CodeCoverageItem binaryFile="DataModeling\bin\Debug\DataModeling.dll" pdbFile="DataModeling\bin\Debug\DataModeling.pdb" instrumentInPlace="true" />
                 <CodeCoverageItem binaryFile="Policies\bin\Debug\Policies.dll" pdbFile="Policies\bin\Debug\Policies.pdb" instrumentInPlace="true" />
                 <CodeCoverageItem binaryFile="ServiceInterfaces\bin\Debug\ServiceInterfaces.dll" pdbFile="ServiceInterfaces\bin\Debug\ServiceInterfaces.pdb" instrumentInPlace="true" />
+                <CodeCoverageItem binaryFile="MvcUtilities\bin\Debug\MvcUtilities.dll" pdbFile="MvcUtilities\bin\Debug\MvcUtilities.pdb" instrumentInPlace="true" />
               </Regular>
             </CodeCoverage>
           </Configuration>

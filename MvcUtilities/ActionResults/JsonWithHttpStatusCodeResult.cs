@@ -15,11 +15,7 @@ namespace MvcUtilities.ActionResults
             StatusCode = (int)statusCode;
         }
 
-        public int StatusCode
-        {
-            get;
-            private set;
-        }
+        public int StatusCode { get; private set; }
 
         public override void ExecuteResult(ControllerContext context)
         {
