@@ -174,5 +174,10 @@ I am using a project called [T4MVC](http://t4mvc.codeplex.com/). At the start of
 
 Just a fair warning, I ran into issues using the T4MVC project. Specifically, I created another route and somehow this broke the T4MVC code. The trick was to move all other custom routes after the default route.
 
+## Unit Testing
+It was recommended that I include unit tests. A lot of people aren't quite sure how to test ASP.NET MVC code. Many times is it because they make their code too tightly coupled. Fortunately, this project is designed with testing in mind, so it is fairly easy to test.
+
+Most of these unit tests are fairly simple. Others involve creating stubs and mocks and building up the environment. You might be interested to see how I test policies, the ASP.NET MVC action filters, action results and helpers, as well as the controller actions themselves.
+
 ## Please Contribute
 I'd like to continue improving this project. If you have any awesome code snippets, contribute!
