@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Adapters;
@@ -31,7 +31,7 @@ namespace TestMvcApplication.Controllers
         [HttpStatusCodeErrorHandler]
         public virtual ActionResult Load()
         {
-            IEnumerable<CustomerData> data = adapter.GetCustomers();
+            CustomerData[] data = adapter.GetCustomers().ToArray();
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 

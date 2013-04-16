@@ -53,6 +53,7 @@
     <Compile Include="ActionResultHelper.cs" />
     <Compile Include="ClassicControllerTester.cs" />
     <Compile Include="ErrorControllerTester.cs" />
+    <Compile Include="KnockoutControllerTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Net;
+using MvcUtilities.ActionResults;
 
 namespace TestMvcApplication.Tests
 {
@@ -33,6 +35,32 @@ namespace TestMvcApplication.Tests
             RedirectToRouteResult redirect = (RedirectToRouteResult)result;
             Assert.AreEqual(controllerName, redirect.RouteValues["controller"], "The user was redirected to the wrong controller.");
             Assert.AreEqual(actionName, redirect.RouteValues["action"], "The user was redirected to the wrong action.");
+        }
+
+        public static TModel AssertJson<TModel>(ActionResult result)
+        {
+            Assert.IsInstanceOfType(result, typeof(JsonResult), "JSON was not returned.");
+            JsonResult jsonResult = (JsonResult)result;
+            Assert.IsInstanceOfType(jsonResult.Data, typeof(TModel), "The model was not passed to the JSON.");
+            TModel model = (TModel)jsonResult.Data;
+            return model;
+        }
+
+        public static TModel AssertJsonWithHttpStatusCode<TModel>(ActionResult result, HttpStatusCode statusCode)
+        {
+            Assert.IsInstanceOfType(result, typeof(JsonWithHttpStatusCodeResult), "JSON was not returned.");
+            JsonWithHttpStatusCodeResult jsonResult = (JsonWithHttpStatusCodeResult)result;
+            Assert.AreEqual((int)statusCode, jsonResult.StatusCode, "The wrong HTTP status code was returned.");
+            Assert.IsInstanceOfType(jsonResult.Data, typeof(TModel), "The wrong model was passed to the JSON.");
+            TModel model = (TModel)jsonResult.Data;
+            return model;
+        }
+
+        public static void AssertHttpStatusCode(ActionResult result, HttpStatusCode statusCode)
+        {
+            Assert.IsInstanceOfType(result, typeof(HttpStatusCodeResult), "An HTTP status code was not returned.");
+            HttpStatusCodeResult statusCodeResult = (HttpStatusCodeResult)result;
+            Assert.AreEqual((int)statusCode, statusCodeResult.StatusCode, "The wrong HTTP status code was returned.");
         }
     }
 }
