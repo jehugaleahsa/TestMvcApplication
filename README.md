@@ -3,11 +3,9 @@
 A repository for ASP.NET MVC patterns and best practices.
 
 ## Purpose
-Quite some time ago I started writing a book. It was about how to write enterprise applications using ASP.NET MVC and back-end services. However, it didn't focus on teaching the technologies involved. Instead it focused on how to properly configure a solution, how to minimize dependencies and how to build a system that is both configurable and testable. Basically, it covered topics that would have saved me years of trial and error when I was new to .NET development.
+After a year of struggling with ASP.NET MVC, I finally made a breakthrough. I learned a handful of techniques that made working ASP.NET MVC a productive, reliable and fun experience. This project acts as a collection of classes, techniques, conventions and development philosophies. It is approachable for advanced and entry-level developers alike. For those just learning ASP.NET MVC, it demonstrates how to organize your code and provides working, reusable components. For the more advanced, it provides techniques to eliminate duplication, illustrates how to use popular frameworks and provides some guidelines for architecting an n-tier architecture.
 
-I eventually realized that my book was about how to architect a system and, honestly, that topic is just too big for one book. I also realized that I wasn't qualified to write about some topics, such as continuous integration. The most I could say is "you should be doing this". In the case of continuous integration I would have needed to explain how to configure [TeamCity](http://www.jetbrains.com/teamcity/) or [Jenkins](http://jenkins-ci.org/) step-by-step on a separate server. I simply lacked a high-enough perspective on these topics as a whole.
-
-My book was centered around developing an ASP.NET MVC project, gradually introducing different problems and ways to solve them. I am publishing the code that resulted from months of research. Even if you think you're an expert MVC developer, I can almost guarantee there is some code contained here that will interest you. A lot of best practices can be carried over to any project, MVC or not. Some of this code will seem fairly boilerplate. Other code could very well change your whole approach to software development.
+This is an open and on-going project. I hope that it will continue to evolve and be helpful.
 
 ## Points of Interest
 To save you time from pouring over hundreds of lines of code, I will try to direct your attention to features that will be useful for you.
