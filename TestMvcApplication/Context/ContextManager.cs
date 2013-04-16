@@ -1,12 +1,13 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Web;
-using System.Web.Routing;
 using System.Web.Mvc;
+using System.Web.Routing;
+using Adapters;
+using ServiceInterfaces;
 
-namespace TestMvcApplication
+namespace TestMvcApplication.Context
 {
-    public class ContextManager
+    public class ContextManager : IUrlHelper, IPrincipalManager, IConfigurationManager
     {
         private readonly RequestContext context;
 
@@ -35,6 +36,12 @@ namespace TestMvcApplication
         {
             UrlHelper helper = new UrlHelper(context);
             return helper.Action(result);
+        }
+
+        public bool IsSafe(string url)
+        {
+            UrlHelper helper = new UrlHelper(context);
+            return helper.IsLocalUrl(url) && url.Length > 1 && url.StartsWith("/") && !url.StartsWith("//") && !url.StartsWith("/\\");
         }
     }
 }

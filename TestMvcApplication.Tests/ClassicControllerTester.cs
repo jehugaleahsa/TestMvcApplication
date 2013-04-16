@@ -1,17 +1,31 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Adapters;
 using Adapters.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using TestMvcApplication.Controllers;
-using System;
 
 namespace TestMvcApplication.Tests
 {
     [TestClass]
     public class ClassicControllerTester
     {
+        #region Ctor
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ShouldThrowExceptionIfAdapterIsNull()
+        {
+            ICustomerAdapter adapter = null;
+            new ClassicController(adapter);
+        }
+
+        #endregion
+
+        #region Index
+
         [TestMethod]
         public void ShouldBuildIndexViewWithCustomersOrderByName()
         {
@@ -34,6 +48,10 @@ namespace TestMvcApplication.Tests
             string[] expected = new string[] { "Bob", "Gary", "Louis" };
             CollectionAssert.AreEqual(expected, names, "The customers were not ordered by name.");
         }
+
+        #endregion
+
+        #region Create
 
         [TestMethod]
         public void ShouldBuildCreateViewWithNoModel()
@@ -72,6 +90,10 @@ namespace TestMvcApplication.Tests
             CustomerData model = ActionResultHelper.AssertViewWithModel<CustomerData>(result, controller.Views.Create);
             Assert.AreSame(data, model, "The customer data was not set as the model.");
         }
+
+        #endregion
+
+        #region Edit
 
         [TestMethod]
         public void ShouldRetrieveCustomerForEdit()
@@ -120,6 +142,10 @@ namespace TestMvcApplication.Tests
             Assert.AreSame(data, model, "The model was not passed to the view.");
         }
 
+        #endregion
+
+        #region Delete
+
         [TestMethod]
         public void ShouldRetrieveCustomerForDelete()
         {
@@ -153,12 +179,6 @@ namespace TestMvcApplication.Tests
             ActionResultHelper.AssertRedirected(result, controller.Name, controller.ActionNames.Index);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ShouldThrowExceptionIfAdapterIsNull()
-        {
-            ICustomerAdapter adapter = null;
-            new ClassicController(adapter);
-        }
+        #endregion
     }
 }

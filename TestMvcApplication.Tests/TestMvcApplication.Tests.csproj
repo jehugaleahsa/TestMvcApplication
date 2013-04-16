@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="ActionResultHelper.cs" />
     <Compile Include="ClassicControllerTester.cs" />
+    <Compile Include="ErrorControllerTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +62,10 @@
     <ProjectReference Include="..\Adapters\Adapters.csproj">
       <Project>{0DD6657B-13C2-423C-8E28-FB702EAEB20B}</Project>
       <Name>Adapters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MvcUtilities\MvcUtilities.csproj">
+      <Project>{6D334141-39BB-42F8-9E37-53C8F2B8614E}</Project>
+      <Name>MvcUtilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestMvcApplication\TestMvcApplication.csproj">
       <Project>{09935540-21D9-417E-BFA1-D73A2A988266}</Project>

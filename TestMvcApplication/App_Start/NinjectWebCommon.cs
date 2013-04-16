@@ -10,7 +10,9 @@ using Ninject.Extensions.Interception.Infrastructure.Language;
 using Ninject.Modules;
 using Ninject.Web.Common;
 using Policies;
+using ServiceInterfaces;
 using ServiceInterfaces.Repositories;
+using TestMvcApplication.Context;
 using TestMvcApplication.Controllers;
 using TestMvcApplication.Interceptors;
 
@@ -70,6 +72,9 @@ namespace TestMvcApplication
         public override void Load()
         {
             Bind<ContextManager>().ToSelf().InRequestScope();
+            Bind<IUrlHelper>().To<ContextManager>();
+            Bind<IPrincipalManager>().To<ContextManager>();
+            Bind<IConfigurationManager>().To<ContextManager>();
 
             Bind<EntitySet>().ToMethod(getEntitySet).InRequestScope();
 
@@ -87,7 +92,7 @@ namespace TestMvcApplication
 
         private static EntitySet getEntitySet(IContext context)
         {
-            ContextManager manager = context.Kernel.Get<ContextManager>();
+            IConfigurationManager manager = context.Kernel.Get<IConfigurationManager>();
             return new EntitySet(manager.ConnectionString);
         }
     }

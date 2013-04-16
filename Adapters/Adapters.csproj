@@ -45,6 +45,7 @@
     <Compile Include="AdapterException.cs" />
     <Compile Include="ICustomerAdapter.cs" />
     <Compile Include="CustomerAdapter.cs" />
+    <Compile Include="IPrincipalManager.cs" />
     <Compile Include="Mappers\CustomerMapper.cs" />
     <Compile Include="Mappers\ICustomerMapper.cs" />
     <Compile Include="Mappers\PrimitiveMapper.cs" />
