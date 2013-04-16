@@ -3,7 +3,7 @@
 A repository for ASP.NET MVC patterns and best practices.
 
 ## Purpose
-After a year of struggling with ASP.NET MVC, I finally made a breakthrough. I learned a handful of techniques that made working ASP.NET MVC a productive, reliable and fun experience. This project acts as a collection of classes, techniques, conventions and development philosophies. It is approachable for advanced and entry-level developers alike. For those just learning ASP.NET MVC, it demonstrates how to organize your code and provides working, reusable components. For the more advanced, it provides techniques to eliminate duplication, illustrates how to use popular frameworks and provides some guidelines for architecting an n-tier architecture.
+After a year of struggling with ASP.NET MVC, I finally made a breakthrough. I learned a handful of techniques that made working with ASP.NET MVC a productive, reliable and fun experience. This project acts as a collection of classes, techniques, conventions and development philosophies. It is approachable for advanced and entry-level developers alike. For those just learning ASP.NET MVC, it demonstrates how to organize your code and provides working, reusable components. For the more advanced, it provides techniques to eliminate duplication, illustrates how to use popular frameworks and provides some guidelines for architecting an n-tier architecture.
 
 This is an open and on-going project. I hope that it will continue to evolve and be helpful.
 
