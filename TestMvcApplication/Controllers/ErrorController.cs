@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Web.Mvc;
+using MvcUtilities.FilterAttributes;
 using MvcUtilities.Models;
 using TestMvcApplication.Context;
 
 namespace TestMvcApplication.Controllers
 {
+    [Trace]
     public partial class ErrorController : Controller
     {
         private readonly IUrlHelper urlHelper;

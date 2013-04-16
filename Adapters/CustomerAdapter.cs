@@ -30,6 +30,7 @@ namespace Adapters
             set;
         }
 
+        [Log]
         [ErrorMessage("An error occurred while retrieving the customer.")]
         public CustomerData GetCustomer(string customerId)
         {
@@ -37,12 +38,14 @@ namespace Adapters
             return CustomerMapper.Convert(customer);
         }
 
+        [Log]
         [ErrorMessage("An error occurred while retrieving the customers.")]
         public IEnumerable<CustomerData> GetCustomers()
         {
             return customerRepository.GetCustomers().Select(CustomerMapper.Convert).ToList();
         }
 
+        [Log]
         [ErrorMessage("An error occurred while adding the customer.")]
         public CustomerData AddCustomer(CustomerData customerData)
         {
@@ -51,6 +54,7 @@ namespace Adapters
             return CustomerMapper.Convert(customer);
         }
 
+        [Log]
         [ErrorMessage("An error occurred while updating the customer.")]
         public void UpdateCustomer(CustomerData customerData)
         {
@@ -59,6 +63,7 @@ namespace Adapters
             customerRepository.Update(original, modified);
         }
 
+        [Log]
         [ErrorMessage("An error occurred while removing the customer.")]
         public void RemoveCustomer(string customerId)
         {

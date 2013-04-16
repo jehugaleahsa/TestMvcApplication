@@ -7,7 +7,7 @@ using ServiceInterfaces;
 
 namespace TestMvcApplication.Context
 {
-    public class ContextManager : IUrlHelper, IPrincipalManager, IConfigurationManager
+    public class ContextManager : IUrlHelper, IPrincipalManager, IConfigurationManager, ILogger
     {
         private readonly RequestContext context;
 

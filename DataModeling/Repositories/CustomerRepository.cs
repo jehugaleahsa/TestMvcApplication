@@ -21,24 +21,30 @@ namespace DataModeling.Repositories
             this.entities = entities;
         }
 
+        [Log]
         [ErrorMessage("Failed to get the customer.")]
         public Customer GetCustomer(Guid customerId)
         {
             return entities.Customers.SingleOrDefault(customer => customer.CustomerId == customerId);
         }
 
+        [Log]
         [ErrorMessage("Failed to get the customers.")]
         public IEnumerable<Customer> GetCustomers()
         {
             return entities.Customers.ToList();
         }
 
+        [Log]
+        [ErrorMessage("Failed to add the customer.")]
         public void Add(Customer customer)
         {
             entities.Customers.Add(customer);
             entities.SaveChanges();
         }
 
+        [Log]
+        [ErrorMessage("Failed to update the customer.")]
         public void Update(Customer original, Customer modified)
         {
             original.Name = modified.Name;
@@ -47,6 +53,8 @@ namespace DataModeling.Repositories
             entities.SaveChanges();
         }
 
+        [Log]
+        [ErrorMessage("Failed to remove the customer.")]
         public void Remove(Customer customer)
         {
             entities.Customers.Remove(customer);

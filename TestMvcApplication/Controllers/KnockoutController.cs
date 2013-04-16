@@ -9,6 +9,7 @@ using MvcUtilities.FilterAttributes;
 
 namespace TestMvcApplication.Controllers
 {
+    [Trace]
     public partial class KnockoutController : Controller
     {
         private readonly ICustomerAdapter adapter;

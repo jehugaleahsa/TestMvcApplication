@@ -75,15 +75,18 @@ namespace TestMvcApplication
             Bind<IUrlHelper>().To<ContextManager>();
             Bind<IPrincipalManager>().To<ContextManager>();
             Bind<IConfigurationManager>().To<ContextManager>();
+            Bind<ILogger>().To<ContextManager>();
 
             Bind<EntitySet>().ToMethod(getEntitySet).InRequestScope();
 
             var customerRepositoryBinding = Bind<ICustomerRepository>().To<CustomerRepository>();
-            customerRepositoryBinding.Intercept().With<DataExceptionInterceptor>();
+            customerRepositoryBinding.Intercept().With<DataExceptionInterceptor>().InOrder(1);
+            customerRepositoryBinding.Intercept().With<LogInterceptor>().InOrder(2);
 
             var adapterBinding = Bind<ICustomerAdapter>().To<CustomerAdapter>();
             adapterBinding.Intercept().With<AdapterExceptionInterceptor>().InOrder(1);
             adapterBinding.Intercept().With<TransactionInterceptor>().InOrder(2);
+            adapterBinding.Intercept().With<LogInterceptor>().InOrder(3);
 
             Bind<ErrorController>().ToSelf();
             Bind<ClassicController>().ToSelf();

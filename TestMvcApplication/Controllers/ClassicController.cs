@@ -7,6 +7,7 @@ using MvcUtilities.FilterAttributes;
 
 namespace TestMvcApplication.Controllers
 {
+    [Trace]
     [RedirectOnError(ReturnController=ClassicController.NameConst, ReturnAction=ClassicController.ActionNameConstants.Index)]
     public partial class ClassicController : Controller
     {
