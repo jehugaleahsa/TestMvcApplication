@@ -16,7 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EC83A24C-26DE-4F16-9904-E32604FD76E6}"
 	ProjectSection(SolutionItems) = preProject
 		Local.testsettings = Local.testsettings
-		TestMvcApplication1.vsmdi = TestMvcApplication1.vsmdi
+		TestMvcApplication.vsmdi = TestMvcApplication.vsmdi
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Policies.Tests", "Policies.Tests\Policies.Tests.csproj", "{8B194190-9104-44FF-8E6F-24570CEFEF1B}"
@@ -31,9 +31,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataModeling.Tests", "DataM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcUtilities.Tests", "MvcUtilities.Tests\MvcUtilities.Tests.csproj", "{966041E8-6762-4B87-BBDF-F3CB008EB32F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMvcApplication.Tests", "TestMvcApplication.Tests\TestMvcApplication.Tests.csproj", "{FD09A78E-CD99-4BE9-A1ED-E16A8F4AECD5}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = TestMvcApplication1.vsmdi
+		CategoryFile = TestMvcApplication.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +90,10 @@ Global
 		{966041E8-6762-4B87-BBDF-F3CB008EB32F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{966041E8-6762-4B87-BBDF-F3CB008EB32F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{966041E8-6762-4B87-BBDF-F3CB008EB32F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD09A78E-CD99-4BE9-A1ED-E16A8F4AECD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD09A78E-CD99-4BE9-A1ED-E16A8F4AECD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD09A78E-CD99-4BE9-A1ED-E16A8F4AECD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD09A78E-CD99-4BE9-A1ED-E16A8F4AECD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
