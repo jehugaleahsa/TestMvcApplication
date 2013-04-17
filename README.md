@@ -62,7 +62,7 @@ The `CustomFieldNameModelBinder` class allows you to decorate properties with on
 
 The `ModelBinderBuilder` class is an even more flexible class. In the `TestMvcApplication/App_Start/BindingConfig.cs` file, you can actually build a model binder on-the-fly specifying how to map between fields and properties. This may be a better approach if you don't want to dirty your view models with lots of attributes. This also comes in handy when your front-end team doesn't have a consistent naming convention (the horror!). Unfortunately, ASP.NET MVC does not provide a way to specify which model binder to use on an action-per-action basis. However, you can easily create a sub-class of `IModelBinder` that simply delegates to a model binder built using `ModelBinderBuilder`.
 
-In the `MvcUtilities/ActionResults` folder, the `JsonWithHttpStatusCodeResult` demonstrates extending the `JsonResult` class to send a different HTTP status code. Writing this class is ridiculously easy, but people just repeat the same code throughout their code anyway.
+In the `MvcUtilities/ActionResults` folder, the `JsonWithHttpStatusCodeResult` demonstrates extending the `JsonResult` class to send a different HTTP status code. Writing this class is ridiculously easy, but people just repeat the same code throughout their code base anyway.
 
 This project also has a general-purpose exception class `CodedException`. `CodedException` holds an HTTP status code. This is used in the MVC project to send meaningful status codes to the UI. This is especially useful when working with JSON and RESTful interfaces. The exceptions that are caught by the UI should inherit from `CodedException`.
 
