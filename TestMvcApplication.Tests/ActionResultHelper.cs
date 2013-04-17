@@ -1,7 +1,6 @@
-﻿using System;
+﻿using System.Net;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Net;
 using MvcUtilities.ActionResults;
 
 namespace TestMvcApplication.Tests

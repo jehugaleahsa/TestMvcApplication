@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
-using MvcUtilities;
 using System.Runtime.Serialization;
+using MvcUtilities;
 
 namespace Adapters
 {

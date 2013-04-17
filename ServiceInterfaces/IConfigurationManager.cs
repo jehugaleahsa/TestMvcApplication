@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ServiceInterfaces
+﻿namespace ServiceInterfaces
 {
     public interface IConfigurationManager
     {

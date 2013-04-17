@@ -1,7 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
-using NLog;
+﻿using System.Web.Mvc;
+using Policies;
+using ServiceInterfaces;
 
 namespace MvcUtilities.FilterAttributes
 {
@@ -9,10 +8,12 @@ namespace MvcUtilities.FilterAttributes
     {
         public string LogName { get; set; }
 
+        [Inject]
+        public ILogger Logger { get; set; }
+
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            Logger logger = LogManager.GetLogger(LogName ?? String.Empty);
-            logger.Log(LogLevel.Trace,
+            Logger.Trace(LogName,
                 @"Entering {0}Controller.{1}",
                 filterContext.ActionDescriptor.ControllerDescriptor.ControllerName,
                 filterContext.ActionDescriptor.ActionName);
@@ -21,12 +22,11 @@ namespace MvcUtilities.FilterAttributes
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            Logger logger = LogManager.GetLogger(LogName ?? String.Empty);
             if (filterContext.Exception != null && !filterContext.ExceptionHandled)
             {
-                logger.LogException(LogLevel.Error, filterContext.Exception.Message, filterContext.Exception);
+                Logger.ErrorException(LogName, filterContext.Exception);
             }
-            logger.Log(LogLevel.Trace,
+            Logger.Trace(LogName,
                 @"Exiting {0}Controller.{1}",
                 filterContext.ActionDescriptor.ControllerDescriptor.ControllerName,
                 filterContext.ActionDescriptor.ActionName);
@@ -37,8 +37,7 @@ namespace MvcUtilities.FilterAttributes
         {
             if (filterContext.Exception != null && !filterContext.ExceptionHandled)
             {
-                Logger logger = LogManager.GetLogger(LogName ?? String.Empty);
-                logger.LogException(LogLevel.Error, filterContext.Exception.Message, filterContext.Exception);
+                Logger.ErrorException(LogName, filterContext.Exception);
             }
             base.OnResultExecuted(filterContext);
         }

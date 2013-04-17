@@ -1,8 +1,8 @@
-﻿using Adapters.Mappers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Adapters.Mappers;
 using Adapters.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServiceInterfaces.Entities;
-using System;
 
 namespace Adapters.Tests
 {

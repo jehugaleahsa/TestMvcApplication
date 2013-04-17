@@ -1,13 +1,13 @@
 ﻿using System;
-using Adapters;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestMvcApplication.Controllers;
-using NSubstitute;
-using System.Web.Mvc;
-using System.Net;
-using Adapters.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Web.Mvc;
+using Adapters;
+using Adapters.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
+using TestMvcApplication.Controllers;
 
 namespace TestMvcApplication.Tests
 {

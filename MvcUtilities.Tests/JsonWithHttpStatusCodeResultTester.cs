@@ -1,11 +1,11 @@
-﻿using System.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MvcUtilities.ActionResults;
+﻿using System.IO;
+using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using System.Web;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MvcUtilities.ActionResults;
 using NSubstitute;
-using System.IO;
 
 namespace MvcUtilities.Tests
 {

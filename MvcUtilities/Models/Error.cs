@@ -1,5 +1,4 @@
-﻿
-namespace MvcUtilities.Models
+﻿namespace MvcUtilities.Models
 {
     public class Error
     {

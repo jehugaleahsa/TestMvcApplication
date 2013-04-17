@@ -4,6 +4,7 @@ using Adapters;
 using DataModeling.DataModel;
 using DataModeling.Repositories;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using MvcUtilities.FilterAttributes;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Interception.Infrastructure.Language;
@@ -49,7 +50,7 @@ namespace TestMvcApplication
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            IKernel kernel = new StandardKernel();
+            IKernel kernel = new StandardKernel(new NinjectSettings() { InjectAttribute = typeof(Policies.InjectAttribute) });
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
@@ -78,6 +79,8 @@ namespace TestMvcApplication
             Bind<ILogger>().To<ContextManager>();
 
             Bind<EntitySet>().ToMethod(getEntitySet).InRequestScope();
+
+            Bind<TraceAttribute>().ToSelf();
 
             var customerRepositoryBinding = Bind<ICustomerRepository>().To<CustomerRepository>();
             customerRepositoryBinding.Intercept().With<DataExceptionInterceptor>().InOrder(1);
