@@ -109,7 +109,7 @@ MVC uses the really generic `ActionResult` class to represent the results of a r
 With MVC 4, I haven't needed to write many `ActionResult`s. Almost everything I could ever want is already there.
 
 #### Action Filters Should Make You Happy
-If you think writing Policy classes using Ninject is just too bizarre, you'll be glad to know there is something built-in to ASP.NET MVC for achieving pretty much the same thing... but it just works on controllers. ASP.NET MVC was built with enough insight to support AOP out of the gate, via action filters. The cool thing is you can get away with sub-classing an existing filter, so you don't even need to write that much code.
+If you think writing Policy classes using Ninject is just too bizarre, you'll be glad to know there is something built-in to ASP.NET MVC for achieving pretty much the same thing... but it only works on controllers. ASP.NET MVC was built with enough insight to support AOP out of the gate, via action filters. The cool thing is you can get away with sub-classing an existing filter, so you don't even need to write that much code.
 
 There are a ton of existing filters. You should definitely know about: the `Authorize` filter; the `HttpPost`, `HttpPut`, `HttpDelete`, etc. filters; the `HandlerError` filter and the `OutputCache` filter.
 
