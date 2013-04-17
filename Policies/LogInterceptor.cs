@@ -23,6 +23,7 @@ namespace Policies
             catch (Exception exception)
             {
                 logger.ErrorException(logName, exception);
+                throw;
             }
             finally
             {

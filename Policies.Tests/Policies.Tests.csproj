@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="AttributeInterceptorTester.cs" />
     <Compile Include="ExceptionInterceptorTester.cs" />
+    <Compile Include="LogInterceptorTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionInterceptorTester.cs" />
   </ItemGroup>
@@ -64,6 +65,10 @@
     <ProjectReference Include="..\Policies\Policies.csproj">
       <Project>{576AB159-E4F1-4E2E-A7A1-54166D3F974C}</Project>
       <Name>Policies</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceInterfaces\ServiceInterfaces.csproj">
+      <Project>{45C0C712-ECF5-41C8-989C-7D7F75E60B77}</Project>
+      <Name>ServiceInterfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
