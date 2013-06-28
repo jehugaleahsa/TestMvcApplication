@@ -1,0 +1,90 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Title { Angular }
+@section Scripts
+{
+<script type="text/javascript" src="@Url.Content("~/Scripts/Angular/index.js")"></script>
+}
+@section Styles
+{
+<link rel="Stylesheet" type="text/css" href="~/Content/Angular/angular.css" />
+}
+<div data-ng-app="TestMVCApplication" data-ng-controller="CustomerController">
+    <div class="row">
+        <div class="span4"></div>
+        <div class="span8">
+            <div id="customer-container">
+                <table id="tblData" class="table table-striped table-bordered table-hover" data-ng-show="customerList.length > 0">
+                    <thead>
+                        <tr>
+                            <th><a class="sort-field" data-field-name="name" data-field-type="String" href="#">Name</a></th>
+                            <th><a class="sort-field" data-field-name="birthDate" data-field-type="Date" href="#">Date</a></th>
+                            <th><a class="sort-field" data-field-name="height" data-field-type="Number" href="#">Height</a></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="customer in customerList | orderBy:orderByField">
+                            <td>{{customer.Name}}</td>
+                            <td>{{customer.BirthDate | date}}</td>
+                            <td>{{customer.Height}}</td>
+                            <td><a class="lnk-edit-customer" data-customer-id="{{customer.CustomerId}}" href="#">Edit</a></td>
+                            <td><a class="lnk-delete-customer" data-customer-id="{{customer.CustomerId}}" href="#">Delete</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <a id="btn-create-customer" href="#" class="btn btn-primary" data-ng-click="showCreateModal()">Create</a>
+        </div>
+    </div>
+    <!-- Create/Edit Modal -->
+    <div id="modal-create-customer" class="modal hide fade">
+        <header class="modal-header">
+            <a href="#" class="close" data-dismiss="modal">&times;</a>
+            <h3 id="modal-customer-title"></h3>
+        </header>
+        <div id="content" class="modal-body">
+            <form id="form-create-customer" action="#" method="get" class="form-horizontal">
+                <div class="control-group">
+                    <input name="hdnCustomerId" type="hidden" value="{{selected.CustomerId}}" />
+                    <label for="txtName" class="control-label">Name:</label>
+                    <div class="controls">
+                        <input id="txtName" name="txtName" type="text" placeholder="Enter a name..." data-ng-model="selected.Name" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="dpBirthDate" class="control-label">Birth Date:</label>
+                    <div class="controls">
+                        <input id="dpBirthDate" name="dpBirthDate" type="text" data-ng-model="selected.BirthDate" data-datepicker />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="txtHeight" class="control-label">Height:</label>
+                    <div class="controls">
+                        <input id="txtHeight" name="txtHeight" type="text" data-ng-model="selected.Height" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <footer class="modal-footer">
+            <a id="btn-create-customer-save" href="#" class="btn btn-primary" data-ng-click="addCustomer()"></a>
+            <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+        </footer>
+    </div>
+    <!-- Delete Modal -->
+    <div id="modal-delete-customer" class="modal hide fade"">
+        <header class="modal-header">
+            <a href="#" class="close" data-dismiss="modal">&times;</a>
+            <h3>Delete Customer</h3>
+        </header>
+        <div class="modal-body">
+            Are you sure you want to delete <span data-bind="text: selected().name"></span>?
+        </div>
+        <footer class="modal-footer">
+            <a id="btn-delete-customer-save" href="#" class="btn btn-warning" data-bind="attr: { 'data-customer-id': selected().customerId }">Delete</a>
+            <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+        </footer>
+    </div>
+</div>
