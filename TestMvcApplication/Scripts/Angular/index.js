@@ -1,4 +1,4 @@
-﻿var application = angular.module('TestMVCApplication', []);
+﻿var application = angular.module('Customer', []);
 
 application.filter('date', function () {
     return function (date) {
