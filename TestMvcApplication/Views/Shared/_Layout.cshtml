@@ -20,16 +20,29 @@
         @RenderBody()
         <footer>
         </footer>
-        <!-- Common Modal -->
-        <div id="modal-common" class="modal hide fade">
+        <!-- Common Information Modal -->
+        <div id="modal-information" class="modal hide fade">
             <header class="modal-header">
                 <a href="#" class="close" data-dismiss="modal">&times;</a>
-                <h1 id="title"></h1>
+                <h1 id="information-title"></h1>
             </header>
-            <div id="content" class="modal-body">
+            <div id="information-content" class="modal-body">
             </div>
             <footer class="modal-footer">
                 <a href="#" class="btn" data-dismiss="modal">Close</a>
+            </footer>
+        </div>
+        <!-- Common Confirmation Modal -->
+        <div id="modal-confirmation" class="modal hide fade">
+            <header class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h1 id="confirmation-title">Confirm</h1>
+            </header>
+            <div id="confirmation-content" class="modal-body">
+            </div>
+            <footer class="modal-footer">
+                <a id="confirmation-ok" href="#" class="btn" data-dismiss="modal">OK</a>
+                <a href="#" class="btn" data-dismiss="modal">Cancel</a>
             </footer>
         </div>
     </body>

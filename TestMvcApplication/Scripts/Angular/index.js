@@ -31,7 +31,31 @@ function CustomerController($scope, repository) {
     $scope.orderByField = 'Name';
 
     function newCustomer() {
-        return { 'CustomerId': null, 'Name': null, 'BirthDate': null, 'Height': null };
+        return {
+            'CustomerId': null,
+            'Name': null,
+            'BirthDate': null,
+            'Height': null 
+        };
+    }
+
+    function copyCustomer(customer) {
+        return {
+            'CustomerId': customer.CustomerId,
+            'Name': customer.Name,
+            'BirthDate': customer.BirthDate,
+            'Height': customer.Height 
+        };
+    }
+
+    function find(customerId) {
+        for (var i = 0; i != $scope.customerList.length; ++i) {
+            var customer = $scope.customerList[i];
+            if (customer.CustomerId == customerId) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     repository.load(function (data) {
@@ -48,13 +72,96 @@ function CustomerController($scope, repository) {
         $('#modal-create-customer').modal('show');
     };
 
-    $scope.addCustomer = function () {
-        repository.create($scope.selected, function (data) {
-            $scope.customerList.push(data);
-            $scope.selected = newCustomer();
-            $scope.$apply();
-            $('#modal-create-customer').modal('hide');
-        }, handleError);
+    $scope.showEditModal = function (customer) {
+        $('#modal-customer-title').text('Edit Customer');
+        $('#btn-create-customer-save').text('Save');
+        $('#form-create-customer').attr('data-mode', 'edit');
+        $scope.selected = copyCustomer(customer);
+        $scope.$apply();
+        $('#modal-create-customer').modal('show');
+    };
+
+    $scope.submit = function () {
+        if (!isValid()) {
+            handleError('Please correct the fields in error.');
+            return;
+        }
+        var mode = $('#form-create-customer').attr('data-mode');
+        if (mode == 'create') {
+            repository.create($scope.selected, function (data) {
+                $scope.customerList.push(data);
+                $scope.selected = newCustomer();
+                $scope.$apply();
+                $('#modal-create-customer').modal('hide');
+            }, handleError);
+        } else {
+            repository.update($scope.selected, function (data) {
+                var index = find($scope.selected.CustomerId);
+                var customer = $scope.customerList[index];
+                customer.Name = $scope.selected.Name;
+                customer.BirthDate = $scope.selected.BirthDate;
+                customer.Height = $scope.selected.Height;
+                $scope.$apply();
+                $('#modal-create-customer').modal('hide');
+            }, handleError);
+        }
+    };
+
+    $scope.isNameValid = function () {
+        if (!$scope.selected.Name) {
+            $('#name-validation').text('You must provide a name.');
+            return 'error';
+        }
+        $('#name-validation').text('');
+        return 'success';
+    };
+
+    $scope.isBirthDateValid = function () {
+        if (!$scope.selected.BirthDate) {
+            $('#birth-date-validation').text('You must provide a birth date.');
+            return 'error';
+        }
+        if (!moment($scope.selected.BirthDate).isValid()) {
+            $('#birth-date-validation').text('You must provide a valid birth date.');
+            return 'error';
+        }
+        $('#birth-date-validation').text('');
+        return 'success';
+    };
+
+    $scope.isHeightValid = function () {
+        if (!$scope.selected.Height) {
+            $('#height-validation').text('You must provide a height');
+            return 'error';
+        }
+        var height = parseInt($scope.selected.Height, 10);
+        if (isNaN(height)) {
+            $('#height-validation').text('You must provide a valid height.');
+            return 'error';
+        }
+        $('#height-validation').text('');
+        return 'success';
+    };
+
+    function isValid() {
+        if ($scope.isNameValid() == 'error') { return false; }
+        if ($scope.isBirthDateValid() == 'error') { return false; }
+        if ($scope.isHeightValid() == 'error') { return false; }
+        return true;
+    }
+
+    $scope.deleteCustomer = function (customer) {
+        showConfirmationModal({
+            content: 'Are you sure you want to delete ' + customer.Name + '?',
+            style: 'btn-danger',
+            success: function () {
+                repository.remove(customer, function () {
+                    var index = find(customer.CustomerId);
+                    $scope.customerList.splice(index, 1);
+                    $scope.$apply();
+                }, handleError);
+            }
+        });
     };
 }
 
@@ -92,7 +199,39 @@ function CustomerRepository(baseUrl) {
             data: customer,
             dataType: 'json'
         })
-        .success(function (data, textStatus, handler) {
+        .done(function (data, textStatus, handler) {
+            success(data);
+        })
+        .fail(function (handler, textStatus, errorThrown) {
+            error(errorThrown);
+        });
+    };
+
+    this.remove = function (customer, success, error) {
+        var url = buildUrl('Knockout', 'Delete');
+        $.ajax({
+            url: url,
+            type: 'delete',
+            data: { 'customer_id': customer.CustomerId },
+            dataType: 'json'
+        })
+        .done(function (data, textStatus, handler) {
+            success(data);
+        })
+        .fail(function (handler, textStatus, errorThrown) {
+            error(errorThrown);
+        });
+    };
+
+    this.update = function (customer, success, error) {
+        var url = buildUrl('Knockout', 'Edit');
+        $.ajax({
+            url: url,
+            type: 'PUT',
+            data: customer,
+            dataType: 'json'
+        })
+        .done(function (data, textStatus, handler) {
             success(data);
         })
         .fail(function (handler, textStatus, errorThrown) {
@@ -107,5 +246,5 @@ application.factory('repository', [function () {
 }]);
 
 function handleError(errorMessage) {
-    showModal('Errors', errorMessage);
+    showInformationModal('Errors', errorMessage);
 }

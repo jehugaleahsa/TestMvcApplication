@@ -171,7 +171,7 @@ function loadCustomers(data) {
 }
 
 function handleError(errorMessage) {
-    showModal('Errors', errorMessage);
+    showInformationModal('Errors', errorMessage);
 }
 
 function sortByField() {
