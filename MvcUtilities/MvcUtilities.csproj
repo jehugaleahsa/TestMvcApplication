@@ -31,12 +31,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionResults\JsonWithHttpStatusCodeResult.cs" />
@@ -45,9 +59,10 @@
     <Compile Include="Binders\ModelBinderBuilder.cs" />
     <Compile Include="CodedException.cs" />
     <Compile Include="FilterAttributes\TraceAttribute.cs" />
+    <Compile Include="FilterAttributes\WebApiExceptionHandlerAttribute.cs" />
     <Compile Include="Models\Error.cs" />
     <Compile Include="FilterAttributes\HttpsAttribute.cs" />
-    <Compile Include="FilterAttributes\HttpStatusCodeErrorHandlerAttribute.cs" />
+    <Compile Include="FilterAttributes\CodedExceptionHandlerAttribute.cs" />
     <Compile Include="FilterAttributes\RedirectOnErrorAttribute.cs" />
     <Compile Include="Helpers\DisplayAttributeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,6 +76,9 @@
       <Project>{45C0C712-ECF5-41C8-989C-7D7F75E60B77}</Project>
       <Name>ServiceInterfaces</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

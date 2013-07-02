@@ -94,7 +94,7 @@ namespace TestMvcApplication.Tests
             CustomerData data = new CustomerData();
             ActionResult result = controller.Edit(data);
 
-            ActionResultHelper.AssertHttpStatusCode(result, HttpStatusCode.NoContent);
+            ActionResultHelper.AssertHttpStatusCode(result, HttpStatusCode.OK);
 
             adapter.Received().UpdateCustomer(data);
         }
@@ -112,7 +112,7 @@ namespace TestMvcApplication.Tests
             string customerId = Guid.NewGuid().ToString("N");
             ActionResult result = controller.Delete(customerId);
 
-            ActionResultHelper.AssertHttpStatusCode(result, HttpStatusCode.NoContent);
+            ActionResultHelper.AssertHttpStatusCode(result, HttpStatusCode.OK);
 
             adapter.Received().RemoveCustomer(customerId);
         }

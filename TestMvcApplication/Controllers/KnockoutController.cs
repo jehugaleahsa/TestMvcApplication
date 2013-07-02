@@ -29,7 +29,7 @@ namespace TestMvcApplication.Controllers
             return View(Views.Index);
         }
 
-        [HttpStatusCodeErrorHandler]
+        [CodedExceptionHandler]
         public virtual ActionResult Load()
         {
             CustomerData[] data = adapter.GetCustomers().ToArray();
@@ -37,7 +37,7 @@ namespace TestMvcApplication.Controllers
         }
 
         [HttpPost]
-        [HttpStatusCodeErrorHandler]
+        [CodedExceptionHandler]
         public virtual ActionResult Create(CustomerData data)
         {
             CustomerData result = adapter.AddCustomer(data);
@@ -45,19 +45,19 @@ namespace TestMvcApplication.Controllers
         }
 
         [HttpPut]
-        [HttpStatusCodeErrorHandler]
+        [CodedExceptionHandler]
         public virtual ActionResult Edit(CustomerData data)
         {
             adapter.UpdateCustomer(data);
-            return new HttpStatusCodeResult(HttpStatusCode.NoContent, "The customer was updated.");
+            return new HttpStatusCodeResult(HttpStatusCode.OK, "The customer was updated.");
         }
 
         [HttpDelete]
-        [HttpStatusCodeErrorHandler]
+        [CodedExceptionHandler]
         public virtual ActionResult Delete(string customer_id)
         {
             adapter.RemoveCustomer(customer_id);
-            return new HttpStatusCodeResult(HttpStatusCode.NoContent, "The customer was deleted.");
+            return new HttpStatusCodeResult(HttpStatusCode.OK, "The customer was deleted.");
         }
     }
 }
