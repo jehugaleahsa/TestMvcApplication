@@ -1,5 +1,6 @@
 using System;
 using System.Web;
+using System.Web.Http;
 using Adapters;
 using DataModeling.DataModel;
 using DataModeling.Repositories;
@@ -55,6 +56,10 @@ namespace TestMvcApplication
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
             RegisterServices(kernel);
+
+            // Enables dependency lookup for Web API
+            GlobalConfiguration.Configuration.DependencyResolver = new NinjectWebApiDependencyResolver(kernel);
+
             return kernel;
         }
 
@@ -94,6 +99,7 @@ namespace TestMvcApplication
             Bind<ErrorController>().ToSelf();
             Bind<ClassicController>().ToSelf();
             Bind<KnockoutController>().ToSelf();
+            Bind<CustomerController>().ToSelf();
         }
 
         private static EntitySet getEntitySet(IContext context)

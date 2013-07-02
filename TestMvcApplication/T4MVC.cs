@@ -109,6 +109,8 @@ namespace Links
     
         public static readonly string knockout_2_2_1_debug_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/knockout-2.2.1.debug.min.js") ? Url("knockout-2.2.1.debug.min.js") : Url("knockout-2.2.1.debug.js");
         public static readonly string knockout_2_2_1_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/knockout-2.2.1.min.js") ? Url("knockout-2.2.1.min.js") : Url("knockout-2.2.1.js");
+        public static readonly string moment_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/moment.min.js") ? Url("moment.min.js") : Url("moment.js");
+        public static readonly string moment_min_js = Url("moment.min.js");
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public static class Shared {
             private const string URLPATH = "~/Scripts/Shared";

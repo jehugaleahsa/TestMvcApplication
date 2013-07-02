@@ -30,6 +30,11 @@ function CustomerController($scope, repository) {
 
     $scope.orderByField = 'Name';
 
+    repository.load(function (data) {
+        $scope.customerList = data;
+        $scope.$apply();
+    }, handleError);
+
     function newCustomer() {
         return {
             'CustomerId': null,
@@ -57,11 +62,6 @@ function CustomerController($scope, repository) {
         }
         return -1;
     }
-
-    repository.load(function (data) {
-        $scope.customerList = data;
-        $scope.$apply();
-    }, handleError);
 
     $scope.showCreateModal = function () {
         $('#modal-customer-title').text('Create Customer');
@@ -176,10 +176,10 @@ function CustomerRepository(baseUrl) {
     }
 
     this.load = function (success, error) {
-        var url = buildUrl('Knockout', 'Load');
+        var url = buildUrl('api', 'Customer', 'GetCustomers');
         $.ajax({
             url: url,
-            type: 'post',
+            type: 'GET',
             dataType: 'JSON',
             cache: false
         })
@@ -192,12 +192,14 @@ function CustomerRepository(baseUrl) {
     };
 
     this.create = function (customer, success, error) {
-        var url = buildUrl('Knockout', 'Create');
+        var url = buildUrl('api', 'Customer', 'POST');
+        var data = JSON.stringify(customer);
         $.ajax({
             url: url,
-            type: 'post',
-            data: customer,
-            dataType: 'json'
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            contentType: 'application/json'
         })
         .done(function (data, textStatus, handler) {
             success(data);
@@ -208,12 +210,13 @@ function CustomerRepository(baseUrl) {
     };
 
     this.remove = function (customer, success, error) {
-        var url = buildUrl('Knockout', 'Delete');
+        var url = buildUrl('api', 'Customer');
+        var data = JSON.stringify({ 'customerId': customer.CustomerId });
         $.ajax({
             url: url,
-            type: 'delete',
-            data: { 'customer_id': customer.CustomerId },
-            dataType: 'json'
+            type: 'DELETE',
+            data: data,
+            contentType: 'application/json'
         })
         .done(function (data, textStatus, handler) {
             success(data);
@@ -224,12 +227,14 @@ function CustomerRepository(baseUrl) {
     };
 
     this.update = function (customer, success, error) {
-        var url = buildUrl('Knockout', 'Edit');
+        var url = buildUrl('api', 'Customer');
+        var data = JSON.stringify(customer);
         $.ajax({
             url: url,
             type: 'PUT',
-            data: customer,
-            dataType: 'json'
+            data: data,
+            dataType: 'json',
+            contentType: 'application/json'
         })
         .done(function (data, textStatus, handler) {
             success(data);

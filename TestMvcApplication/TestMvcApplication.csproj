@@ -165,11 +165,14 @@
     <Compile Include="App_Start\BindingConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\NinjectExtensions.cs" />
+    <Compile Include="App_Start\NinjectWebApiDependencyResolver.cs" />
+    <Compile Include="App_Start\NinjectWebApiDependencyScope.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="ClassicController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\AngularController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ClassicController.cs" />
     <Compile Include="Context\ContextManager.cs" />
