@@ -107,6 +107,20 @@ function CustomerController($scope, repository) {
         }
     };
 
+    $scope.deleteCustomer = function (customer) {
+        showConfirmationModal({
+            content: 'Are you sure you want to delete ' + customer.Name + '?',
+            style: 'btn-danger',
+            success: function () {
+                repository.remove(customer, function () {
+                    var index = find(customer.CustomerId);
+                    $scope.customerList.splice(index, 1);
+                    $scope.$apply();
+                }, handleError);
+            }
+        });
+    };
+
     $scope.isNameValid = function () {
         if (!$scope.selected.Name) {
             $('#name-validation').text('You must provide a name.');
@@ -149,20 +163,6 @@ function CustomerController($scope, repository) {
         if ($scope.isHeightValid() == 'error') { return false; }
         return true;
     }
-
-    $scope.deleteCustomer = function (customer) {
-        showConfirmationModal({
-            content: 'Are you sure you want to delete ' + customer.Name + '?',
-            style: 'btn-danger',
-            success: function () {
-                repository.remove(customer, function () {
-                    var index = find(customer.CustomerId);
-                    $scope.customerList.splice(index, 1);
-                    $scope.$apply();
-                }, handleError);
-            }
-        });
-    };
 }
 
 application.controller('CustomerController', ['$scope', 'repository', CustomerController]);
@@ -176,7 +176,7 @@ function CustomerRepository(baseUrl) {
     }
 
     this.load = function (success, error) {
-        var url = buildUrl('api', 'Customer', 'GetCustomers');
+        var url = buildUrl('api', 'Customers');
         $.ajax({
             url: url,
             type: 'GET',
@@ -192,7 +192,7 @@ function CustomerRepository(baseUrl) {
     };
 
     this.create = function (customer, success, error) {
-        var url = buildUrl('api', 'Customer', 'POST');
+        var url = buildUrl('api', 'Customers');
         var data = JSON.stringify(customer);
         $.ajax({
             url: url,
@@ -209,12 +209,12 @@ function CustomerRepository(baseUrl) {
         });
     };
 
-    this.remove = function (customer, success, error) {
-        var url = buildUrl('api', 'Customer');
-        var data = JSON.stringify({ 'customerId': customer.CustomerId });
+    this.update = function (customer, success, error) {
+        var url = buildUrl('api', 'Customers');
+        var data = JSON.stringify(customer);
         $.ajax({
             url: url,
-            type: 'DELETE',
+            type: 'PUT',
             data: data,
             contentType: 'application/json'
         })
@@ -226,14 +226,11 @@ function CustomerRepository(baseUrl) {
         });
     };
 
-    this.update = function (customer, success, error) {
-        var url = buildUrl('api', 'Customer');
-        var data = JSON.stringify(customer);
+    this.remove = function (customer, success, error) {
+        var url = buildUrl('api', 'Customers', customer.CustomerId);
         $.ajax({
             url: url,
-            type: 'PUT',
-            data: data,
-            dataType: 'json',
+            type: 'DELETE',
             contentType: 'application/json'
         })
         .done(function (data, textStatus, handler) {

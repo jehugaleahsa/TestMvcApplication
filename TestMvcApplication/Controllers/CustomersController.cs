@@ -8,11 +8,11 @@ using Adapters.Models;
 
 namespace TestMvcApplication.Controllers
 {
-    public class CustomerController : ApiController
+    public class CustomersController : ApiController
     {
         private readonly ICustomerAdapter adapter;
 
-        public CustomerController(ICustomerAdapter adapter)
+        public CustomersController(ICustomerAdapter adapter)
         {
             if (adapter == null)
             {
@@ -21,33 +21,33 @@ namespace TestMvcApplication.Controllers
             this.adapter = adapter;
         }
 
-        public virtual CustomerData Get(string customerId)
+        public CustomerData Get(string id)
         {
-            CustomerData data = adapter.GetCustomer(customerId);
+            CustomerData data = adapter.GetCustomer(id);
             return data;
         }
 
-        public virtual CustomerData[] GetCustomers()
+        public CustomerData[] GetAll()
         {
             CustomerData[] data = adapter.GetCustomers().ToArray();
             return data;
         }
 
-        public virtual HttpResponseMessage Post(CustomerData data)
+        public HttpResponseMessage Post(CustomerData data)
         {
             CustomerData result = adapter.AddCustomer(data);
             return Request.CreateResponse(HttpStatusCode.Created, result);
         }
 
-        public virtual HttpResponseMessage Put(CustomerData data)
+        public HttpResponseMessage Put(CustomerData data)
         {
             adapter.UpdateCustomer(data);
             return Request.CreateResponse(HttpStatusCode.OK, "The customer was updated.");
         }
 
-        public virtual HttpResponseMessage Delete(string customerId)
+        public HttpResponseMessage Delete(string id)
         {
-            adapter.RemoveCustomer(customerId);
+            adapter.RemoveCustomer(id);
             return Request.CreateResponse(HttpStatusCode.OK, "The customer was deleted.");
         }
     }

@@ -99,7 +99,7 @@ namespace TestMvcApplication
             Bind<ErrorController>().ToSelf();
             Bind<ClassicController>().ToSelf();
             Bind<KnockoutController>().ToSelf();
-            Bind<CustomerController>().ToSelf();
+            Bind<CustomersController>().ToSelf();
         }
 
         private static EntitySet getEntitySet(IContext context)
