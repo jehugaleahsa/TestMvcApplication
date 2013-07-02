@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 using System.Web.Mvc;
 using MvcUtilities.Binders;
-using System.Runtime.Serialization;
 
 namespace Adapters.Models
 {

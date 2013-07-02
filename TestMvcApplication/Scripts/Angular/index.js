@@ -230,8 +230,7 @@ function CustomerRepository(baseUrl) {
         var url = buildUrl('api', 'Customers', customer.CustomerId);
         $.ajax({
             url: url,
-            type: 'DELETE',
-            contentType: 'application/json'
+            type: 'DELETE'
         })
         .done(function (data, textStatus, handler) {
             success(data);

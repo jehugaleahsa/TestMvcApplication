@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Linq;
+using System.Web.Http;
 
 namespace TestMvcApplication
 {
@@ -11,6 +12,19 @@ namespace TestMvcApplication
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            // Uncomment out the following code to use JSON as the default
+            //var formatters = from formatter in config.Formatters
+            //                 from mediaType in formatter.SupportedMediaTypes
+            //                 where mediaType.MediaType == "application/xml" || mediaType.MediaType == "text/xml"
+            //                 select new { Formatter = formatter, MediaType = mediaType } into pair
+            //                 group pair by pair.Formatter into formatterGroup
+            //                 where formatterGroup.Any()
+            //                 select formatterGroup.Key;
+            //foreach (var formatter in formatters)
+            //{
+            //    config.Formatters.Remove(formatter);
+            //}
         }
     }
 }
