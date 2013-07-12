@@ -28,6 +28,10 @@ $(function () {
     showConfirmationModal = function (config) {
         confirmationContent.html(config.content);
         confirmationOK.removeClass();
+        confirmationOK.html('OK');
+        if (config.text) {
+            confirmationOK.html(config.text);
+        }
         confirmationOK.addClass('btn');
         if (config.style) {
             confirmationOK.addClass(config.style);

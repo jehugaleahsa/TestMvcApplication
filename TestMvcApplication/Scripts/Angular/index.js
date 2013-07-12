@@ -25,32 +25,53 @@ application.directive('datepicker', function () {
 });
 
 function CustomerController($scope, repository) {
-    $scope.selected = newCustomer();
+    $scope.selected = {};
     $scope.customerList = [];
-
     $scope.orderByField = 'Name';
+    $scope.CustomerModal = {
+        Title: '',
+        Action: '',
+        Mode: '',
+        Validation: {}
+    };
+
+    resetCustomer($scope.selected);
+    resetValidation($scope.CustomerModal);
 
     repository.load(function (data) {
         $scope.customerList = data;
         $scope.$apply();
     }, handleError);
 
-    function newCustomer() {
-        return {
-            'CustomerId': null,
-            'Name': null,
-            'BirthDate': null,
-            'Height': null 
+    function resetCustomer(customer) {
+        customer.CustomerId = null;
+        customer.Name = null;
+        customer.BirthDate = null;
+        customer.Height = null;
+    }
+
+    function resetValidation(customerModal) {
+        customerModal.Validation = {
+            Name: {
+                Status: '',
+                Message: ''
+            },
+            BirthDate: {
+                Status: '',
+                Message: ''
+            },
+            Height: {
+                Status: '',
+                Message: ''
+            }
         };
     }
 
-    function copyCustomer(customer) {
-        return {
-            'CustomerId': customer.CustomerId,
-            'Name': customer.Name,
-            'BirthDate': customer.BirthDate,
-            'Height': customer.Height 
-        };
+    function copyCustomer(from, to) {
+        to.CustomerId = from.CustomerId;
+        to.Name = from.Name;
+        to.BirthDate = from.BirthDate;
+        to.Height = from.Height;
     }
 
     function find(customerId) {
@@ -63,44 +84,44 @@ function CustomerController($scope, repository) {
         return -1;
     }
 
-    $scope.showCreateModal = function () {
-        $('#modal-customer-title').text('Create Customer');
-        $('#btn-create-customer-save').text('Create');
-        $('#form-create-customer').attr('data-mode', 'create');
-        $scope.selected = newCustomer();
-        $scope.$apply();
+    $scope.showCreateModal = function (selected, customerModal) {
+        customerModal.Title = 'Create Customer';
+        customerModal.Action = 'Create';
+        customerModal.Mode = 'Create';
+
+        resetValidation(customerModal);
+        resetCustomer(selected);
         $('#modal-create-customer').modal('show');
     };
 
-    $scope.showEditModal = function (customer) {
-        $('#modal-customer-title').text('Edit Customer');
-        $('#btn-create-customer-save').text('Save');
-        $('#form-create-customer').attr('data-mode', 'edit');
-        $scope.selected = copyCustomer(customer);
-        $scope.$apply();
+    $scope.showEditModal = function (customerModal, selected, customer) {
+        customerModal.Title = 'Edit Customer';
+        customerModal.Action = 'Save';
+        customerModal.Mode = 'Edit'
+
+        resetValidation(customerModal);
+        copyCustomer(customer, selected);
         $('#modal-create-customer').modal('show');
     };
 
-    $scope.submit = function () {
+    $scope.submit = function (customerModal, selected) {
         if (!isValid()) {
-            handleError('Please correct the fields in error.');
             return;
         }
-        var mode = $('#form-create-customer').attr('data-mode');
-        if (mode == 'create') {
-            repository.create($scope.selected, function (data) {
+        if (customerModal.Mode == 'Create') {
+            repository.create(selected, function (data) {
                 $scope.customerList.push(data);
-                $scope.selected = newCustomer();
+                resetCustomer(selected);
                 $scope.$apply();
                 $('#modal-create-customer').modal('hide');
             }, handleError);
         } else {
-            repository.update($scope.selected, function (data) {
-                var index = find($scope.selected.CustomerId);
+            repository.update(selected, function (data) {
+                var index = find(selected.CustomerId);
                 var customer = $scope.customerList[index];
-                customer.Name = $scope.selected.Name;
-                customer.BirthDate = $scope.selected.BirthDate;
-                customer.Height = $scope.selected.Height;
+                customer.Name = selected.Name;
+                customer.BirthDate = selected.BirthDate;
+                customer.Height = selected.Height;
                 $scope.$apply();
                 $('#modal-create-customer').modal('hide');
             }, handleError);
@@ -110,6 +131,7 @@ function CustomerController($scope, repository) {
     $scope.deleteCustomer = function (customer) {
         showConfirmationModal({
             content: 'Are you sure you want to delete ' + customer.Name + '?',
+            text: 'Delete',
             style: 'btn-danger',
             success: function () {
                 repository.remove(customer, function () {
@@ -121,51 +143,57 @@ function CustomerController($scope, repository) {
         });
     };
 
-    $scope.isNameValid = function () {
-        if (!$scope.selected.Name) {
-            $('#name-validation').text('You must provide a name.');
-            return 'error';
+    $scope.isNameValid = function (modal, selected) {
+        if (!selected.Name) {
+            modal.Validation.Name.Status = 'error';
+            modal.Validation.Name.Message = 'You must provide a name.';
+            return false;
         }
-        $('#name-validation').text('');
-        return 'success';
+        modal.Validation.Name.Status = 'success';
+        modal.Validation.Name.Message = '';
+        return true;
     };
 
-    $scope.isBirthDateValid = function () {
-        if (!$scope.selected.BirthDate) {
-            $('#birth-date-validation').text('You must provide a birth date.');
-            return 'error';
+    $scope.isBirthDateValid = function (modal, selected) {
+        if (!selected.BirthDate) {
+            modal.Validation.BirthDate.Status = 'error';
+            modal.Validation.BirthDate.Message = 'You must provide a birth date.';
+            return false;
         }
-        if (!moment($scope.selected.BirthDate).isValid()) {
-            $('#birth-date-validation').text('You must provide a valid birth date.');
-            return 'error';
+        if (!moment(selected.BirthDate).isValid()) {
+            modal.Validation.BirthDate.Status = 'error';
+            modal.Validation.BirthDate.Message = 'You must provide a valid birth date.';
+            return false;
         }
-        $('#birth-date-validation').text('');
-        return 'success';
+        modal.Validation.BirthDate.Status = 'success';
+        modal.Validation.BirthDate.Message = '';
+        return true;
     };
 
-    $scope.isHeightValid = function () {
-        if (!$scope.selected.Height) {
-            $('#height-validation').text('You must provide a height');
-            return 'error';
+    $scope.isHeightValid = function (modal, selected) {
+        if (!selected.Height) {
+            modal.Validation.Height.Status = 'error';
+            modal.Validation.Height.Message = 'You must provide a height.';
+            return false;
         }
-        var height = parseInt($scope.selected.Height, 10);
+        var height = parseInt(selected.Height, 10);
         if (isNaN(height)) {
-            $('#height-validation').text('You must provide a valid height.');
-            return 'error';
+            modal.Validation.Height.Status = 'error';
+            modal.Validation.Height.Message = 'You must provide a valid height.';
+            return false;
         }
-        $('#height-validation').text('');
-        return 'success';
+        modal.Validation.Height.Status = 'success';
+        modal.Validation.Height.Message = '';
+        return true;
     };
 
     function isValid() {
-        if ($scope.isNameValid() == 'error') { return false; }
-        if ($scope.isBirthDateValid() == 'error') { return false; }
-        if ($scope.isHeightValid() == 'error') { return false; }
-        return true;
+        var isNameValid = $scope.isNameValid($scope.CustomerModal, $scope.selected);
+        var isBirthDateValid = $scope.isBirthDateValid($scope.CustomerModal, $scope.selected);
+        var isHeightValid = $scope.isHeightValid($scope.CustomerModal, $scope.selected);
+        return isNameValid && isBirthDateValid && isHeightValid;
     }
 }
-
-application.controller('CustomerController', ['$scope', 'repository', CustomerController]);
 
 function CustomerRepository(baseUrl) {
 

@@ -30,49 +30,49 @@
                             <td>{{customer.Name}}</td>
                             <td>{{customer.BirthDate | date}}</td>
                             <td>{{customer.Height}}</td>
-                            <td><a class="lnk-edit-customer" data-customer-id="{{customer.CustomerId}}" href="#" data-ng-click="showEditModal(customer)">Edit</a></td>
+                            <td><a class="lnk-edit-customer" data-customer-id="{{customer.CustomerId}}" href="#" data-ng-click="showEditModal(CustomerModal, selected, customer)">Edit</a></td>
                             <td><a class="lnk-delete-customer" data-customer-id="{{customer.CustomerId}}" href="#" data-ng-click="deleteCustomer(customer)">Delete</a></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <a id="btn-create-customer" href="#" class="btn btn-primary" data-ng-click="showCreateModal()">Create</a>
+            <a id="btn-create-customer" href="#" class="btn btn-primary" data-ng-click="showCreateModal(selected, CustomerModal)">Create</a>
         </div>
     </div>
     <!-- Create/Edit Modal -->
     <div id="modal-create-customer" class="modal hide fade">
         <header class="modal-header">
             <a href="#" class="close" data-dismiss="modal">&times;</a>
-            <h3 id="modal-customer-title"></h3>
+            <h3 id="modal-customer-title">{{CustomerModal.Title}}</h3>
         </header>
         <div id="content" class="modal-body">
             <form id="form-create-customer" action="#" method="get" class="form-horizontal">
-                <div class="control-group {{isNameValid()}}">
+                <div class="control-group {{CustomerModal.Validation.Name.Status}}">
                     <input name="hdnCustomerId" type="hidden" value="{{selected.CustomerId}}" />
                     <label for="txtName" class="control-label">Name:</label>
                     <div class="controls">
                         <input id="txtName" name="txtName" type="text" placeholder="Enter a name..." data-ng-model="selected.Name" />
-                        <span id="name-validation" class="help-inline"></span>
+                        <span id="name-validation" class="help-inline">{{CustomerModal.Validation.Name.Message}}</span>
                     </div>
                 </div>
-                <div class="control-group {{isBirthDateValid()}}">
+                <div class="control-group {{CustomerModal.Validation.BirthDate.Status}}">
                     <label for="dpBirthDate" class="control-label">Birth Date:</label>
                     <div class="controls">
                         <input id="dpBirthDate" name="dpBirthDate" type="text" data-ng-model="selected.BirthDate" data-datepicker />
-                        <span id="birth-date-validation" class="help-inline"></span>
+                        <span id="birth-date-validation" class="help-inline">{{CustomerModal.Validation.BirthDate.Message}}</span>
                     </div>
                 </div>
-                <div class="control-group {{isHeightValid()}}">
+                <div class="control-group {{CustomerModal.Validation.Height.Status}}">
                     <label for="txtHeight" class="control-label">Height:</label>
                     <div class="controls">
                         <input id="txtHeight" name="txtHeight" type="text" data-ng-model="selected.Height" />
-                        <span id="height-validation" class="help-inline"></span>
+                        <span id="height-validation" class="help-inline">{{CustomerModal.Validation.Height.Message}}</span>
                     </div>
                 </div>
             </form>
         </div>
         <footer class="modal-footer">
-            <a id="btn-create-customer-save" href="#" class="btn btn-primary" data-ng-click="submit()"></a>
+            <a id="btn-create-customer-save" href="#" class="btn btn-primary" data-ng-click="submit(CustomerModal, selected)">{{CustomerModal.Action}}</a>
             <a href="#" class="btn" data-dismiss="modal">Cancel</a>
         </footer>
     </div>

@@ -225,7 +225,7 @@ function submitDeleteCustomer() {
         url: buildUrl('Knockout', 'Delete'),
         type: 'delete',
         data: { customer_id: customerId },
-        dataType: 'json'
+        dataType: 'text'
     })
     .success(function (data, textStatus, handler) {
         $('#modal-delete-customer').modal('hide');
@@ -273,7 +273,7 @@ function updateCustomer(form) {
         url: buildUrl('Knockout', 'Edit'),
         type: 'put',
         data: $(form).serialize(),
-        dataType: 'json'
+        dataType: 'text'
     })
     .success(function (data, textStatus, handler) {
         $('#modal-create-customer').modal('hide');
