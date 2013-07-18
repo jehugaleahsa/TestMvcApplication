@@ -47,7 +47,7 @@
         </header>
         <div id="content" class="modal-body">
             <form id="form-create-customer" action="#" method="get" class="form-horizontal">
-                <div class="control-group {{CustomerModal.Validation.Name.Status}}">
+                <div class="control-group {{getNameStatus(CustomerModal, selected)}}">
                     <input name="hdnCustomerId" type="hidden" value="{{selected.CustomerId}}" />
                     <label for="txtName" class="control-label">Name:</label>
                     <div class="controls">
@@ -55,14 +55,14 @@
                         <span id="name-validation" class="help-inline">{{CustomerModal.Validation.Name.Message}}</span>
                     </div>
                 </div>
-                <div class="control-group {{CustomerModal.Validation.BirthDate.Status}}">
+                <div class="control-group {{getBirthDateStatus(CustomerModal, selected)}}">
                     <label for="dpBirthDate" class="control-label">Birth Date:</label>
                     <div class="controls">
                         <input id="dpBirthDate" name="dpBirthDate" type="text" data-ng-model="selected.BirthDate" data-datepicker />
                         <span id="birth-date-validation" class="help-inline">{{CustomerModal.Validation.BirthDate.Message}}</span>
                     </div>
                 </div>
-                <div class="control-group {{CustomerModal.Validation.Height.Status}}">
+                <div class="control-group {{getHeightStatus(CustomerModal, selected)}}">
                     <label for="txtHeight" class="control-label">Height:</label>
                     <div class="controls">
                         <input id="txtHeight" name="txtHeight" type="text" data-ng-model="selected.Height" />

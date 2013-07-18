@@ -51,6 +51,7 @@ function CustomerController($scope, repository) {
     }
 
     function resetValidation(customerModal) {
+        customerModal.IsSubmitted = false;
         customerModal.Validation = {
             Name: {
                 Status: '',
@@ -105,6 +106,7 @@ function CustomerController($scope, repository) {
     };
 
     $scope.submit = function (customerModal, selected) {
+        customerModal.IsSubmitted = true;
         if (!isValid()) {
             return;
         }
@@ -143,49 +145,61 @@ function CustomerController($scope, repository) {
         });
     };
 
-    $scope.isNameValid = function (modal, selected) {
+    function isNameValid(modal, selected) {
+        if (!modal.IsSubmitted) {
+            return true;
+        }
+        var container = modal.Validation.Name;
         if (!selected.Name) {
-            modal.Validation.Name.Status = 'error';
-            modal.Validation.Name.Message = 'You must provide a name.';
+            container.Status = 'error';
+            container.Message = 'You must provide a name.';
             return false;
         }
-        modal.Validation.Name.Status = 'success';
-        modal.Validation.Name.Message = '';
+        container.Status = 'success';
+        container.Message = '';
         return true;
-    };
+    }
 
-    $scope.isBirthDateValid = function (modal, selected) {
+    function isBirthDateValid(modal, selected) {
+        if (!modal.IsSubmitted) {
+            return true;
+        }
+        var container = modal.Validation.BirthDate;
         if (!selected.BirthDate) {
-            modal.Validation.BirthDate.Status = 'error';
-            modal.Validation.BirthDate.Message = 'You must provide a birth date.';
+            container.Status = 'error';
+            container.Message = 'You must provide a birth date.';
             return false;
         }
         if (!moment(selected.BirthDate).isValid()) {
-            modal.Validation.BirthDate.Status = 'error';
-            modal.Validation.BirthDate.Message = 'You must provide a valid birth date.';
+            container.Status = 'error';
+            container.Message = 'You must provide a valid birth date.';
             return false;
         }
-        modal.Validation.BirthDate.Status = 'success';
-        modal.Validation.BirthDate.Message = '';
+        container.Status = 'success';
+        container.Message = '';
         return true;
-    };
+    }
 
-    $scope.isHeightValid = function (modal, selected) {
+    function isHeightValid(modal, selected) {
+        if (!modal.IsSubmitted) {
+            return true;
+        }
+        var container = modal.Validation.Height;
         if (!selected.Height) {
-            modal.Validation.Height.Status = 'error';
-            modal.Validation.Height.Message = 'You must provide a height.';
+            container.Status = 'error';
+            container.Message = 'You must provide a height.';
             return false;
         }
         var height = parseInt(selected.Height, 10);
         if (isNaN(height)) {
-            modal.Validation.Height.Status = 'error';
-            modal.Validation.Height.Message = 'You must provide a valid height.';
+            container.Status = 'error';
+            container.Message = 'You must provide a valid height.';
             return false;
         }
-        modal.Validation.Height.Status = 'success';
-        modal.Validation.Height.Message = '';
+        container.Status = 'success';
+        container.Message = '';
         return true;
-    };
+    }
 
     function isValid() {
         var isNameValid = $scope.isNameValid($scope.CustomerModal, $scope.selected);
@@ -193,6 +207,21 @@ function CustomerController($scope, repository) {
         var isHeightValid = $scope.isHeightValid($scope.CustomerModal, $scope.selected);
         return isNameValid && isBirthDateValid && isHeightValid;
     }
+
+    $scope.getNameStatus = function (modal, selected) {
+        isNameValid(modal, selected);
+        return modal.Validation.Name.Status;
+    };
+
+    $scope.getBirthDateStatus = function (modal, selected) {
+        isBirthDateValid(modal, selected);
+        return modal.Validation.BirthDate.Status;
+    };
+
+    $scope.getHeightStatus = function (modal, selected) {
+        isHeightValid(modal, selected);
+        return modal.Validation.Height.Status;
+    };
 }
 
 function CustomerRepository(baseUrl) {
