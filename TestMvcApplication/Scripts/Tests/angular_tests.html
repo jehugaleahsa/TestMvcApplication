@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Angular Tests</title>
+        <link rel="stylesheet" href="../../Content/mocha.css" />
+    </head>
+    <body>
+        <div id="mocha"></div>
+        <script type="text/javascript" src="../jquery-2.0.2.js"></script>
+        <script type="text/javascript" src="../angular.js"></script>
+        <script type="text/javascript" src="../chai.js"></script>
+        <script type="text/javascript" src="../mocha.js"></script>
+        <script type="text/javascript">mocha.setup('bdd');</script>
+        <script type="text/javascript" src="../Shared/layout.js"></script>
+        <script type="text/javascript" src="../Angular/index.js"></script>
+
+        <script type="text/javascript">
+            chai.should();
+            describe('string', function () {
+                it('should equal other strings with the same characters', function () {
+                    'Hello'.should.equal('Hello');
+                });
+                it('should not equal other string with different characters', function () {
+                    'Hello'.should.not.equal('Goodbye');
+                });
+                it('should fail', function () {
+                    (1).should.equal(2);
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            mocha.checkLeaks();
+            mocha.run();
+        </script>
+    </body>
+</html>
