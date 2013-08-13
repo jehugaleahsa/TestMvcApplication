@@ -7,13 +7,6 @@ namespace DataModeling.DataModel
 {
     internal class EntityContext : DbContext
     {
-        public EntityContext()
-        {
-            this.Configuration.LazyLoadingEnabled = false;
-            this.Configuration.ProxyCreationEnabled = false;
-            this.Configuration.ValidateOnSaveEnabled = false;
-        }
-
         public EntityContext(string connectionString)
             : base(connectionString)
         {

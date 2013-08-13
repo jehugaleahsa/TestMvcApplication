@@ -3,9 +3,14 @@
 A repository for ASP.NET MVC patterns and best practices.
 
 ## Purpose
-After a year of struggling with ASP.NET MVC, I finally made a breakthrough. I learned a handful of techniques that made working with ASP.NET MVC a productive, reliable and fun experience. This project acts as a collection of classes, techniques, conventions and development philosophies. It is approachable for advanced and entry-level developers alike. For those just learning ASP.NET MVC, it demonstrates how to organize your code and provides working, reusable components. For the more advanced, it provides techniques to eliminate duplication, illustrates how to use popular frameworks and provides some guidelines for architecting an n-tier architecture.
+After a year of struggling with ASP.NET MVC, I finally made a breakthrough. I learned a handful of techniques that made working with ASP.NET MVC a productive, reliable and fun experience. This project acts as a collection of classes, techniques, conventions and development philosophies. It is approachable for advanced and entry-level developers alike. For those just learning ASP.NET MVC, it demonstrates how to organize your code and provides working, reusable components. For the more advanced, it provides techniques to eliminate duplication, illustrates how to use popular frameworks and provides some guidelines for building an n-tier architecture.
 
 This is an open and on-going project. I hope that it will continue to evolve and be helpful.
+
+## Getting Started
+This project uses NuGet to reference dependencies. You will need to add NuGet through the package manager. Once you do, the dependencies should be brought down the first time you build.
+
+This project uses Entity Framework's code-first to build a test database. There is a **DatabaseMigration** project that you can run to create your database. You will need to modify the **app.config** file to point the connection string to a valid database. Before you run the web application (**TestMvcApplication**), you will need to change the **web.config**'s connection string as well.
 
 ## Points of Interest
 To save you time from pouring over hundreds of lines of code, I will try to direct your attention to features that will be useful for you.
@@ -20,7 +25,7 @@ The DTOs are just plain objects. They are intentionally simple. `Customer` repre
 The `ICustomerRepository` has methods for interacting with the database. Since this is just an interface, nothing should be exposed regarding whether we're interacting with a database, a service, etc. In this solution, I am creating a repository for each database table. In a different situation, I might create a repository for a particular feature.
 
 ### Policies
-This project is extremely important for making an application configurable. This project, along with Ninject, makes it possible to do [aspect-oriented programming (AOP)](http://en.wikipedia.org/wiki/Aspect-oriented_programming). This allows us to program declaratively to do things like database transactions, exception handling, logging and a whole lot more.
+This project is extremely important for making an application configurable. This project, along with Ninject, makes it possible to do [aspect-oriented programming (AOP)](http://en.wikipedia.org/wiki/Aspect-oriented_programming). This allows us to program declaratively to do things like database transactions, exception handling policies, logging and a whole lot more.
 
 `AttributeInterceptor` is an abstract class. It provides a single method for getting custom attributes from a method. Most policies are declared using attributes. For instance, we might indicate that a method should run within a database transaction by doing something like this:
 
@@ -36,9 +41,13 @@ We can configure the system to look for methods with this attribute and decorate
 
 A common operation in a layered architecture is to simply capture exceptions from a lower layer and wrap them with a new exception. This is what `ExceptionInterceptor` does. The idea is that the cause of the exception can't be handled yet but we don't want to burden higher layers with handling low-level exception types. Allowing certain types of exceptions to bubble up could actually break our abstraction. `ExceptionInterceptor` will inspect the decorated method for an optional `ErrorMessage` attribute and use it as the new exception's message.
 
-Other common operations, such as logging can be performed in a declarative way. Just defining some arbitrary classes won't accomplish anything. Take a look at the `TestMvcApplication/App_Start/NinjectWebCommon.cs` class - it will show how these interceptors are wired up.
+Other common operations, such as logging, tracing, etc. can be performed in a declarative way.
+
+Just defining some arbitrary classes won't accomplish anything. Take a look at the `TestMvcApplication/App_Start/NinjectWebCommon.cs` class - it will show how these interceptors are wired up.
 
 ### Data Modeling
+Under the hood, I am using Entity Framework's code-first feature. More or less, Entity Framework will use conventions to "assume" how to map entities (`Customer`) to database tables. Where it isn't smart enough, I provide a `EntityTypeConfiguration` object to be explicit. This configuration object is used to synchronize the code's model with the database's model. It is also used when generating the actual SQL. Check out some of the classes found under the **DataModel** folder and then explore the **DataMigration** project to see how to manually synchronize and pre-populate a database.
+
 This project contains an implementation for the `ICustomerRepository` interface. This solution uses Entity Framework with SQL Server to store customer data. When building large systems, it is usually important to hide which underlying data access tools you are using. The Repository pattern achieves this for us nicely. If we decided to move our data layer to a separate service (maybe for load balancing or to be closer to the database), the repository interface will shield most of the code from the change.
 
 In order to implement the `ICustomerRepository` interface, `CustomerRepository` accepts an instance of `EntitySet`. `EntitySet` is a thin wrapper around a `DbContext` class, a member of the Entity Framework. This class is configured to allow us to use raw DTOs (or [POCO](http://msdn.microsoft.com/en-us/library/vstudio/dd456853.aspx)s). Normally, Entity Framework will auto-generate our data objects for us based on the entity model; however, these classes have a lot of additional logic for managing their state internally which in larger systems can lead to EF concerns bleeding into other layers.
