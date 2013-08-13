@@ -10,9 +10,6 @@ namespace DataModeling.DataModel
         public EntityContext(string connectionString)
             : base(connectionString)
         {
-            this.Configuration.LazyLoadingEnabled = false;
-            this.Configuration.ProxyCreationEnabled = false;
-            this.Configuration.ValidateOnSaveEnabled = false;
         }
 
         public ObjectContext ObjectContext
@@ -26,9 +23,12 @@ namespace DataModeling.DataModel
 
         public DbSet<Customer> Customers { get; set; }
 
+        public DbSet<CustomerSetting> CustomerSettings { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new CustomerConfiguration());
+            modelBuilder.Configurations.Add(new CustomerSettingConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }

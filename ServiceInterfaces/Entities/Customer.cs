@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ServiceInterfaces.Entities
 {
@@ -11,5 +12,7 @@ namespace ServiceInterfaces.Entities
         public DateTime BirthDate { get; set; }
 
         public int Height { get; set; }
+
+        public ICollection<CustomerSetting> Settings { get; private set; }
     }
 }

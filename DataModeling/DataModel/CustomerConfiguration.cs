@@ -9,7 +9,8 @@ namespace DataModeling.DataModel
         public CustomerConfiguration()
         {
             Property(c => c.CustomerId).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(c => c.Name).HasMaxLength(250);
+            HasMany(c => c.Settings).WithRequired(s => s.Customer).WillCascadeOnDelete(true);
+            Property(c => c.Name).HasMaxLength(250).IsRequired();
         }
     }
 }

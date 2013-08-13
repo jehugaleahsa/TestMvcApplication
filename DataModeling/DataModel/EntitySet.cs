@@ -14,6 +14,9 @@ namespace DataModeling.DataModel
         public EntitySet(string connectionString)
         {
             context = new EntityContext(connectionString);
+            context.Configuration.LazyLoadingEnabled = false;
+            context.Configuration.ProxyCreationEnabled = false;
+            context.Configuration.ValidateOnSaveEnabled = false;
         }
 
         ~EntitySet()
@@ -44,11 +47,6 @@ namespace DataModeling.DataModel
             }
         }
 
-        public IDbSet<Customer> Customers
-        {
-            get { return context.Customers; }
-        }
-
         public IEnumerable<TEntity> GetEntities<TEntity>(DbDataReader reader)
         {
             return context.ObjectContext.Translate<TEntity>(reader);
@@ -57,6 +55,16 @@ namespace DataModeling.DataModel
         public int SaveChanges()
         {
             return context.SaveChanges();
+        }
+
+        public IDbSet<Customer> Customers
+        {
+            get { return context.Customers; }
+        }
+
+        public IDbSet<CustomerSetting> Settings 
+        { 
+            get { return context.CustomerSettings; } 
         }
     }
 }

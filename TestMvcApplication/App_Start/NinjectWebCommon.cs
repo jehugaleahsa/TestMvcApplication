@@ -17,6 +17,7 @@ using ServiceInterfaces.Repositories;
 using TestMvcApplication.Context;
 using TestMvcApplication.Controllers;
 using TestMvcApplication.Interceptors;
+using Ninject.Syntax;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(TestMvcApplication.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(TestMvcApplication.NinjectWebCommon), "Stop")]
@@ -88,18 +89,34 @@ namespace TestMvcApplication
             Bind<TraceAttribute>().ToSelf();
 
             var customerRepositoryBinding = Bind<ICustomerRepository>().To<CustomerRepository>();
-            customerRepositoryBinding.Intercept().With<DataExceptionInterceptor>().InOrder(1);
-            customerRepositoryBinding.Intercept().With<LogInterceptor>().InOrder(2);
+            setupRepositoryInterceptors(customerRepositoryBinding);
 
-            var adapterBinding = Bind<ICustomerAdapter>().To<CustomerAdapter>();
-            adapterBinding.Intercept().With<AdapterExceptionInterceptor>().InOrder(1);
-            adapterBinding.Intercept().With<TransactionInterceptor>().InOrder(2);
-            adapterBinding.Intercept().With<LogInterceptor>().InOrder(3);
+            var settingRepositoryBinding = Bind<ICustomerSettingRepository>().To<CustomerSettingRepository>();
+            setupRepositoryInterceptors(customerRepositoryBinding);
+
+            var customerAdapterBinding = Bind<ICustomerAdapter>().To<CustomerAdapter>();
+            setupAdapterInterceptors(customerAdapterBinding);
+
+            var settingAdapterBinding = Bind<ISettingAdapter>().To<SettingAdapter>();
+            setupAdapterInterceptors(settingAdapterBinding);
 
             Bind<ErrorController>().ToSelf();
             Bind<ClassicController>().ToSelf();
             Bind<KnockoutController>().ToSelf();
             Bind<CustomersController>().ToSelf();
+        }
+
+        private static void setupRepositoryInterceptors<TRepository>(IBindingWhenInNamedWithOrOnSyntax<TRepository> binding)
+        {
+            binding.Intercept().With<DataExceptionInterceptor>().InOrder(1);
+            binding.Intercept().With<LogInterceptor>().InOrder(2);
+        }
+
+        private static void setupAdapterInterceptors<TAdapter>(IBindingWhenInNamedWithOrOnSyntax<TAdapter> binding)
+        {
+            binding.Intercept().With<AdapterExceptionInterceptor>().InOrder(1);
+            binding.Intercept().With<TransactionInterceptor>().InOrder(2);
+            binding.Intercept().With<LogInterceptor>().InOrder(3);
         }
 
         private static EntitySet getEntitySet(IContext context)

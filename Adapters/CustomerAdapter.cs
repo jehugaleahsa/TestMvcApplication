@@ -24,11 +24,7 @@ namespace Adapters
             CustomerMapper = new CustomerMapper();
         }
 
-        public ICustomerMapper CustomerMapper
-        {
-            get;
-            set;
-        }
+        public ICustomerMapper CustomerMapper { get; set; }
 
         [Log]
         [ErrorMessage("An error occurred while retrieving the customer.")]
