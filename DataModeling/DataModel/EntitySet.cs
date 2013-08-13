@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Data.EntityClient;
-using System.Data.Objects;
 using ServiceInterfaces.Entities;
 
 namespace DataModeling.DataModel
@@ -48,7 +46,7 @@ namespace DataModeling.DataModel
 
         public IDbSet<Customer> Customers
         {
-            get { return context.Set<Customer>(); }
+            get { return context.Customers; }
         }
 
         public IEnumerable<TEntity> GetEntities<TEntity>(DbDataReader reader)
@@ -59,26 +57,6 @@ namespace DataModeling.DataModel
         public int SaveChanges()
         {
             return context.SaveChanges();
-        }
-
-        private class EntityContext : DbContext
-        {
-            public EntityContext(string connectionString)
-                : base(connectionString)
-            {
-                this.Configuration.LazyLoadingEnabled = false;
-                this.Configuration.ProxyCreationEnabled = false;
-                this.Configuration.ValidateOnSaveEnabled = false;
-            }
-
-            public ObjectContext ObjectContext
-            {
-                get
-                {
-                    IObjectContextAdapter adapter = this as IObjectContextAdapter;
-                    return adapter.ObjectContext;
-                }
-            }
         }
     }
 }
