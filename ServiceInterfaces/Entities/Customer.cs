@@ -13,6 +13,6 @@ namespace ServiceInterfaces.Entities
 
         public int Height { get; set; }
 
-        public ICollection<CustomerSetting> Settings { get; private set; }
+        public ICollection<AddressItem> Settings { get; private set; }
     }
 }

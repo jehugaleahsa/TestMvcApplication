@@ -43,12 +43,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Customer.cs" />
-    <Compile Include="Entities\CustomerSetting.cs" />
+    <Compile Include="Entities\AddressItem.cs" />
     <Compile Include="IConfigurationManager.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="Repositories\ICustomerRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\ICustomerSettingRepository.cs" />
+    <Compile Include="Repositories\IAddressItemRepository.cs" />
     <Compile Include="ServiceException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

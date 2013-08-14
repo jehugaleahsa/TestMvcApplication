@@ -91,13 +91,13 @@ namespace TestMvcApplication
             var customerRepositoryBinding = Bind<ICustomerRepository>().To<CustomerRepository>();
             setupRepositoryInterceptors(customerRepositoryBinding);
 
-            var settingRepositoryBinding = Bind<ICustomerSettingRepository>().To<CustomerSettingRepository>();
+            var settingRepositoryBinding = Bind<IAddressItemRepository>().To<AddressItemRepository>();
             setupRepositoryInterceptors(customerRepositoryBinding);
 
             var customerAdapterBinding = Bind<ICustomerAdapter>().To<CustomerAdapter>();
             setupAdapterInterceptors(customerAdapterBinding);
 
-            var settingAdapterBinding = Bind<ISettingAdapter>().To<SettingAdapter>();
+            var settingAdapterBinding = Bind<IAddressItemAdapter>().To<AddressItemAdapter>();
             setupAdapterInterceptors(settingAdapterBinding);
 
             Bind<ErrorController>().ToSelf();

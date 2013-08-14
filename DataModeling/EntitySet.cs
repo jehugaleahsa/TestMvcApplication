@@ -63,9 +63,9 @@ namespace DataModeling
             get { return context.Customers; }
         }
 
-        public IDbSet<CustomerSetting> Settings 
+        public IDbSet<AddressItem> AddressItems 
         { 
-            get { return context.CustomerSettings; } 
+            get { return context.AddressItems; } 
         }
     }
 }

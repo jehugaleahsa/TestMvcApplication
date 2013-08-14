@@ -10,7 +10,7 @@ This is an open and on-going project. I hope that it will continue to evolve and
 ## Getting Started
 This project uses NuGet to reference dependencies. You will need to add NuGet through the package manager. Once you do, the dependencies should be brought down the first time you build.
 
-This project uses Entity Framework's code-first to build a test database. There is a **DatabaseMigration** project that you can run to create your database. You will need to modify the **app.config** file to point the connection string to a valid database. Before you run the web application (**TestMvcApplication**), you will need to change the **web.config**'s connection string as well.
+This project uses Entity Framework's code-first to build a test database. There is a **DatabaseMigration** project that you can run to create your database. You will need to modify the **app.config** file to point the connection string to a valid database. Before you run the web application ( **TestMvcApplication** ), you will need to change the **web.config**'s connection string as well.
 
 ## Points of Interest
 To save you time from pouring over hundreds of lines of code, I will try to direct your attention to features that will be useful for you.
