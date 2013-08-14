@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Data.EntityClient;
+using DataModeling.DataModel;
 using ServiceInterfaces.Entities;
 
-namespace DataModeling.DataModel
+namespace DataModeling
 {
     public class EntitySet : IDisposable
     {

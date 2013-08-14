@@ -2,7 +2,7 @@ using System;
 using System.Web;
 using System.Web.Http;
 using Adapters;
-using DataModeling.DataModel;
+using DataModeling;
 using DataModeling.Repositories;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using MvcUtilities.FilterAttributes;
@@ -10,6 +10,7 @@ using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Interception.Infrastructure.Language;
 using Ninject.Modules;
+using Ninject.Syntax;
 using Ninject.Web.Common;
 using Policies;
 using ServiceInterfaces;
@@ -17,7 +18,6 @@ using ServiceInterfaces.Repositories;
 using TestMvcApplication.Context;
 using TestMvcApplication.Controllers;
 using TestMvcApplication.Interceptors;
-using Ninject.Syntax;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(TestMvcApplication.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(TestMvcApplication.NinjectWebCommon), "Stop")]
