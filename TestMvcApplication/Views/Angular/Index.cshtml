@@ -40,7 +40,7 @@
         </div>
     </div>
     <!-- Create/Edit Modal -->
-    <div id="modal-create-customer" class="modal hide fade">
+    <div id="modal-customer" class="modal hide fade">
         <header class="modal-header">
             <a href="#" class="close" data-dismiss="modal">&times;</a>
             <h3 id="modal-customer-title">{{customerModal.Title}}</h3>
@@ -73,7 +73,7 @@
                                type="text" 
                                data-ng-model="selected.BirthDate" 
                                required="required" 
-                               data-ng-pattern="/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/(199\d|[2-9]\d{3})$/"
+                               data-ng-pattern="/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/(\d{2}|\d{4})$/"
                                data-datepicker />
                         <span class="help-inline" data-ng-show="showErrorMessage(formCustomer.dpBirthDate, 'required')">You must provide a birth date.</span>
                         <span class="help-inline" data-ng-show="showErrorMessage(formCustomer.dpBirthDate, 'pattern')">You must provide a valid birth date.</span>
@@ -84,13 +84,12 @@
                     <div class="controls">
                         <input id="txtHeight" 
                                name="txtHeight" 
-                               type="number"
-                               min=0
+                               type="text"
+                               data-ng-pattern="/^\d*$/"
                                data-ng-model="selected.Height"
                                required="required" />
                         <span class="help-inline" data-ng-show="showErrorMessage(formCustomer.txtHeight, 'required')">You must provide a height.</span>
-                        <span class="help-inline" data-ng-show="showErrorMessage(formCustomer.txtHeight, 'number')">You must provide a valid height.</span>
-                        <span class="help-inline" data-ng-show="showErrorMessage(formCustomer.txtHeight, 'min')">A height cannot be negative.</span>
+                        <span class="help-inline" data-ng-show="showErrorMessage(formCustomer.txtHeight, 'pattern')">You must provide a valid height.</span>
                     </div>
                 </div>
             </form>

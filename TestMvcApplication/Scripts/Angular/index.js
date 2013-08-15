@@ -79,7 +79,7 @@ function CustomerController($scope, repository) {
 
         resetCustomer(selected);
         setDirty(form, false);
-        $('#modal-create-customer').modal('show');
+        $('#modal-customer').modal('show');
     };
 
     $scope.showEditModal = function (modal, selected, customer, form) {
@@ -89,7 +89,7 @@ function CustomerController($scope, repository) {
 
         copyCustomer(customer, selected);
         setDirty(form, false);
-        $('#modal-create-customer').modal('show');
+        $('#modal-customer').modal('show');
     };
 
     $scope.submit = function (modal, selected, form) {
@@ -102,7 +102,7 @@ function CustomerController($scope, repository) {
                 $scope.customerList.push(data);
                 resetCustomer(selected);
                 $scope.$apply();
-                $('#modal-create-customer').modal('hide');
+                $('#modal-customer').modal('hide');
             }, handleError);
         } else {
             repository.update(selected, function (data) {
@@ -112,7 +112,7 @@ function CustomerController($scope, repository) {
                 customer.BirthDate = selected.BirthDate;
                 customer.Height = selected.Height;
                 $scope.$apply();
-                $('#modal-create-customer').modal('hide');
+                $('#modal-customer').modal('hide');
             }, handleError);
         }
     };
