@@ -30,13 +30,13 @@
                             <td>{{customer.Name}}</td>
                             <td>{{customer.BirthDate | date}}</td>
                             <td>{{customer.Height}}</td>
-                            <td><a class="lnk-edit-customer" data-customer-id="{{customer.CustomerId}}" href="#" data-ng-click="showEditModal(CustomerModal, selected, customer)">Edit</a></td>
+                            <td><a class="lnk-edit-customer" data-customer-id="{{customer.CustomerId}}" href="#" data-ng-click="showEditModal(CustomerModal, selected, customer, formCustomer)">Edit</a></td>
                             <td><a class="lnk-delete-customer" data-customer-id="{{customer.CustomerId}}" href="#" data-ng-click="deleteCustomer(customer)">Delete</a></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <a id="btn-create-customer" href="#" class="btn btn-primary" data-ng-click="showCreateModal(selected, CustomerModal)">Create</a>
+            <a id="btn-create-customer" href="#" class="btn btn-primary" data-ng-click="showCreateModal(selected, CustomerModal, formCustomer)">Create</a>
         </div>
     </div>
     <!-- Create/Edit Modal -->
@@ -46,33 +46,61 @@
             <h3 id="modal-customer-title">{{CustomerModal.Title}}</h3>
         </header>
         <div id="content" class="modal-body">
-            <form id="form-create-customer" action="#" method="get" class="form-horizontal">
-                <div class="control-group {{getNameStatus(CustomerModal, selected)}}">
+            <form id="form-create-customer" 
+                  name="formCustomer" 
+                  action="#" 
+                  method="get" 
+                  class="form-horizontal" 
+                  novalidate="novalidate">
+                <div class="control-group" 
+                     data-ng-class="{ error : formCustomer.txtName.$dirty && formCustomer.txtName.$invalid, success: !formCustomer.txtName.$invalid }">
                     <input name="hdnCustomerId" type="hidden" value="{{selected.CustomerId}}" />
                     <label for="txtName" class="control-label">Name:</label>
                     <div class="controls">
-                        <input id="txtName" name="txtName" type="text" placeholder="Enter a name..." data-ng-model="selected.Name" />
-                        <span id="name-validation" class="help-inline">{{CustomerModal.Validation.Name.Message}}</span>
+                        <input id="txtName" name="txtName" type="text" placeholder="Enter a name..." data-ng-model="selected.Name" required="required" />
+                        <span class="help-inline"
+                              data-ng-show="formCustomer.txtName.$dirty && formCustomer.txtName.$error.required">You must provide a name.</span>
                     </div>
                 </div>
-                <div class="control-group {{getBirthDateStatus(CustomerModal, selected)}}">
+                <div class="control-group" 
+                     data-ng-class="{ error: formCustomer.dpBirthDate.$dirty && formCustomer.dpBirthDate.$invalid, success: !formCustomer.dpBirthDate.$invalid }">
                     <label for="dpBirthDate" class="control-label">Birth Date:</label>
                     <div class="controls">
-                        <input id="dpBirthDate" name="dpBirthDate" type="text" data-ng-model="selected.BirthDate" data-datepicker />
-                        <span id="birth-date-validation" class="help-inline">{{CustomerModal.Validation.BirthDate.Message}}</span>
+                        <input id="dpBirthDate" 
+                               name="dpBirthDate" 
+                               type="text" 
+                               data-ng-model="selected.BirthDate" 
+                               required="required" 
+                               data-ng-pattern="/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/(199\d|[2-9]\d{3})$/"
+                               data-datepicker />
+                        <span class="help-inline"
+                              data-ng-show="formCustomer.dpBirthDate.$dirty && formCustomer.dpBirthDate.$error.required">You must provide a birth date.</span>
+                        <span class="help-inline"
+                              data-ng-show="formCustomer.dpBirthDate.$dirty && formCustomer.dpBirthDate.$error.pattern">You must provide a valid birth date.</span>
                     </div>
                 </div>
-                <div class="control-group {{getHeightStatus(CustomerModal, selected)}}">
+                <div class="control-group"
+                     data-ng-class="{ error: formCustomer.txtHeight.$dirty && formCustomer.txtHeight.$invalid, success: !formCustomer.txtHeight.$invalid }">
                     <label for="txtHeight" class="control-label">Height:</label>
                     <div class="controls">
-                        <input id="txtHeight" name="txtHeight" type="text" data-ng-model="selected.Height" />
-                        <span id="height-validation" class="help-inline">{{CustomerModal.Validation.Height.Message}}</span>
+                        <input id="txtHeight" 
+                               name="txtHeight" 
+                               type="number"
+                               min=0
+                               data-ng-model="selected.Height"
+                               required="required" />
+                        <span class="help-inline"
+                              data-ng-show="formCustomer.txtHeight.$dirty && formCustomer.txtHeight.$error.required">You must provide a height.</span>
+                        <span class="help-inline"
+                              data-ng-show="formCustomer.txtHeight.$dirty && formCustomer.txtHeight.$error.number">You must provide a valid height.</span>
+                        <span class="help-inline"
+                              data-ng-show="formCustomer.txtHeight.$dirty && formCustomer.txtHeight.$error.min">A height cannot be negative.</span>
                     </div>
                 </div>
             </form>
         </div>
         <footer class="modal-footer">
-            <a id="btn-create-customer-save" href="#" class="btn btn-primary" data-ng-click="submit(CustomerModal, selected)">{{CustomerModal.Action}}</a>
+            <a href="#" id="btn-create-customer-save" type="submit" class="btn btn-primary" data-ng-click="submit(CustomerModal, selected, formCustomer)">{{CustomerModal.Action}}</a>
             <a href="#" class="btn" data-dismiss="modal">Cancel</a>
         </footer>
     </div>

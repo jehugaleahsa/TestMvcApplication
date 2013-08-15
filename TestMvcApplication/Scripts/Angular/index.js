@@ -31,12 +31,10 @@ function CustomerController($scope, repository) {
     $scope.CustomerModal = {
         Title: '',
         Action: '',
-        Mode: '',
-        Validation: {}
+        Mode: ''
     };
 
     resetCustomer($scope.selected);
-    resetValidation($scope.CustomerModal);
 
     repository.load(function (data) {
         $scope.customerList = data;
@@ -50,22 +48,11 @@ function CustomerController($scope, repository) {
         customer.Height = null;
     }
 
-    function resetValidation(customerModal) {
-        customerModal.IsSubmitted = false;
-        customerModal.Validation = {
-            Name: {
-                Status: '',
-                Message: ''
-            },
-            BirthDate: {
-                Status: '',
-                Message: ''
-            },
-            Height: {
-                Status: '',
-                Message: ''
-            }
-        };
+    function setDirty(form, isDirty) {
+        var elements = [form.txtName, form.dpBirthDate, form.txtHeight]
+        for (var index = 0; index != elements.length; ++index) {
+            elements[index].$dirty = isDirty;
+        }
     }
 
     function copyCustomer(from, to) {
@@ -85,29 +72,29 @@ function CustomerController($scope, repository) {
         return -1;
     }
 
-    $scope.showCreateModal = function (selected, customerModal) {
+    $scope.showCreateModal = function (selected, customerModal, form) {
         customerModal.Title = 'Create Customer';
         customerModal.Action = 'Create';
         customerModal.Mode = 'Create';
 
-        resetValidation(customerModal);
         resetCustomer(selected);
+        setDirty(form, false);
         $('#modal-create-customer').modal('show');
     };
 
-    $scope.showEditModal = function (customerModal, selected, customer) {
+    $scope.showEditModal = function (customerModal, selected, customer, form) {
         customerModal.Title = 'Edit Customer';
         customerModal.Action = 'Save';
         customerModal.Mode = 'Edit'
 
-        resetValidation(customerModal);
         copyCustomer(customer, selected);
+        setDirty(form, false);
         $('#modal-create-customer').modal('show');
     };
 
-    $scope.submit = function (customerModal, selected) {
-        customerModal.IsSubmitted = true;
-        if (!isValid()) {
+    $scope.submit = function (customerModal, selected, form) {
+        setDirty(form, true);
+        if (form.$invalid) {
             return;
         }
         if (customerModal.Mode == 'Create') {
@@ -144,84 +131,6 @@ function CustomerController($scope, repository) {
             }
         });
     };
-
-    function isNameValid(modal, selected) {
-        if (!modal.IsSubmitted) {
-            return true;
-        }
-        var container = modal.Validation.Name;
-        if (!selected.Name) {
-            container.Status = 'error';
-            container.Message = 'You must provide a name.';
-            return false;
-        }
-        container.Status = 'success';
-        container.Message = '';
-        return true;
-    }
-
-    function isBirthDateValid(modal, selected) {
-        if (!modal.IsSubmitted) {
-            return true;
-        }
-        var container = modal.Validation.BirthDate;
-        if (!selected.BirthDate) {
-            container.Status = 'error';
-            container.Message = 'You must provide a birth date.';
-            return false;
-        }
-        if (!moment(selected.BirthDate).isValid()) {
-            container.Status = 'error';
-            container.Message = 'You must provide a valid birth date.';
-            return false;
-        }
-        container.Status = 'success';
-        container.Message = '';
-        return true;
-    }
-
-    function isHeightValid(modal, selected) {
-        if (!modal.IsSubmitted) {
-            return true;
-        }
-        var container = modal.Validation.Height;
-        if (!selected.Height) {
-            container.Status = 'error';
-            container.Message = 'You must provide a height.';
-            return false;
-        }
-        var height = parseInt(selected.Height, 10);
-        if (isNaN(height)) {
-            container.Status = 'error';
-            container.Message = 'You must provide a valid height.';
-            return false;
-        }
-        container.Status = 'success';
-        container.Message = '';
-        return true;
-    }
-
-    function isValid() {
-        var isNameValid = $scope.isNameValid($scope.CustomerModal, $scope.selected);
-        var isBirthDateValid = $scope.isBirthDateValid($scope.CustomerModal, $scope.selected);
-        var isHeightValid = $scope.isHeightValid($scope.CustomerModal, $scope.selected);
-        return isNameValid && isBirthDateValid && isHeightValid;
-    }
-
-    $scope.getNameStatus = function (modal, selected) {
-        isNameValid(modal, selected);
-        return modal.Validation.Name.Status;
-    };
-
-    $scope.getBirthDateStatus = function (modal, selected) {
-        isBirthDateValid(modal, selected);
-        return modal.Validation.BirthDate.Status;
-    };
-
-    $scope.getHeightStatus = function (modal, selected) {
-        isHeightValid(modal, selected);
-        return modal.Validation.Height.Status;
-    };
 }
 
 function CustomerRepository(baseUrl) {
@@ -239,11 +148,9 @@ function CustomerRepository(baseUrl) {
             type: 'GET',
             dataType: 'JSON',
             cache: false
-        })
-        .done(function (data, textStatus, handler) {
+        }).done(function (data, textStatus, handler) {
             success(data);
-        })
-        .fail(function (handler, textStatus, errorThrown) {
+        }).fail(function (handler, textStatus, errorThrown) {
             error(errorThrown);
         });
     };
@@ -257,11 +164,9 @@ function CustomerRepository(baseUrl) {
             data: data,
             dataType: 'json',
             contentType: 'application/json'
-        })
-        .done(function (data, textStatus, handler) {
+        }).done(function (data, textStatus, handler) {
             success(data);
-        })
-        .fail(function (handler, textStatus, errorThrown) {
+        }).fail(function (handler, textStatus, errorThrown) {
             error(errorThrown);
         });
     };
@@ -274,11 +179,9 @@ function CustomerRepository(baseUrl) {
             type: 'PUT',
             data: data,
             contentType: 'application/json'
-        })
-        .done(function (data, textStatus, handler) {
+        }).done(function (data, textStatus, handler) {
             success(data);
-        })
-        .fail(function (handler, textStatus, errorThrown) {
+        }).fail(function (handler, textStatus, errorThrown) {
             error(errorThrown);
         });
     };
@@ -288,11 +191,9 @@ function CustomerRepository(baseUrl) {
         $.ajax({
             url: url,
             type: 'DELETE'
-        })
-        .done(function (data, textStatus, handler) {
+        }).done(function (data, textStatus, handler) {
             success(data);
-        })
-        .fail(function (handler, textStatus, errorThrown) {
+        }).fail(function (handler, textStatus, errorThrown) {
             error(errorThrown);
         });
     };
