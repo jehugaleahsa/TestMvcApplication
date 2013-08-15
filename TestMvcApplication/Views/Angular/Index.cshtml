@@ -30,20 +30,20 @@
                             <td>{{customer.Name}}</td>
                             <td>{{customer.BirthDate | date}}</td>
                             <td>{{customer.Height}}</td>
-                            <td><a class="lnk-edit-customer" data-customer-id="{{customer.CustomerId}}" href="#" data-ng-click="showEditModal(CustomerModal, selected, customer, formCustomer)">Edit</a></td>
+                            <td><a class="lnk-edit-customer" data-customer-id="{{customer.CustomerId}}" href="#" data-ng-click="showEditModal(customerModal, selected, customer, formCustomer)">Edit</a></td>
                             <td><a class="lnk-delete-customer" data-customer-id="{{customer.CustomerId}}" href="#" data-ng-click="deleteCustomer(customer)">Delete</a></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <a id="btn-create-customer" href="#" class="btn btn-primary" data-ng-click="showCreateModal(selected, CustomerModal, formCustomer)">Create</a>
+            <a id="btn-create-customer" href="#" class="btn btn-primary" data-ng-click="showCreateModal(selected, customerModal, formCustomer)">Create</a>
         </div>
     </div>
     <!-- Create/Edit Modal -->
     <div id="modal-create-customer" class="modal hide fade">
         <header class="modal-header">
             <a href="#" class="close" data-dismiss="modal">&times;</a>
-            <h3 id="modal-customer-title">{{CustomerModal.Title}}</h3>
+            <h3 id="modal-customer-title">{{customerModal.Title}}</h3>
         </header>
         <div id="content" class="modal-body">
             <form id="form-create-customer" 
@@ -52,18 +52,20 @@
                   method="get" 
                   class="form-horizontal" 
                   novalidate="novalidate">
-                <div class="control-group" 
-                     data-ng-class="{ error : formCustomer.txtName.$dirty && formCustomer.txtName.$invalid, success: !formCustomer.txtName.$invalid }">
+                <div class="control-group" data-ng-class="getStatusClass(formCustomer.txtName)">
                     <input name="hdnCustomerId" type="hidden" value="{{selected.CustomerId}}" />
                     <label for="txtName" class="control-label">Name:</label>
                     <div class="controls">
-                        <input id="txtName" name="txtName" type="text" placeholder="Enter a name..." data-ng-model="selected.Name" required="required" />
-                        <span class="help-inline"
-                              data-ng-show="formCustomer.txtName.$dirty && formCustomer.txtName.$error.required">You must provide a name.</span>
+                        <input id="txtName" 
+                               name="txtName" 
+                               type="text" 
+                               placeholder="Enter a name..." 
+                               data-ng-model="selected.Name" 
+                               required="required" />
+                        <span class="help-inline" data-ng-show="showErrorMessage(formCustomer.txtName, 'required')">You must provide a name.</span>
                     </div>
                 </div>
-                <div class="control-group" 
-                     data-ng-class="{ error: formCustomer.dpBirthDate.$dirty && formCustomer.dpBirthDate.$invalid, success: !formCustomer.dpBirthDate.$invalid }">
+                <div class="control-group" data-ng-class="getStatusClass(formCustomer.dpBirthDate)">
                     <label for="dpBirthDate" class="control-label">Birth Date:</label>
                     <div class="controls">
                         <input id="dpBirthDate" 
@@ -73,14 +75,11 @@
                                required="required" 
                                data-ng-pattern="/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/(199\d|[2-9]\d{3})$/"
                                data-datepicker />
-                        <span class="help-inline"
-                              data-ng-show="formCustomer.dpBirthDate.$dirty && formCustomer.dpBirthDate.$error.required">You must provide a birth date.</span>
-                        <span class="help-inline"
-                              data-ng-show="formCustomer.dpBirthDate.$dirty && formCustomer.dpBirthDate.$error.pattern">You must provide a valid birth date.</span>
+                        <span class="help-inline" data-ng-show="showErrorMessage(formCustomer.dpBirthDate, 'required')">You must provide a birth date.</span>
+                        <span class="help-inline" data-ng-show="showErrorMessage(formCustomer.dpBirthDate, 'pattern')">You must provide a valid birth date.</span>
                     </div>
                 </div>
-                <div class="control-group"
-                     data-ng-class="{ error: formCustomer.txtHeight.$dirty && formCustomer.txtHeight.$invalid, success: !formCustomer.txtHeight.$invalid }">
+                <div class="control-group" data-ng-class="getStatusClass(formCustomer.txtHeight)">
                     <label for="txtHeight" class="control-label">Height:</label>
                     <div class="controls">
                         <input id="txtHeight" 
@@ -89,18 +88,15 @@
                                min=0
                                data-ng-model="selected.Height"
                                required="required" />
-                        <span class="help-inline"
-                              data-ng-show="formCustomer.txtHeight.$dirty && formCustomer.txtHeight.$error.required">You must provide a height.</span>
-                        <span class="help-inline"
-                              data-ng-show="formCustomer.txtHeight.$dirty && formCustomer.txtHeight.$error.number">You must provide a valid height.</span>
-                        <span class="help-inline"
-                              data-ng-show="formCustomer.txtHeight.$dirty && formCustomer.txtHeight.$error.min">A height cannot be negative.</span>
+                        <span class="help-inline" data-ng-show="showErrorMessage(formCustomer.txtHeight, 'required')">You must provide a height.</span>
+                        <span class="help-inline" data-ng-show="showErrorMessage(formCustomer.txtHeight, 'number')">You must provide a valid height.</span>
+                        <span class="help-inline" data-ng-show="showErrorMessage(formCustomer.txtHeight, 'min')">A height cannot be negative.</span>
                     </div>
                 </div>
             </form>
         </div>
         <footer class="modal-footer">
-            <a href="#" id="btn-create-customer-save" type="submit" class="btn btn-primary" data-ng-click="submit(CustomerModal, selected, formCustomer)">{{CustomerModal.Action}}</a>
+            <a href="#" id="btn-create-customer-save" type="submit" class="btn btn-primary" data-ng-click="submit(customerModal, selected, formCustomer)">{{customerModal.Action}}</a>
             <a href="#" class="btn" data-dismiss="modal">Cancel</a>
         </footer>
     </div>

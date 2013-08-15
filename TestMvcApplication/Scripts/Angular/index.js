@@ -28,7 +28,7 @@ function CustomerController($scope, repository) {
     $scope.selected = {};
     $scope.customerList = [];
     $scope.orderByField = 'Name';
-    $scope.CustomerModal = {
+    $scope.customerModal = {
         Title: '',
         Action: '',
         Mode: ''
@@ -72,32 +72,32 @@ function CustomerController($scope, repository) {
         return -1;
     }
 
-    $scope.showCreateModal = function (selected, customerModal, form) {
-        customerModal.Title = 'Create Customer';
-        customerModal.Action = 'Create';
-        customerModal.Mode = 'Create';
+    $scope.showCreateModal = function (selected, modal, form) {
+        modal.Title = 'Create Customer';
+        modal.Action = 'Create';
+        modal.Mode = 'Create';
 
         resetCustomer(selected);
         setDirty(form, false);
         $('#modal-create-customer').modal('show');
     };
 
-    $scope.showEditModal = function (customerModal, selected, customer, form) {
-        customerModal.Title = 'Edit Customer';
-        customerModal.Action = 'Save';
-        customerModal.Mode = 'Edit'
+    $scope.showEditModal = function (modal, selected, customer, form) {
+        modal.Title = 'Edit Customer';
+        modal.Action = 'Save';
+        modal.Mode = 'Edit'
 
         copyCustomer(customer, selected);
         setDirty(form, false);
         $('#modal-create-customer').modal('show');
     };
 
-    $scope.submit = function (customerModal, selected, form) {
+    $scope.submit = function (modal, selected, form) {
         setDirty(form, true);
         if (form.$invalid) {
             return;
         }
-        if (customerModal.Mode == 'Create') {
+        if (modal.Mode == 'Create') {
             repository.create(selected, function (data) {
                 $scope.customerList.push(data);
                 resetCustomer(selected);
@@ -130,6 +130,17 @@ function CustomerController($scope, repository) {
                 }, handleError);
             }
         });
+    };
+
+    $scope.getStatusClass = function (control) {
+        return {
+            error: control.$dirty && control.$invalid,
+            success: !control.$invalid
+        };
+    };
+
+    $scope.showErrorMessage = function (control, check) {
+        return control.$dirty && control.$error[check];
     };
 }
 
