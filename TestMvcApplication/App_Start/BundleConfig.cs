@@ -14,7 +14,9 @@ namespace TestMvcApplication
                 "~/Scripts/knockout-{version}.js",
                 "~/Scripts/angular.js",
                 "~/Scripts/moment.js",
-                "~/Scripts/json2.js"
+                "~/Scripts/json2.js",
+                "~/Scripts/parsley.extend.js",
+                "~/Scripts/parsley.js"
             ));
             bundles.Add(new StyleBundle("~/Content/bootstrap").Include(
                 "~/Content/bootstrap.css"

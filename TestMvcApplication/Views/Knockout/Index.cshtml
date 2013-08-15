@@ -46,19 +46,42 @@
                 <input name="hdnCustomerId" type="hidden" data-bind="value: selected().customerId" />
                 <label for="txtName" class="control-label">Name:</label>
                 <div class="controls">
-                    <input id="txtName" name="txtName" type="text" placeholder="Enter a name..." data-bind="value: selected().name" />
+                    <input id="txtName" 
+                           name="txtName" 
+                           type="text"
+                           placeholder="Enter a name..."
+                           data-bind="value: selected().name"
+                           data-required="true"
+                           data-required-message="Please provide a name."
+                           data-trigger="change" />
                 </div>
             </div>
             <div class="control-group">
                 <label for="dpBirthDate" class="control-label">Birth Date:</label>
                 <div class="controls">
-                    <input id="dpBirthDate" name="dpBirthDate" type="text" data-bind="value: selected().birthDate" />
+                    <input id="dpBirthDate" 
+                           name="dpBirthDate" 
+                           type="text" 
+                           data-bind="value: selected().birthDate"
+                           data-required="true"
+                           data-required-message="Please provide a birth date."
+                           data-americandate="true"
+                           data-americandate-message="Please enter a valid birth date."
+                           data-trigger="change" />
                 </div>
             </div>
             <div class="control-group">
                 <label for="txtHeight" class="control-label">Height:</label>
                 <div class="controls">
-                    <input id="txtHeight" name="txtHeight" type="text" data-bind="value: selected().height" />
+                    <input id="txtHeight" 
+                           name="txtHeight" 
+                           type="text" 
+                           data-bind="value: selected().height"
+                           data-required="true"
+                           data-required-message="Please provide a height."
+                           data-type="digits"
+                           data-type-digits-message="Please enter a valid height."
+                           data-trigger="change" />
                 </div>
             </div>
         </form>

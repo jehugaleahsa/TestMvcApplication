@@ -101,46 +101,6 @@ function ViewModel() {
 };
 var viewModel = new ViewModel();
 
-function defineValidation() {
-    $('#form-create-customer').validate({
-        rules: {
-            txtName: {
-                required: true
-            },
-            dpBirthDate: {
-                required: true,
-                date: true
-            },
-            txtHeight: {
-                required: true,
-                number: true
-            }
-        },
-        messages: {
-            txtName: {
-                required: 'Please provide a name.'
-            },
-            dpBirthDate: {
-                required: 'Please provide a birth date.',
-                date: 'Please enter a valid date.'
-            },
-            txtHeight: {
-                required: 'Please provide a height.',
-                number: 'Please enter a valid number.'
-            }
-        },
-        errorClass: 'error help-inline',
-        validClass: 'success help-inline',
-        highlight: function (element, errorClass, validClass) {
-            $(element).parents('.control-group').addClass(errorClass).removeClass(validClass);
-        },
-        unhighlight: function (element, errorClass, validClass) {
-            $(element).parents('.control-group').addClass(validClass).removeClass(errorClass);
-        },
-        submitHandler: submitCustomerForm
-    });
-}
-
 function loadData() {
     $.ajax({
         url: buildUrl('Knockout', 'Load'),
@@ -285,7 +245,19 @@ function updateCustomer(form) {
 
 $(function () {
     $('#dpBirthDate').datepicker({ dateFormat: 'm/d/yy' });
-    defineValidation();
+
+    $('#form-create-customer').parsley({
+        successClass: 'success',
+        errorClass: 'error',
+        errors: {
+            classHandler: function (el) {
+                return $(el).closest('.control-group');
+            },
+            errorsWrapper: $('<div />').prop('outerHTML'),
+            errorElem: $('<span />').addClass('help-inline').prop('outerHTML')
+        }
+    });
+
     ko.applyBindings(viewModel);
     loadData();
 

@@ -301,6 +301,10 @@
     <Content Include="Scripts\mocha.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\parsley.extend.js" />
+    <Content Include="Scripts\parsley.extend.min.js" />
+    <Content Include="Scripts\parsley.js" />
+    <Content Include="Scripts\parsley.min.js" />
     <Content Include="Scripts\Shared\layout.js" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
