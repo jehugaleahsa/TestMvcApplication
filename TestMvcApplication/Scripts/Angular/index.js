@@ -1,11 +1,5 @@
 ﻿var application = angular.module('Customer', []);
 
-application.filter('date', function () {
-    return function (date) {
-        return moment(date).format('MM/DD/YYYY');
-    };
-});
-
 application.directive('datepicker', function () {
     return {
         restrict: 'A',

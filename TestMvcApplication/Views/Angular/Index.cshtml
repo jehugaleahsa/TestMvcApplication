@@ -28,7 +28,7 @@
                     <tbody>
                         <tr data-ng-repeat="customer in customerList | orderBy:orderByField:reverse">
                             <td>{{customer.Name}}</td>
-                            <td>{{customer.BirthDate | date}}</td>
+                            <td>{{customer.BirthDate | date:shortDate }}</td>
                             <td>{{customer.Height}}</td>
                             <td><a class="lnk-edit-customer" data-customer-id="{{customer.CustomerId}}" href="#" data-ng-click="showEditModal(customerModal, selected, customer, formCustomer)">Edit</a></td>
                             <td><a class="lnk-delete-customer" data-customer-id="{{customer.CustomerId}}" href="#" data-ng-click="deleteCustomer(customer)">Delete</a></td>

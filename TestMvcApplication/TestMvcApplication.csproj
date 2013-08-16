@@ -202,7 +202,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
-    <Content Include="Content\mocha.css" />
+    <Content Include="Content\jasmine.css" />
     <Content Include="Content\Shared\layout.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -278,13 +278,15 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\Angular\index.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\chai.js" />
     <Content Include="Scripts\Classic\CustomerDetails.js" />
+    <Content Include="Scripts\jasmine-html.js" />
+    <Content Include="Scripts\jasmine.js" />
     <Content Include="Scripts\jquery-2.0.2-vsdoc.js" />
     <Content Include="Scripts\jquery-2.0.2.js" />
     <Content Include="Scripts\jquery-2.0.2.min.js" />
@@ -298,7 +300,6 @@
     <Content Include="Scripts\Knockout\index.js" />
     <Content Include="Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Scripts\knockout-2.2.1.js" />
-    <Content Include="Scripts\mocha.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\parsley.extend.js" />
@@ -317,6 +318,8 @@
     <None Include="T4MVC.tt.hooks.t4" />
     <None Include="T4MVC.tt.settings.xml" />
     <Content Include="Scripts\Tests\angular_tests.html" />
+    <Content Include="Scripts\Tests\angular_tests.js" />
+    <Content Include="Scripts\Tests\run_tests.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
