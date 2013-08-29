@@ -146,7 +146,8 @@ function sortByField() {
     return false;
 }
 
-function showCreateModal() {
+function showCreateModal(event) {
+    event.preventDefault();
     $('#modal-customer-title').text('Create Customer');
     $('#btn-create-customer-save').text('Create');
     $('#form-create-customer').attr('data-mode', 'create');
@@ -154,7 +155,8 @@ function showCreateModal() {
     $('#modal-create-customer').modal('show');
 }
 
-function showEditModal() {
+function showEditModal(event) {
+    event.preventDefault();
     $('#modal-customer-title').text('Edit Customer');
     $('#btn-create-customer-save').text('Update');
     $('#form-create-customer').attr('data-mode', 'edit');
@@ -166,7 +168,8 @@ function showEditModal() {
     }
 }
 
-function showDeleteModal() {
+function showDeleteModal(event) {
+    event.preventDefault();
     var customerId = $(this).attr('data-customer-id');
     var current = customerList.find(customerId);
     if (current != null) {
@@ -175,11 +178,22 @@ function showDeleteModal() {
     }
 }
 
-function submitCustomerChanges() {
-    $('#form-create-customer').submit();
+function submitCustomerChanges(event) {
+    event.preventDefault();
+    var form = $('#form-create-customer');
+    var isValid = form.parsley('isValid');
+    if (isValid) {
+        var mode = form.attr('data-mode');
+        if (mode == 'create') {
+            createCustomer(form);
+        } else {
+            updateCustomer(form);
+        }
+    }    
 }
 
-function submitDeleteCustomer() {
+function submitDeleteCustomer(event) {
+    event.preventDefault();
     var customerId = $(this).attr('data-customer-id');
     $.ajax({
         url: buildUrl('Knockout', 'Delete'),
@@ -196,21 +210,12 @@ function submitDeleteCustomer() {
     });
 }
 
-function submitCustomerForm(form) {
-    var mode = $('#form-create-customer').attr('data-mode');
-    if (mode == 'create') {
-        createCustomer(form);
-    } else {
-        updateCustomer(form);
-    }
-    return false;
-}
-
 function createCustomer(form) {
+    var data = $(form).serialize();
     $.ajax({
         url: buildUrl('Knockout', 'Create'),
         type: 'post',
-        data: $(form).serialize(),
+        data: data,
         dataType: 'json'
     })
     .success(function (data, textStatus, handler) {
@@ -229,10 +234,11 @@ function createCustomer(form) {
 }
 
 function updateCustomer(form) {
+    var data = $(form).serialize();
     $.ajax({
         url: buildUrl('Knockout', 'Edit'),
         type: 'put',
-        data: $(form).serialize(),
+        data: data,
         dataType: 'text'
     })
     .success(function (data, textStatus, handler) {
