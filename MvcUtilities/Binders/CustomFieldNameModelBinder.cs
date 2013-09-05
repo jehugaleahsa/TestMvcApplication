@@ -13,9 +13,20 @@ namespace MvcUtilities.Binders
         public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
             object model = Activator.CreateInstance(bindingContext.ModelMetadata.ModelType);
-            bindingContext.ModelMetadata.Model = model;
+            
             foreach (PropertyInfo propertyInfo in bindingContext.ModelMetadata.ModelType.GetProperties())
             {
+                bool isViewModel = propertyInfo.GetCustomAttributes(typeof(NestedViewModelAttribute), true).Any();
+                if (isViewModel)
+                {
+                    ModelBindingContext subContext = new ModelBindingContext(bindingContext);
+                    subContext.ModelMetadata = ModelMetadataProviders.Current.GetMetadataForType(() => null, propertyInfo.PropertyType);
+
+                    IModelBinder subBinder = ModelBinders.Binders.GetBinder(propertyInfo.PropertyType);
+                    object subModel = subBinder.BindModel(controllerContext, subContext);
+                    propertyInfo.SetValue(model, subModel, null);
+                    continue;
+                }
                 List<string> fieldNames = new List<string>();
                 fieldNames.Add(propertyInfo.Name);
                 var names = propertyInfo.GetCustomAttributes(typeof(FieldNameAttribute), true)
@@ -31,6 +42,9 @@ namespace MvcUtilities.Binders
                     }
                 }
             }
+
+            bindingContext.ModelMetadata.Model = model;
+
             ValidationContext context = new ValidationContext(model, null, null);
             List<ValidationResult> results = new List<ValidationResult>();
             if (Validator.TryValidateObject(model, context, results, true))

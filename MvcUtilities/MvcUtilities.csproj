@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionResults\JsonWithHttpStatusCodeResult.cs" />
+    <Compile Include="Binders\NestedViewModelAttribute.cs" />
     <Compile Include="Binders\CustomFieldNameModelBinder.cs" />
     <Compile Include="Binders\FieldNameAttribute.cs" />
     <Compile Include="Binders\ModelBinderBuilder.cs" />
