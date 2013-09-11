@@ -49,7 +49,7 @@
     <Compile Include="InjectAttribute.cs" />
     <Compile Include="LogInterceptor.cs" />
     <Compile Include="LogAttribute.cs" />
-    <Compile Include="ExceptionInterceptor.cs" />
+    <Compile Include="ExceptionWrapper.cs" />
     <Compile Include="ErrorMessageAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionAttribute.cs" />

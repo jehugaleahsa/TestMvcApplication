@@ -11,7 +11,7 @@ namespace Policies.Tests
         [TestMethod]
         public void ShouldWrapExceptionAndUseItsMessageByDefault()
         {
-            ExceptionWrapper wrapper = new ExceptionWrapper();
+            ExceptionWrapper<Exception> wrapper = new ExceptionWrapper<Exception>((e, m) => new InvalidOperationException(m, e));
 
             IInvocation invocation = Substitute.For<IInvocation>();
             invocation.Request.Target.Returns(typeof(NoAttribute));
@@ -32,7 +32,7 @@ namespace Policies.Tests
         [TestMethod]
         public void ShouldUseDifferentErrorMessageWithAttribute()
         {
-            ExceptionWrapper wrapper = new ExceptionWrapper();
+            ExceptionWrapper<Exception> wrapper = new ExceptionWrapper<Exception>((e, m) => new InvalidOperationException(m, e));
 
             IInvocation invocation = Substitute.For<IInvocation>();
             invocation.Request.Target.Returns(typeof(WithAttribute));
@@ -53,7 +53,7 @@ namespace Policies.Tests
         [TestMethod]
         public void ShouldDoNothingIfNoExceptionIsThrown()
         {
-            ExceptionWrapper wrapper = new ExceptionWrapper();
+            ExceptionWrapper<Exception> wrapper = new ExceptionWrapper<Exception>((e, m) => e);
 
             IInvocation invocation = Substitute.For<IInvocation>();
             invocation.Request.Target.Returns(typeof(WithAttribute));
@@ -65,8 +65,7 @@ namespace Policies.Tests
         [ExpectedException(typeof(OutOfMemoryException))]
         public void ShouldDoNothingIfDifferentExceptionType()
         {
-            InvalidOperationExceptionWrapper wrapper = new InvalidOperationExceptionWrapper();
-
+            ExceptionWrapper<InvalidOperationException> wrapper = new ExceptionWrapper<InvalidOperationException>((e, m) => e);
             IInvocation invocation = Substitute.For<IInvocation>();
             invocation.Request.Target.Returns(typeof(WithAttribute));
             invocation.Request.Method.Returns(typeof(WithAttribute).GetMethod("DoSomething"));
@@ -74,11 +73,66 @@ namespace Policies.Tests
             wrapper.Intercept(invocation);
         }
 
-        public class ExceptionWrapper : ExceptionInterceptor<Exception>
+        [TestMethod]
+        public void ShouldUseClosestMatchWhenMultipleMessagesProvided()
         {
-            protected override Exception Wrap(Exception exception, string message)
+            ExceptionWrapper<Exception> wrapper = new ExceptionWrapper<Exception>((e, m) => new InvalidOperationException(m, e));
+
+            IInvocation invocation = Substitute.For<IInvocation>();
+            invocation.Request.Target.Returns(typeof(WithMultipleAttributes));
+            invocation.Request.Method.Returns(typeof(WithMultipleAttributes).GetMethod("DoSomething"));
+            const string message = "Error message";
+            invocation.When(i => i.Proceed()).Do(x => { throw new ArgumentNullException(message); });
+            try
             {
-                return new InvalidOperationException(message, exception);
+                wrapper.Intercept(invocation);
+                Assert.Fail("The exception was swallowed.");
+            }
+            catch (InvalidOperationException exception)
+            {
+                Assert.AreEqual(WithMultipleAttributes.DerivedErrorMessage, exception.Message);
+            }
+        }
+
+        [TestMethod]
+        public void ShouldIgnoreMessagesForMoreDerivedTypes()
+        {
+            ExceptionWrapper<Exception> wrapper = new ExceptionWrapper<Exception>((e, m) => new InvalidOperationException(m, e));
+
+            IInvocation invocation = Substitute.For<IInvocation>();
+            invocation.Request.Target.Returns(typeof(WithMultipleAttributes));
+            invocation.Request.Method.Returns(typeof(WithMultipleAttributes).GetMethod("DoSomething"));
+            const string message = "Error message";
+            invocation.When(i => i.Proceed()).Do(x => { throw new ArgumentException(message); });
+            try
+            {
+                wrapper.Intercept(invocation);
+                Assert.Fail("The exception was swallowed.");
+            }
+            catch (InvalidOperationException exception)
+            {
+                Assert.AreEqual(WithMultipleAttributes.BaseErrorMessage, exception.Message);
+            }
+        }
+
+        [TestMethod]
+        public void ShouldUseExceptionMessageWhenAllMessageForDerivedTypes()
+        {
+            ExceptionWrapper<Exception> wrapper = new ExceptionWrapper<Exception>((e, m) => new InvalidOperationException(m, e));
+
+            IInvocation invocation = Substitute.For<IInvocation>();
+            invocation.Request.Target.Returns(typeof(WithMultipleAttributes));
+            invocation.Request.Method.Returns(typeof(WithMultipleAttributes).GetMethod("DoSomething"));
+            const string message = "Error message";
+            invocation.When(i => i.Proceed()).Do(x => { throw new Exception(message); });
+            try
+            {
+                wrapper.Intercept(invocation);
+                Assert.Fail("The exception was swallowed.");
+            }
+            catch (InvalidOperationException exception)
+            {
+                Assert.AreEqual(message, exception.Message);
             }
         }
 
@@ -99,11 +153,15 @@ namespace Policies.Tests
             }
         }
 
-        public class InvalidOperationExceptionWrapper : ExceptionInterceptor<InvalidOperationException>
+        public class WithMultipleAttributes
         {
-            protected override Exception Wrap(InvalidOperationException exception, string message)
+            public const string BaseErrorMessage = "This is the generic message.";
+            public const string DerivedErrorMessage = "This is a more specific message.";
+
+            [ErrorMessage(BaseErrorMessage, ExceptionType=typeof(ArgumentException))]
+            [ErrorMessage(DerivedErrorMessage, ExceptionType=typeof(ArgumentNullException))]
+            public void DoSomething()
             {
-                return exception;
             }
         }
     }

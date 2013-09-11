@@ -17,7 +17,8 @@ using ServiceInterfaces;
 using ServiceInterfaces.Repositories;
 using TestMvcApplication.Context;
 using TestMvcApplication.Controllers;
-using TestMvcApplication.Interceptors;
+using System.Data;
+using System.Net;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(TestMvcApplication.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(TestMvcApplication.NinjectWebCommon), "Stop")]
@@ -108,13 +109,16 @@ namespace TestMvcApplication
 
         private static void setupRepositoryInterceptors<TRepository>(IBindingWhenInNamedWithOrOnSyntax<TRepository> binding)
         {
-            binding.Intercept().With<DataExceptionInterceptor>().InOrder(1);
+            binding.Intercept().With(new ExceptionWrapper<DataException>((e, m) => new ServiceException(m, e))).InOrder(1);
             binding.Intercept().With<LogInterceptor>().InOrder(2);
         }
 
         private static void setupAdapterInterceptors<TAdapter>(IBindingWhenInNamedWithOrOnSyntax<TAdapter> binding)
         {
-            binding.Intercept().With<AdapterExceptionInterceptor>().InOrder(1);
+            binding
+                .Intercept()
+                .With(new ExceptionWrapper<ServiceException>((e, m) => new AdapterException(HttpStatusCode.InternalServerError, m, e)))
+                .InOrder(1);
             binding.Intercept().With<TransactionInterceptor>().InOrder(2);
             binding.Intercept().With<LogInterceptor>().InOrder(3);
         }

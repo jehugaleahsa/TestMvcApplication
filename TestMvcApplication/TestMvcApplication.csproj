@@ -181,8 +181,6 @@
     <Compile Include="ErrorController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
-    <Compile Include="Interceptors\AdapterExceptionInterceptor.cs" />
-    <Compile Include="Interceptors\DataExceptionInterceptor.cs" />
     <Compile Include="Context\IUrlHelper.cs" />
     <Compile Include="KnockoutController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
