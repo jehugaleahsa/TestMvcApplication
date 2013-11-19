@@ -10,6 +10,15 @@ using ServiceInterfaces.Repositories;
 
 namespace Adapters
 {
+    public interface IAddressItemAdapter
+    {
+        AddressItemData AddAddressItem(AddressItemData data);
+
+        IEnumerable<AddressItemData> GetAddressItems(string customerId);
+
+        void RemoveAddressItem(string settingId);
+    }
+
     public class AddressItemAdapter : IAddressItemAdapter
     {
         private readonly ICustomerRepository customerRepository;
@@ -32,16 +41,7 @@ namespace Adapters
             AddressItemMapper = new AddressItemMapper();
         }
 
-        public AddressItemMapper AddressItemMapper { get; set; }
-
-        [Log]
-        [ErrorMessage("An error occurred while adding the address item.")]
-        public AddressItemData AddAddressItem(AddressItemData data)
-        {
-            AddressItem item = AddressItemMapper.Convert(data);
-            itemRepository.Add(item);
-            return AddressItemMapper.Convert(item);
-        }
+        public IAddressItemMapper AddressItemMapper { get; set; }
 
         [Log]
         [ErrorMessage("An error occurred while retrieving the customer's address items.")]
@@ -54,6 +54,15 @@ namespace Adapters
                 throw new AdapterException(HttpStatusCode.NotFound, "A customer with the given ID was not found.");
             }
             return itemRepository.GetAddressItems(customer).Select(s => AddressItemMapper.Convert(s)).ToArray();
+        }
+
+        [Log]
+        [ErrorMessage("An error occurred while adding the address item.")]
+        public AddressItemData AddAddressItem(AddressItemData data)
+        {
+            AddressItem item = AddressItemMapper.Convert(data);
+            itemRepository.Add(item);
+            return AddressItemMapper.Convert(item);
         }
 
         [Log]

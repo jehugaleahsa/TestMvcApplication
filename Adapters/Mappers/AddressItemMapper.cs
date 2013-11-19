@@ -4,6 +4,13 @@ using ServiceInterfaces.Entities;
 
 namespace Adapters.Mappers
 {
+    public interface IAddressItemMapper
+    {
+        AddressItem Convert(AddressItemData data);
+
+        AddressItemData Convert(AddressItem setting);
+    }
+
     public class AddressItemMapper : IAddressItemMapper
     {
         public AddressItem Convert(AddressItemData data)

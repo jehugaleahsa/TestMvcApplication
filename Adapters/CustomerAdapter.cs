@@ -10,6 +10,19 @@ using ServiceInterfaces.Repositories;
 
 namespace Adapters
 {
+    public interface ICustomerAdapter
+    {
+        CustomerData AddCustomer(CustomerData customerData);
+
+        CustomerData GetCustomer(string customerId);
+
+        IEnumerable<CustomerData> GetCustomers();
+
+        void RemoveCustomer(string customerId);
+
+        void UpdateCustomer(CustomerData customerData);
+    }
+
     public class CustomerAdapter : ICustomerAdapter
     {
         private readonly ICustomerRepository customerRepository;

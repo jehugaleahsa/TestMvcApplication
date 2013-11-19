@@ -4,6 +4,13 @@ using ServiceInterfaces.Entities;
 
 namespace Adapters.Mappers
 {
+    public interface ICustomerMapper
+    {
+        Customer Convert(CustomerData data);
+
+        CustomerData Convert(Customer customer);
+    }
+
     public class CustomerMapper : ICustomerMapper
     {
         public Customer Convert(CustomerData viewModel)

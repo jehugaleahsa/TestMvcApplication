@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdapterExceptionTester.cs" />
+    <Compile Include="AddressItemAdapterTester.cs" />
     <Compile Include="CustomerAdapterTester.cs" />
     <Compile Include="CustomerMapperTester.cs" />
     <Compile Include="PrimitiveMapperTester.cs" />
