@@ -89,17 +89,11 @@ namespace TestMvcApplication
 
             Bind<TraceAttribute>().ToSelf();
 
-            var customerRepositoryBinding = Bind<ICustomerRepository>().To<CustomerRepository>();
-            setupRepositoryInterceptors(customerRepositoryBinding);
+            Bind<ICustomerRepository>().To<CustomerRepository>().WithRepositoryInterceptors();
+            Bind<IAddressItemRepository>().To<AddressItemRepository>().WithRepositoryInterceptors();
 
-            var settingRepositoryBinding = Bind<IAddressItemRepository>().To<AddressItemRepository>();
-            setupRepositoryInterceptors(customerRepositoryBinding);
-
-            var customerAdapterBinding = Bind<ICustomerAdapter>().To<CustomerAdapter>();
-            setupAdapterInterceptors(customerAdapterBinding);
-
-            var settingAdapterBinding = Bind<IAddressItemAdapter>().To<AddressItemAdapter>();
-            setupAdapterInterceptors(settingAdapterBinding);
+            Bind<ICustomerAdapter>().To<CustomerAdapter>().WithAdapterInterceptors();
+            Bind<IAddressItemAdapter>().To<AddressItemAdapter>().WithAdapterInterceptors();
 
             Bind<ErrorController>().ToSelf();
             Bind<ClassicController>().ToSelf();
@@ -107,13 +101,22 @@ namespace TestMvcApplication
             Bind<CustomersController>().ToSelf();
         }
 
-        private static void setupRepositoryInterceptors<TRepository>(IBindingWhenInNamedWithOrOnSyntax<TRepository> binding)
+        private static EntitySet getEntitySet(IContext context)
+        {
+            IConfigurationManager manager = context.Kernel.Get<IConfigurationManager>();
+            return new EntitySet(manager.ConnectionString);
+        }
+    }
+
+    internal static class InterceptorHelpers
+    {
+        public static void WithRepositoryInterceptors<TRepository>(this IBindingWhenInNamedWithOrOnSyntax<TRepository> binding)
         {
             binding.Intercept().With(new ExceptionWrapper<DataException>((e, m) => new ServiceException(m, e))).InOrder(1);
             binding.Intercept().With<LogInterceptor>().InOrder(2);
         }
 
-        private static void setupAdapterInterceptors<TAdapter>(IBindingWhenInNamedWithOrOnSyntax<TAdapter> binding)
+        public static void WithAdapterInterceptors<TAdapter>(this IBindingWhenInNamedWithOrOnSyntax<TAdapter> binding)
         {
             binding
                 .Intercept()
@@ -121,12 +124,6 @@ namespace TestMvcApplication
                 .InOrder(1);
             binding.Intercept().With<TransactionInterceptor>().InOrder(2);
             binding.Intercept().With<LogInterceptor>().InOrder(3);
-        }
-
-        private static EntitySet getEntitySet(IContext context)
-        {
-            IConfigurationManager manager = context.Kernel.Get<IConfigurationManager>();
-            return new EntitySet(manager.ConnectionString);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace DataModeling.DataModel
             modelBuilder.Entity<Customer>().HasMany(c => c.Settings).WithRequired(s => s.Customer).WillCascadeOnDelete(true);
             modelBuilder.Entity<Customer>().Property(c => c.Name).HasMaxLength(250).IsRequired();
 
-            // CustomerSetting
+            // AddressItem
             modelBuilder.Entity<AddressItem>().Property(c => c.AddressItemId).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             modelBuilder.Entity<AddressItem>().Property(c => c.Key).HasMaxLength(250).IsRequired();
             modelBuilder.Entity<AddressItem>().Property(c => c.Value).HasMaxLength(1000).IsRequired();
