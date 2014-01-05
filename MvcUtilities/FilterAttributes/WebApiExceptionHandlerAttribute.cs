@@ -11,13 +11,12 @@ namespace MvcUtilities.FilterAttributes
             CodedException exception = actionExecutedContext.Exception as CodedException;
             if (exception == null)
             {
-                actionExecutedContext.Response = actionExecutedContext.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exception);
+                actionExecutedContext.Response = actionExecutedContext.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, actionExecutedContext.Exception);
             }
             else
             {
-                actionExecutedContext.Response = actionExecutedContext.Request.CreateErrorResponse(exception.StatusCode, exception.Message, exception);
+                actionExecutedContext.Response = actionExecutedContext.Request.CreateErrorResponse(exception.StatusCode, exception);
             }
-            base.OnException(actionExecutedContext);
         }
     }
 }
