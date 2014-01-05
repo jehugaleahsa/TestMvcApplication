@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 using System.Web.Mvc;
 using MvcUtilities.Binders;
+using MvcUtilities.ValidationAttributes;
 
 namespace Adapters.Models
 {
@@ -10,6 +11,7 @@ namespace Adapters.Models
     {
         [HiddenInput(DisplayValue=false)]
         [FieldName("hdnCustomerId")]
+        [Guid]
         [DataMember]
         public string CustomerId { get; set; }
 
@@ -19,6 +21,7 @@ namespace Adapters.Models
         public string Name { get; set; }
 
         [Required]
+        [Date]
         [FieldName("dpBirthDate")]
         [DataMember(IsRequired = true)]
         public string BirthDate { get; set; }
