@@ -16,14 +16,12 @@ namespace MvcUtilities.ValidationAttributes
             if (asString != null)
             {
                 DateTime date;
-                bool isValid = DateTime.TryParse(asString, out date);
-                if (isValid)
+                if (!DateTime.TryParse(asString, out date))
                 {
-                    return null;
-                }
-                return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
+                    return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
+                }                
             }
-            return base.IsValid(value, validationContext);
+            return null;
         }
     }
 }

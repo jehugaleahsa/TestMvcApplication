@@ -16,14 +16,12 @@ namespace MvcUtilities.ValidationAttributes
             if (asString != null)
             {
                 Guid guid;
-                bool isValid = Guid.TryParse(asString, out guid);
-                if (isValid)
+                if (!Guid.TryParse(asString, out guid))
                 {
-                    return null;
+                    return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
                 }
-                return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
             }
-            return base.IsValid(value, validationContext);
+            return null;
         }
     }
 }
