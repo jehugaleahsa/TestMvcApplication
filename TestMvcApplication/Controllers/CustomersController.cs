@@ -23,38 +23,40 @@ namespace TestMvcApplication.Controllers
         }
 
         [WebApiExceptionHandler]
-        public CustomerData Get(string id)
+        public HttpResponseMessage Get(HttpRequestMessage request, string id)
         {
             CustomerData data = adapter.GetCustomer(id);
-            return data;
+            return request.CreateResponse(HttpStatusCode.OK, data);
         }
 
         [WebApiExceptionHandler]
-        public CustomerData[] GetAll()
+        public HttpResponseMessage GetAll(HttpRequestMessage request)
         {
             CustomerData[] data = adapter.GetCustomers().ToArray();
-            return data;
+            return request.CreateResponse(HttpStatusCode.OK, data);
         }
 
+        [ValidateModel]
         [WebApiExceptionHandler]
-        public HttpResponseMessage Post(CustomerData data)
+        public HttpResponseMessage Post(HttpRequestMessage request, CustomerData data)
         {
             CustomerData result = adapter.AddCustomer(data);
-            return Request.CreateResponse(HttpStatusCode.Created, result);
+            return request.CreateResponse(HttpStatusCode.Created, result);
         }
 
+        [ValidateModel]
         [WebApiExceptionHandler]
-        public HttpResponseMessage Put(CustomerData data)
+        public HttpResponseMessage Put(HttpRequestMessage request, CustomerData data)
         {
             adapter.UpdateCustomer(data);
-            return Request.CreateResponse(HttpStatusCode.OK, "The customer was updated.");
+            return request.CreateResponse(HttpStatusCode.OK, "The customer was updated.");
         }
 
         [WebApiExceptionHandler]
-        public HttpResponseMessage Delete(string id)
+        public HttpResponseMessage Delete(HttpRequestMessage request, string id)
         {
             adapter.RemoveCustomer(id);
-            return Request.CreateResponse(HttpStatusCode.OK, "The customer was deleted.");
+            return request.CreateResponse(HttpStatusCode.OK, "The customer was deleted.");
         }
     }
 }

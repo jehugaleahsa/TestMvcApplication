@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Adapters;
-using TestMvcApplication.Controllers;
-using NSubstitute;
-using Adapters.Models;
-using System.Net.Http;
 using System.Net;
-using System.Web.Http.Hosting;
+using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Hosting;
+using Adapters;
+using Adapters.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
+using TestMvcApplication.Controllers;
 
 namespace TestMvcApplication.Tests
 {
@@ -40,7 +39,12 @@ namespace TestMvcApplication.Tests
             CustomersController controller = new CustomersController(adapter);
 
             string customerId = Guid.NewGuid().ToString("N");
-            CustomerData result = controller.Get(customerId);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "~/api/customers/" + customerId);
+            request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
+            HttpResponseMessage response = controller.Get(request, customerId);
+            Assert.IsInstanceOfType(response.Content, typeof(ObjectContent<CustomerData>), "Customer data was not returned.");
+            ObjectContent<CustomerData> content = (ObjectContent<CustomerData>)response.Content;
+            CustomerData result = (CustomerData)content.Value;
 
             Assert.AreSame(data, result, "The wrong customer was returned.");
 
@@ -59,8 +63,13 @@ namespace TestMvcApplication.Tests
             adapter.GetCustomers().Returns(data);
             CustomersController controller = new CustomersController(adapter);
 
-            CustomerData[] results = controller.GetAll();
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "~/api/customers");
+            request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
+            HttpResponseMessage response = controller.GetAll(request);
+            Assert.IsInstanceOfType(response.Content, typeof(ObjectContent<CustomerData[]>), "An array of customer data wasn't returned.");
 
+            ObjectContent<CustomerData[]> content = (ObjectContent<CustomerData[]>)response.Content;
+            CustomerData[] results = (CustomerData[])content.Value;
             Assert.AreEqual(1, results.Length, "There should have been one customer.");
             Assert.AreSame(data.First(), results[0], "The wrong customer was returned.");
 
@@ -78,11 +87,11 @@ namespace TestMvcApplication.Tests
             CustomerData added = new CustomerData();
             adapter.AddCustomer(Arg.Any<CustomerData>()).Returns(added);
             CustomersController controller = new CustomersController(adapter);
-            controller.Request = new HttpRequestMessage(HttpMethod.Post, "~/api/customers");
-            controller.Request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
 
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "~/api/customers");
+            request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
             CustomerData data = new CustomerData();
-            HttpResponseMessage message = controller.Post(data);
+            HttpResponseMessage message = controller.Post(request, data);
 
             Assert.AreEqual(HttpStatusCode.Created, message.StatusCode, "The wrong status code was returned.");
             Assert.IsInstanceOfType(message.Content, typeof(ObjectContent), "The content was not the serialized result.");
@@ -102,11 +111,11 @@ namespace TestMvcApplication.Tests
             ICustomerAdapter adapter = Substitute.For<ICustomerAdapter>();
             adapter.UpdateCustomer(Arg.Any<CustomerData>());
             CustomersController controller = new CustomersController(adapter);
-            controller.Request = new HttpRequestMessage(HttpMethod.Put, "~/api/customers");
-            controller.Request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
 
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "~/api/customers");
+            request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
             CustomerData data = new CustomerData();
-            HttpResponseMessage message = controller.Put(data);
+            HttpResponseMessage message = controller.Put(request, data);
 
             Assert.AreEqual(HttpStatusCode.OK, message.StatusCode, "The wrong status code was returned.");
             Assert.IsInstanceOfType(message.Content, typeof(ObjectContent), "The content was not the serialized result.");
@@ -126,11 +135,11 @@ namespace TestMvcApplication.Tests
             ICustomerAdapter adapter = Substitute.For<ICustomerAdapter>();
             adapter.RemoveCustomer(Arg.Any<string>());
             CustomersController controller = new CustomersController(adapter);
-            controller.Request = new HttpRequestMessage(HttpMethod.Delete, "~/api/customers");
-            controller.Request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
 
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "~/api/customers");
+            request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
             string customerId = Guid.NewGuid().ToString("N");
-            HttpResponseMessage message = controller.Delete(customerId);
+            HttpResponseMessage message = controller.Delete(request, customerId);
 
             Assert.AreEqual(HttpStatusCode.OK, message.StatusCode, "The wrong status code was returned.");
             Assert.IsInstanceOfType(message.Content, typeof(ObjectContent), "The content was not the serialized result.");
