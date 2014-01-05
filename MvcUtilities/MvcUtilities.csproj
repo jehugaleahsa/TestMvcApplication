@@ -62,6 +62,7 @@
     <Compile Include="Binders\ModelBinderBuilder.cs" />
     <Compile Include="CodedException.cs" />
     <Compile Include="FilterAttributes\TraceAttribute.cs" />
+    <Compile Include="FilterAttributes\ValidateModelAttribute.cs" />
     <Compile Include="FilterAttributes\WebApiExceptionHandlerAttribute.cs" />
     <Compile Include="Models\Error.cs" />
     <Compile Include="FilterAttributes\HttpsAttribute.cs" />
