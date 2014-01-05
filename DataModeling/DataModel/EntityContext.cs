@@ -1,14 +1,22 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.ModelConfiguration;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.Objects;
+using System.Linq;
 using ServiceInterfaces.Entities;
 
 namespace DataModeling.DataModel
 {
     internal class EntityContext : DbContext
     {
+        static EntityContext()
+        {
+            Database.SetInitializer<EntityContext>(null);
+        }
+
         public EntityContext(string connectionString)
             : base(connectionString)
         {
@@ -19,25 +27,30 @@ namespace DataModeling.DataModel
             get { return ((IObjectContextAdapter)this).ObjectContext; }
         }
 
+        public DbSet<Customer> Customers { get; set; }
+
+        public DbSet<AddressItem> AddressItems { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            
-            // Customer
-            modelBuilder.Entity<Customer>().Property(c => c.CustomerId).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            modelBuilder.Entity<Customer>().HasMany(c => c.Settings).WithRequired(s => s.Customer).WillCascadeOnDelete(true);
-            modelBuilder.Entity<Customer>().Property(c => c.Name).HasMaxLength(250).IsRequired();
 
-            // AddressItem
-            modelBuilder.Entity<AddressItem>().Property(c => c.AddressItemId).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            modelBuilder.Entity<AddressItem>().Property(c => c.Key).HasMaxLength(250).IsRequired();
-            modelBuilder.Entity<AddressItem>().Property(c => c.Value).HasMaxLength(1000).IsRequired();
+            addEntityConfigurations(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<Customer> Customers { get; set; }
-
-        public DbSet<AddressItem> AddressItems { get; set; }
+        private void addEntityConfigurations(DbModelBuilder modelBuilder)
+        {
+            var types = from type in GetType().Assembly.GetTypes()
+                        where type.BaseType.IsGenericType
+                        where type.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>)
+                        select type;
+            foreach (Type type in types)
+            {
+                dynamic configuration = Activator.CreateInstance(type);
+                modelBuilder.Configurations.Add(configuration);
+            }
+        }
     }
 }

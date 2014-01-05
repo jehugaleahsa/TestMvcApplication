@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataModel\AddressItemConfiguration.cs" />
+    <Compile Include="DataModel\CustomerConfiguration.cs" />
     <Compile Include="DataModel\EntityContext.cs" />
     <Compile Include="Helpers\ConnectionManager.cs" />
     <Compile Include="Repositories\CustomerRepository.cs" />
