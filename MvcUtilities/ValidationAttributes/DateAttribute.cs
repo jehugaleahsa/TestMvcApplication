@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MvcUtilities.ValidationAttributes
 {
-    public class DateAttribute : ValidationAttribute
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple=false, Inherited=true)]
+    public sealed class DateAttribute : ValidationAttribute
     {
         public DateAttribute()
             : base("{0} must be a valid date.")
@@ -12,6 +13,10 @@ namespace MvcUtilities.ValidationAttributes
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (validationContext == null)
+            {
+                throw new ArgumentNullException("validationContext");
+            }
             string asString = value as String;
             if (asString != null)
             {

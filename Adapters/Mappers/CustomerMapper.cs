@@ -1,12 +1,12 @@
 ﻿using System;
-using Adapters.Models;
-using ServiceInterfaces.Entities;
+using ViewModels;
+using DataObjects;
 
 namespace Adapters.Mappers
 {
     public interface ICustomerMapper
     {
-        Customer Convert(CustomerData data);
+        Customer Convert(CustomerData viewModel);
 
         CustomerData Convert(Customer customer);
     }
@@ -15,6 +15,10 @@ namespace Adapters.Mappers
     {
         public Customer Convert(CustomerData viewModel)
         {
+            if (viewModel == null)
+            {
+                return null;
+            }
             PrimitiveMapper mapper = new PrimitiveMapper();
             Customer customer = new Customer();
             if (!String.IsNullOrWhiteSpace(viewModel.CustomerId))
@@ -29,6 +33,10 @@ namespace Adapters.Mappers
 
         public CustomerData Convert(Customer customer)
         {
+            if (customer == null)
+            {
+                return null;
+            }
             PrimitiveMapper mapper = new PrimitiveMapper();
             CustomerData viewModel = new CustomerData();
             viewModel.CustomerId = mapper.ToString(customer.CustomerId);

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataModeling.DataModel;
+using DataObjects;
 using Policies;
-using ServiceInterfaces.Entities;
-using ServiceInterfaces.Repositories;
+using ServiceInterfaces;
 
-namespace DataModeling.Repositories
+namespace DataModeling
 {
     public class CustomerRepository : ICustomerRepository
     {
@@ -47,6 +46,14 @@ namespace DataModeling.Repositories
         [ErrorMessage("Failed to update the customer.")]
         public void Update(Customer original, Customer modified)
         {
+            if (original == null)
+            {
+                throw new ArgumentNullException("original");
+            }
+            if (modified == null)
+            {
+                throw new ArgumentNullException("modified");
+            }
             original.Name = modified.Name;
             original.BirthDate = modified.BirthDate;
             original.Height = modified.Height;

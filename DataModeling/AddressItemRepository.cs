@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DataObjects;
 using Policies;
-using ServiceInterfaces.Entities;
-using ServiceInterfaces.Repositories;
+using ServiceInterfaces;
 
-namespace DataModeling.Repositories
+namespace DataModeling
 {
     public class AddressItemRepository : IAddressItemRepository
     {
@@ -22,9 +22,9 @@ namespace DataModeling.Repositories
 
         [Log]
         [ErrorMessage("Failed to get the address item.")]
-        public AddressItem GetAddressItem(Guid settingId)
+        public AddressItem GetAddressItem(Guid itemId)
         {
-            return entities.AddressItems.Where(s => s.AddressItemId == settingId).SingleOrDefault();
+            return entities.AddressItems.Where(s => s.AddressItemId == itemId).SingleOrDefault();
         }
 
         [Log]
@@ -36,17 +36,17 @@ namespace DataModeling.Repositories
 
         [Log]
         [ErrorMessage("Failed to add the address item.")]
-        public void Add(AddressItem setting)
+        public void Add(AddressItem item)
         {
-            entities.AddressItems.Add(setting);
+            entities.AddressItems.Add(item);
             entities.SaveChanges();
         }
 
         [Log]
         [ErrorMessage("Failed to remove the address item.")]
-        public void Remove(AddressItem setting)
+        public void Remove(AddressItem item)
         {
-            entities.AddressItems.Remove(setting);
+            entities.AddressItems.Remove(item);
             entities.SaveChanges();
         }
     }

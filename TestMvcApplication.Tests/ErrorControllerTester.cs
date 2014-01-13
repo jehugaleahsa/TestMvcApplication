@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MvcUtilities.Models;
+using MvcUtilities;
 using NSubstitute;
 using TestMvcApplication.Context;
 using TestMvcApplication.Controllers;
@@ -18,7 +18,7 @@ namespace TestMvcApplication.Tests
         public void ShouldThrowExceptionIfUrlHelperIsNull()
         {
             IUrlHelper helper = null;
-            new ErrorController(helper);
+            using (new ErrorController(helper)) { }
         }
 
         #endregion
@@ -29,36 +29,38 @@ namespace TestMvcApplication.Tests
         public void ShouldDisplayDefaultErrorMessageIfErrorNotProvided()
         {
             IUrlHelper helper = Substitute.For<IUrlHelper>();
-            const string returnUrl = "/return/url";
+            string returnUrl = "/return/url";
             helper.Action(Arg.Any<ActionResult>()).Returns(returnUrl);
-            ErrorController controller = new ErrorController(helper);
+            using (ErrorController controller = new ErrorController(helper))
+            {
+                ActionResult result = controller.Index();
 
-            ActionResult result = controller.Index();
+                ErrorData model = ActionResultHelper.AssertViewWithModel<ErrorData>(result, controller.Views.Index);
 
-            Error model = ActionResultHelper.AssertViewWithModel<Error>(result, controller.Views.Index);
-
-            Assert.AreEqual("An error occurred while processing your request.", model.ErrorMessage, "The wrong error message was set.");
-            Assert.AreEqual(returnUrl, model.ReturnUrl, "The wrong return URL was set.");
+                Assert.AreEqual("An error occurred while processing your request.", model.ErrorMessage, "The wrong error message was set.");
+                Assert.AreEqual(returnUrl, model.ReturnUrl, "The wrong return URL was set.");
+            }
         }
 
         [TestMethod]
         public void ShouldUseGivenErrorMessageAndReturnUrlIfProvided()
         {
             IUrlHelper helper = Substitute.For<IUrlHelper>();
-            helper.IsSafe(Arg.Any<string>()).Returns(true);
-            ErrorController controller = new ErrorController(helper);
-
-            Error error = new Error()
+            helper.IsSafe(Arg.Any<String>()).Returns(true);
+            using (ErrorController controller = new ErrorController(helper))
             {
-                ErrorMessage = "Custom error message",
-                ReturnUrl = "/return/url",
-            };
-            ActionResult result = controller.Index(error);
+                ErrorData error = new ErrorData()
+                {
+                    ErrorMessage = "Custom error message",
+                    ReturnUrl = "/return/url",
+                };
+                ActionResult result = controller.Index(error);
 
-            Error model = ActionResultHelper.AssertViewWithModel<Error>(result, controller.Views.Index);
+                ErrorData model = ActionResultHelper.AssertViewWithModel<ErrorData>(result, controller.Views.Index);
 
-            Assert.AreEqual(error.ErrorMessage, model.ErrorMessage, "The wrong error message was set.");
-            Assert.AreEqual(error.ReturnUrl, model.ReturnUrl, "The wrong return URL was set.");
+                Assert.AreEqual(error.ErrorMessage, model.ErrorMessage, "The wrong error message was set.");
+                Assert.AreEqual(error.ReturnUrl, model.ReturnUrl, "The wrong return URL was set.");
+            }
         }
 
         [TestMethod]
@@ -68,19 +70,20 @@ namespace TestMvcApplication.Tests
             helper.IsSafe(Arg.Any<string>()).Returns(false);
             string returnUrl = "/return/url";
             helper.Action(Arg.Any<ActionResult>()).Returns(returnUrl);
-            ErrorController controller = new ErrorController(helper);
-
-            Error error = new Error()
+            using (ErrorController controller = new ErrorController(helper))
             {
-                ErrorMessage = "Custom error message",
-                ReturnUrl = @"http://www.google.com",
-            };
-            ActionResult result = controller.Index(error);
+                ErrorData error = new ErrorData()
+                {
+                    ErrorMessage = "Custom error message",
+                    ReturnUrl = @"http://www.google.com",
+                };
+                ActionResult result = controller.Index(error);
 
-            Error model = ActionResultHelper.AssertViewWithModel<Error>(result, controller.Views.Index);
+                ErrorData model = ActionResultHelper.AssertViewWithModel<ErrorData>(result, controller.Views.Index);
 
-            Assert.AreEqual(error.ErrorMessage, model.ErrorMessage, "The wrong error message was set.");
-            Assert.AreEqual(returnUrl, model.ReturnUrl, "The wrong return URL was set.");
+                Assert.AreEqual(error.ErrorMessage, model.ErrorMessage, "The wrong error message was set.");
+                Assert.AreEqual(returnUrl, model.ReturnUrl, "The wrong return URL was set.");
+            }
         }
 
         #endregion
@@ -91,9 +94,11 @@ namespace TestMvcApplication.Tests
         public void ShouldDisplayNotFoundView()
         {
             IUrlHelper helper = Substitute.For<IUrlHelper>();
-            ErrorController controller = new ErrorController(helper);
-            ActionResult result = controller.NotFound();
-            ActionResultHelper.AssertView(result, controller.Views.NotFound);
+            using (ErrorController controller = new ErrorController(helper))
+            {
+                ActionResult result = controller.NotFound();
+                ActionResultHelper.AssertView(result, controller.Views.NotFound);
+            }
         }
 
         #endregion

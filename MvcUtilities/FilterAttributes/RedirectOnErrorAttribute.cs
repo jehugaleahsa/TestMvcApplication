@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Web.Mvc;
-using MvcUtilities.Models;
 
 namespace MvcUtilities.FilterAttributes
 {
-    public class RedirectOnErrorAttribute : ActionFilterAttribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=false, Inherited=true)]
+    public sealed class RedirectOnErrorAttribute : ActionFilterAttribute
     {
         /// <summary>
         /// Initializes a new instance of a RedirectOnErrorAttribute.
@@ -34,9 +34,13 @@ namespace MvcUtilities.FilterAttributes
         /// <param name="filterContext">The filter context.</param>
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
+            if (filterContext == null)
+            {
+                throw new ArgumentNullException("filterContext");
+            }
             if (filterContext.Exception != null && !filterContext.ExceptionHandled)
             {
-                Error viewModel = new Error();
+                ErrorData viewModel = new ErrorData();
                 setErrorMessage(filterContext, viewModel);
                 UrlHelper helper = new UrlHelper(filterContext.RequestContext);
                 setReturnUrl(filterContext, viewModel, helper);
@@ -46,7 +50,7 @@ namespace MvcUtilities.FilterAttributes
             base.OnActionExecuted(filterContext);
         }
 
-        private void setErrorMessage(ActionExecutedContext filterContext, Error viewModel)
+        private void setErrorMessage(ActionExecutedContext filterContext, ErrorData viewModel)
         {
             if (String.IsNullOrWhiteSpace(ErrorMessage))
             {
@@ -66,7 +70,7 @@ namespace MvcUtilities.FilterAttributes
             }
         }
 
-        private void setReturnUrl(ActionExecutedContext filterContext, Error viewModel, UrlHelper helper)
+        private void setReturnUrl(ActionExecutedContext filterContext, ErrorData viewModel, UrlHelper helper)
         {
             string returnController = ReturnController;
             if (String.IsNullOrWhiteSpace(returnController))
@@ -81,7 +85,7 @@ namespace MvcUtilities.FilterAttributes
             viewModel.ReturnUrl = helper.Action(returnAction, returnController);
         }
 
-        private void setActionResult(ActionExecutedContext filterContext, Error viewModel, UrlHelper helper)
+        private static void setActionResult(ActionExecutedContext filterContext, ErrorData viewModel, UrlHelper helper)
         {
             if (helper.RouteCollection["Error"] == null)
             {

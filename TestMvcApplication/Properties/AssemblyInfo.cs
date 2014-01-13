@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("TestMvcApplication")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HP")]
+[assembly: AssemblyCompany("Truncon")]
 [assembly: AssemblyProduct("TestMvcApplication")]
 [assembly: AssemblyCopyright("Copyright © HP 2013")]
 [assembly: AssemblyTrademark("")]

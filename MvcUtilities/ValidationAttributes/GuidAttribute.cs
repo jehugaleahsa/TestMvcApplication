@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MvcUtilities.ValidationAttributes
 {
-    public class GuidAttribute : ValidationAttribute
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple=false, Inherited=true)]
+    public sealed class GuidAttribute : ValidationAttribute
     {
         public GuidAttribute()
             : base("{0} must be a valid GUID.")
@@ -12,6 +13,11 @@ namespace MvcUtilities.ValidationAttributes
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (validationContext == null)
+            {
+                throw new ArgumentNullException("validationContext");
+            }
+
             string asString = value as String;
             if (asString != null)
             {

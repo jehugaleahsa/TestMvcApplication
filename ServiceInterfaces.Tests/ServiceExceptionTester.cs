@@ -8,14 +8,14 @@ namespace ServiceInterfaces.Tests
     public class ServiceExceptionTester
     {
         [TestMethod]
-        public void ShouldBeSerializeable()
+        public void ShouldBeSerializable()
         {
             Exception innerException = new Exception("Inner Error Message");
             const string message = "Error message";
             ServiceException exception = new ServiceException(message, innerException);
 
             SerializationHelper helper = new SerializationHelper();
-            ServiceException deserialized = helper.RoundTrip(exception);
+            ServiceException deserialized = helper.Roundtrip(exception);
 
             Assert.AreEqual(message, deserialized.Message, "The message was not serialized.");
             Assert.AreEqual(innerException.Message, deserialized.InnerException.Message, "The inner exception was not serialized.");

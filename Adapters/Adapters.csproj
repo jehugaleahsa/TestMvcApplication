@@ -10,10 +10,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Adapters</RootNamespace>
     <AssemblyName>Adapters</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\TestMvcApplication\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,6 +24,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,18 +34,13 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdapterException.cs" />
@@ -51,12 +49,14 @@
     <Compile Include="Mappers\CustomerMapper.cs" />
     <Compile Include="Mappers\PrimitiveMapper.cs" />
     <Compile Include="Mappers\AddressItemMapper.cs" />
-    <Compile Include="Models\CustomerData.cs" />
-    <Compile Include="Models\AddressItemData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AddressItemAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataObjects\DataObjects.csproj">
+      <Project>{01a2f933-7ed5-41dd-b9f9-048e9568696b}</Project>
+      <Name>DataObjects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MvcUtilities\MvcUtilities.csproj">
       <Project>{6D334141-39BB-42F8-9E37-53C8F2B8614E}</Project>
       <Name>MvcUtilities</Name>
@@ -68,6 +68,10 @@
     <ProjectReference Include="..\ServiceInterfaces\ServiceInterfaces.csproj">
       <Project>{45C0C712-ECF5-41C8-989C-7D7F75E60B77}</Project>
       <Name>ServiceInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ViewModels\ViewModels.csproj">
+      <Project>{1aba12e7-d95e-448e-8a86-91972b0138ae}</Project>
+      <Name>ViewModels</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

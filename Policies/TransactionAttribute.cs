@@ -4,7 +4,7 @@ using System.Transactions;
 namespace Policies
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=true)]
-    public class TransactionAttribute : Attribute
+    public sealed class TransactionAttribute : Attribute
     {
         public TransactionScopeOption TransactionScopeOption { get; set; }
 

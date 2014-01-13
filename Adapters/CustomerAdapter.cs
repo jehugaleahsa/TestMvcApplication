@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Adapters.Mappers;
-using Adapters.Models;
+using ViewModels;
 using Policies;
-using ServiceInterfaces.Entities;
-using ServiceInterfaces.Repositories;
+using DataObjects;
+using ServiceInterfaces;
 
 namespace Adapters
 {
@@ -67,6 +67,10 @@ namespace Adapters
         [ErrorMessage("An error occurred while updating the customer.")]
         public void UpdateCustomer(CustomerData customerData)
         {
+            if (customerData == null)
+            {
+                throw new AdapterException(HttpStatusCode.BadRequest, "No information provided for the customer being updated.");
+            }
             Customer original = getCustomer(customerData.CustomerId);
             Customer modified = CustomerMapper.Convert(customerData);
             customerRepository.Update(original, modified);

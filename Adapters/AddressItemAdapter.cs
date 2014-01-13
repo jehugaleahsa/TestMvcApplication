@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Adapters.Mappers;
-using Adapters.Models;
+using ViewModels;
 using Policies;
-using ServiceInterfaces.Entities;
-using ServiceInterfaces.Repositories;
+using DataObjects;
+using ServiceInterfaces;
 
 namespace Adapters
 {
@@ -67,10 +67,10 @@ namespace Adapters
 
         [Log]
         [ErrorMessage("An error occurred while removing the address item.")]
-        public void RemoveAddressItem(string itemId)
+        public void RemoveAddressItem(string settingId)
         {
             PrimitiveMapper mapper = new PrimitiveMapper();
-            AddressItem item = itemRepository.GetAddressItem(mapper.ToGuid(itemId));
+            AddressItem item = itemRepository.GetAddressItem(mapper.ToGuid(settingId));
             if (item == null)
             {
                 throw new AdapterException(HttpStatusCode.NotFound, "An address item with the given ID was not found.");

@@ -1,8 +1,8 @@
 ﻿using System;
 using Adapters.Mappers;
-using Adapters.Models;
+using ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ServiceInterfaces.Entities;
+using DataObjects;
 
 namespace Adapters.Tests
 {
@@ -10,7 +10,7 @@ namespace Adapters.Tests
     public class CustomerMapperTester
     {
         [TestMethod]
-        public void ShouldConvertViewModelToDTOIgnoringMissingCustomerId()
+        public void ShouldConvertViewModelToDataObjectIgnoringMissingCustomerId()
         {
             CustomerData viewModel = new CustomerData()
             {
@@ -23,13 +23,14 @@ namespace Adapters.Tests
             CustomerMapper mapper = new CustomerMapper();
             Customer customer = mapper.Convert(viewModel);
 
-            Assert.AreEqual(DateTime.Parse(viewModel.BirthDate), customer.BirthDate, "The birth date was not mapped.");
+            PrimitiveMapper primitiveMapper = new PrimitiveMapper();
+            Assert.AreEqual(viewModel.BirthDate, primitiveMapper.ToString(customer.BirthDate), "The birth date was not mapped.");
             Assert.AreEqual(viewModel.Height, customer.Height, "The height was not mapped.");
             Assert.AreEqual(viewModel.Name, customer.Name, "The name was not mapped.");
         }
 
         [TestMethod]
-        public void ShouldConvertViewModelToDTO()
+        public void ShouldConvertViewModelToDataObject()
         {
             CustomerData viewModel = new CustomerData()
             {
@@ -42,14 +43,15 @@ namespace Adapters.Tests
             CustomerMapper mapper = new CustomerMapper();
             Customer customer = mapper.Convert(viewModel);
 
-            Assert.AreEqual(DateTime.Parse(viewModel.BirthDate), customer.BirthDate, "The birth date was not mapped.");
+            PrimitiveMapper primitiveMapper = new PrimitiveMapper();
+            Assert.AreEqual(viewModel.BirthDate, primitiveMapper.ToString(customer.BirthDate), "The birth date was not mapped.");
             Assert.AreEqual(Guid.Parse(viewModel.CustomerId), customer.CustomerId, "The customer ID was not mapped.");
             Assert.AreEqual(viewModel.Height, customer.Height, "The height was not mapped.");
             Assert.AreEqual(viewModel.Name, customer.Name, "The name was not mapped.");
         }
 
         [TestMethod]
-        public void ShouldConvertDTOToViewModel()
+        public void ShouldConvertDataObjectToViewModel()
         {
             Customer customer = new Customer()
             {
@@ -62,7 +64,8 @@ namespace Adapters.Tests
             CustomerMapper mapper = new CustomerMapper();
             CustomerData viewModel = mapper.Convert(customer);
 
-            Assert.AreEqual(customer.BirthDate, DateTime.Parse(viewModel.BirthDate), "The birth date was not mapped.");
+            PrimitiveMapper primitiveMapper = new PrimitiveMapper();
+            Assert.AreEqual(customer.BirthDate, primitiveMapper.ToDateTime(viewModel.BirthDate), "The birth date was not mapped.");
             Assert.AreEqual(customer.CustomerId, Guid.Parse(viewModel.CustomerId), "The customer ID was not mapped.");
             Assert.AreEqual(customer.Height, viewModel.Height, "The height was not mapped.");
             Assert.AreEqual(customer.Name, viewModel.Name, "The name was not mapped.");

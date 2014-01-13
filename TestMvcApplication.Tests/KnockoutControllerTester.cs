@@ -4,10 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Adapters;
-using Adapters.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using TestMvcApplication.Controllers;
+using ViewModels;
 
 namespace TestMvcApplication.Tests
 {
@@ -21,7 +21,7 @@ namespace TestMvcApplication.Tests
         public void ShouldThrowExceptionIfAdapterNull()
         {
             ICustomerAdapter adapter = null;
-            new KnockoutController(adapter);
+            using (new KnockoutController(adapter)) { }
         }
 
         #endregion
@@ -32,11 +32,12 @@ namespace TestMvcApplication.Tests
         public void ShouldDisplayIndex()
         {
             ICustomerAdapter adapter = Substitute.For<ICustomerAdapter>();
-            KnockoutController controller = new KnockoutController(adapter);
+            using (KnockoutController controller = new KnockoutController(adapter))
+            {
+                ActionResult result = controller.Index();
 
-            ActionResult result = controller.Index();
-
-            ActionResultHelper.AssertView(result, controller.Views.Index);
+                ActionResultHelper.AssertView(result, controller.Views.Index);
+            }
         }
 
         #endregion
@@ -49,15 +50,16 @@ namespace TestMvcApplication.Tests
             ICustomerAdapter adapter = Substitute.For<ICustomerAdapter>();
             IEnumerable<CustomerData> data = new List<CustomerData>() { new CustomerData() };
             adapter.GetCustomers().Returns(data);
-            KnockoutController controller = new KnockoutController(adapter);
+            using (KnockoutController controller = new KnockoutController(adapter))
+            {
+                ActionResult result = controller.Load();
 
-            ActionResult result = controller.Load();
+                CustomerData[] model = ActionResultHelper.AssertJson<CustomerData[]>(result);
+                Assert.AreEqual(1, model.Length, "There should have been one customer.");
+                Assert.AreSame(data.First(), model[0], "The wrong customer was returned.");
 
-            CustomerData[] model = ActionResultHelper.AssertJson<CustomerData[]>(result);
-            Assert.AreEqual(1, model.Length, "There should have been one customer.");
-            Assert.AreSame(data.First(), model[0], "The wrong customer was returned.");
-
-            adapter.Received().GetCustomers();
+                adapter.Received().GetCustomers();
+            }
         }
 
         #endregion
@@ -70,15 +72,16 @@ namespace TestMvcApplication.Tests
             ICustomerAdapter adapter = Substitute.For<ICustomerAdapter>();
             CustomerData added = new CustomerData();
             adapter.AddCustomer(Arg.Any<CustomerData>()).Returns(added);
-            KnockoutController controller = new KnockoutController(adapter);
+            using (KnockoutController controller = new KnockoutController(adapter))
+            {
+                CustomerData data = new CustomerData();
+                ActionResult result = controller.Create(data);
 
-            CustomerData data = new CustomerData();
-            ActionResult result = controller.Create(data);
+                CustomerData model = ActionResultHelper.AssertJsonWithHttpStatusCode<CustomerData>(result, HttpStatusCode.Created);
+                Assert.AreSame(added, model, "The added customer was not returned.");
 
-            CustomerData model = ActionResultHelper.AssertJsonWithHttpStatusCode<CustomerData>(result, HttpStatusCode.Created);
-            Assert.AreSame(added, model, "The added customer was not returned.");
-
-            adapter.Received().AddCustomer(data);
+                adapter.Received().AddCustomer(data);
+            }
         }
         
         #endregion
@@ -89,14 +92,15 @@ namespace TestMvcApplication.Tests
         public void ShouldUpdateCustomer()
         {
             ICustomerAdapter adapter = Substitute.For<ICustomerAdapter>();
-            KnockoutController controller = new KnockoutController(adapter);
+            using (KnockoutController controller = new KnockoutController(adapter))
+            {
+                CustomerData data = new CustomerData();
+                ActionResult result = controller.Edit(data);
 
-            CustomerData data = new CustomerData();
-            ActionResult result = controller.Edit(data);
+                ActionResultHelper.AssertHttpStatusCode(result, HttpStatusCode.OK);
 
-            ActionResultHelper.AssertHttpStatusCode(result, HttpStatusCode.OK);
-
-            adapter.Received().UpdateCustomer(data);
+                adapter.Received().UpdateCustomer(data);
+            }
         }
 
         #endregion
@@ -107,14 +111,15 @@ namespace TestMvcApplication.Tests
         public void ShouldDeleteCustomer()
         {
             ICustomerAdapter adapter = Substitute.For<ICustomerAdapter>();
-            KnockoutController controller = new KnockoutController(adapter);
+            using (KnockoutController controller = new KnockoutController(adapter))
+            {
+                string customerId = Guid.NewGuid().ToString("N");
+                ActionResult result = controller.Delete(customerId);
 
-            string customerId = Guid.NewGuid().ToString("N");
-            ActionResult result = controller.Delete(customerId);
+                ActionResultHelper.AssertHttpStatusCode(result, HttpStatusCode.OK);
 
-            ActionResultHelper.AssertHttpStatusCode(result, HttpStatusCode.OK);
-
-            adapter.Received().RemoveCustomer(customerId);
+                adapter.Received().RemoveCustomer(customerId);
+            }
         }
 
         #endregion

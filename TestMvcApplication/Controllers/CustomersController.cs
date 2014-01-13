@@ -4,8 +4,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Adapters;
-using Adapters.Models;
 using MvcUtilities.FilterAttributes;
+using ViewModels;
 
 namespace TestMvcApplication.Controllers
 {

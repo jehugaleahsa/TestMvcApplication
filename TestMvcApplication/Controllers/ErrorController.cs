@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
+using MvcUtilities;
 using MvcUtilities.FilterAttributes;
-using MvcUtilities.Models;
 using TestMvcApplication.Context;
 
 namespace TestMvcApplication.Controllers
@@ -20,17 +20,17 @@ namespace TestMvcApplication.Controllers
             this.urlHelper = urlHelper;
         }
 
-        public virtual ActionResult Index(Error error = null)
+        public virtual ActionResult Index(ErrorData error = null)
         {
             if (error == null)
             {
-                error = new Error();
+                error = new ErrorData();
             }
             if (String.IsNullOrWhiteSpace(error.ErrorMessage))
             {
                 error.ErrorMessage = "An error occurred while processing your request.";
             }
-            if (String.IsNullOrWhiteSpace(error.ReturnUrl) || !urlHelper.IsSafe(error.ReturnUrl))
+            if (error.ReturnUrl == null || !urlHelper.IsSafe(error.ReturnUrl))
             {
                 error.ReturnUrl = urlHelper.Action(MVC.Classic.Index());
             }

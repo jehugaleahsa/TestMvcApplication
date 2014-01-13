@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Adapters.Mappers;
-using Adapters.Models;
+using ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
-using ServiceInterfaces.Entities;
-using ServiceInterfaces.Repositories;
+using DataObjects;
+using ServiceInterfaces;
 
 namespace Adapters.Tests
 {

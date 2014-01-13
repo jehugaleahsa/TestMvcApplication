@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Policies.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HP")]
+[assembly: AssemblyCompany("Truncon")]
 [assembly: AssemblyProduct("Policies.Tests")]
 [assembly: AssemblyCopyright("Copyright © HP 2013")]
 [assembly: AssemblyTrademark("")]
@@ -33,3 +33,4 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: CLSCompliant(true)]

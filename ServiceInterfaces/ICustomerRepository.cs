@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using ServiceInterfaces.Entities;
+using DataObjects;
 
-namespace ServiceInterfaces.Repositories
+namespace ServiceInterfaces
 {
     public interface ICustomerRepository
     {

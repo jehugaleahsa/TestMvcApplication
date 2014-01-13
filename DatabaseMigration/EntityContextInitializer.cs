@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
-using DataModeling.DataModel;
-using ServiceInterfaces.Entities;
+using DataModeling;
+using DataObjects;
 
 namespace DatabaseMigration
 {
@@ -13,6 +13,11 @@ namespace DatabaseMigration
 
         protected override void Seed(EntityContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             context.Database.ExecuteSqlCommand("CREATE UNIQUE INDEX [UK_dbo.AddressItem_CustomerId_Key] ON [AddressItem] ([CustomerId], [Key])");
 
             seedCustomers(context);

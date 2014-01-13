@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System;
+using System.Linq;
 using System.Transactions;
 using Ninject.Extensions.Interception;
 
@@ -9,7 +9,10 @@ namespace Policies
     {
         public override void Intercept(IInvocation invocation)
         {
-            MethodInfo method = invocation.Request.Method;
+            if (invocation == null)
+            {
+                throw new ArgumentNullException("invocation");
+            }
             TransactionAttribute attribute = GetAttributes(invocation).SingleOrDefault();
             if (attribute == null)
             {

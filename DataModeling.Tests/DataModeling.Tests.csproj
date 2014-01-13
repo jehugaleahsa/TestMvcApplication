@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -59,6 +60,10 @@
     <ProjectReference Include="..\DataModeling\DataModeling.csproj">
       <Project>{82518D3E-70F1-488C-816F-5596FA4A518B}</Project>
       <Name>DataModeling</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceInterfaces\ServiceInterfaces.csproj">
+      <Project>{45c0c712-ecf5-41c8-989c-7d7f75e60b77}</Project>
+      <Name>ServiceInterfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

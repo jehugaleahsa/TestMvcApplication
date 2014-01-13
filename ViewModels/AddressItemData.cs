@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
-namespace Adapters.Models
+namespace ViewModels
 {
     [DataContract]
     public class AddressItemData

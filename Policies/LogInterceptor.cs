@@ -11,6 +11,10 @@ namespace Policies
     {
         public override void Intercept(IInvocation invocation)
         {
+            if (invocation == null)
+            {
+                throw new ArgumentNullException("invocation");
+            }
             MethodInfo method = invocation.Request.Method;
             LogAttribute attribute = GetAttributes(invocation).SingleOrDefault();
             ILogger logger = invocation.Request.Kernel.Get<ILogger>();

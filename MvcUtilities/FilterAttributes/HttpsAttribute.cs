@@ -4,18 +4,19 @@ using System.Web.Mvc;
 
 namespace TestMvcApplication.FilterAttributes
 {
-    public class HttpsAttribute : ActionFilterAttribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=false, Inherited=true)]
+    public sealed class HttpsAttribute : ActionFilterAttribute
     {
-        private readonly bool isEnabled;
-
         /// <summary>
         /// Initializes a new instance of a HttpsAttribute.
         /// </summary>
         /// <param name="isEnabled">Determines whether the action requires HTTPS.</param>
         public HttpsAttribute(bool isEnabled)
         {
-            this.isEnabled = isEnabled;
+            IsEnabled = isEnabled;
         }
+
+        public bool IsEnabled { get; private set; }
 
         /// <summary>
         /// Called by the ASP.NET MVC framework before the action method executes.
@@ -23,12 +24,16 @@ namespace TestMvcApplication.FilterAttributes
         /// <param name="filterContext">The filter context.</param>
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            if (filterContext == null)
+            {
+                throw new ArgumentNullException("filterContext");
+            }
+
             HttpRequestBase request = filterContext.HttpContext.Request;
-            HttpResponseBase response = filterContext.HttpContext.Response;
 
             if (!request.IsLocal)
             {
-                if (!request.IsSecureConnection && isEnabled)
+                if (!request.IsSecureConnection && IsEnabled)
                 {
                     Uri uri = request.Url;
                     UriBuilder builder = new UriBuilder(uri)
@@ -39,7 +44,7 @@ namespace TestMvcApplication.FilterAttributes
                     string url = builder.Uri.ToString();
                     filterContext.Result = new RedirectResult(url);
                 }
-                else if (request.IsSecureConnection && !isEnabled)
+                else if (request.IsSecureConnection && !IsEnabled)
                 {
                     Uri uri = request.Url;
                     UriBuilder builder = new UriBuilder(uri)

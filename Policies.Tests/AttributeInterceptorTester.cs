@@ -53,14 +53,18 @@ namespace Policies.Tests
         }
 
         [AttributeUsage(AttributeTargets.Method)]
-        public class CustomAttribute : Attribute
+        internal sealed class CustomAttribute : Attribute
         {
         }
 
-        public class CustomInterceptor : AttributeInterceptor<CustomAttribute>
+        internal class CustomInterceptor : AttributeInterceptor<CustomAttribute>
         {
             public override void Intercept(IInvocation invocation)
             {
+                if (invocation == null)
+                {
+                    throw new ArgumentNullException("invocation");
+                }
                 invocation.Proceed();
             }
 
@@ -70,20 +74,20 @@ namespace Policies.Tests
             }
         }
 
-        public interface IInterfaceWithAttribute
+        internal interface IInterfaceWithAttribute
         {
             [Custom]
             void DoSomething();
         }
 
-        public class ImplementsInterface : IInterfaceWithAttribute
+        internal class ImplementsInterface : IInterfaceWithAttribute
         {
             public void DoSomething()
             {                
             }
         }
 
-        public class AttributeInheritedAndReproduced : IInterfaceWithAttribute
+        internal class AttributeInheritedAndReproduced : IInterfaceWithAttribute
         {
             [Custom]
             public void DoSomething()
@@ -91,13 +95,13 @@ namespace Policies.Tests
             }
         }
 
-        public abstract class AbstractClassWithAttribute
+        internal abstract class AbstractClassWithAttribute
         {
             [Custom]
             public abstract void DoSomething();
         }
 
-        public class ImplementsAbstractClass : AbstractClassWithAttribute
+        internal class ImplementsAbstractClass : AbstractClassWithAttribute
         {
             public override void DoSomething()
             {

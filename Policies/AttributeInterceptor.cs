@@ -14,6 +14,10 @@ namespace Policies
 
         protected virtual IEnumerable<TAttribute> GetAttributes(IInvocation invocation)
         {
+            if (invocation == null)
+            {
+                throw new ArgumentNullException("invocation");
+            }
             Type targetType = invocation.Request.Target.GetType();
             MethodInfo method = invocation.Request.Method;
             Tuple<Type, MethodInfo> key = Tuple.Create(targetType, method);

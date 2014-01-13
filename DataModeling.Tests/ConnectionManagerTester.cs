@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
-using DataModeling.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 

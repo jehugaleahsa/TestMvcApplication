@@ -20,6 +20,10 @@ namespace Policies
 
         public override void Intercept(IInvocation invocation)
         {
+            if (invocation == null)
+            {
+                throw new ArgumentNullException("invocation");
+            }
             try
             {
                 invocation.Proceed();

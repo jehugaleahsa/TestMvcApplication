@@ -16,12 +16,12 @@ namespace MvcUtilities.Binders
 
     public sealed class BoundModelBinder<TModel>
     {
-        private Func<TModel> creator;
+        private Func<TModel> modelCreator;
         private Dictionary<PropertyInfo, PropertyBinder> mappers;
 
         internal BoundModelBinder()
         {
-            creator = () => Activator.CreateInstance<TModel>();
+            modelCreator = () => Activator.CreateInstance<TModel>();
             mappers = new Dictionary<PropertyInfo, PropertyBinder>();
         }
 
@@ -31,33 +31,54 @@ namespace MvcUtilities.Binders
             {
                 throw new ArgumentNullException("creator");
             }
-            this.creator = creator;
+            this.modelCreator = creator;
             return this;
         }
 
-        public BoundModelBinder<TModel> Map<TProp>(Expression<Func<TModel, TProp>> propertySelector, string fieldName, TProp defaultValue = default(TProp))
+        public BoundModelBinder<TModel> Map<TProp>(Expression<Func<TModel, TProp>> propertySelector, string fieldName)
         {
-            if (propertySelector == null)
-            {
-                throw new ArgumentNullException("propertyGetter");
-            }
+            MemberExpression memberExpression = getMember<TProp>(propertySelector);
             if (String.IsNullOrWhiteSpace(fieldName))
             {
                 throw new ArgumentException("The field name to map to was blank.", "fieldName");
+            }
+            return map(fieldName, default(TProp), memberExpression);
+        }
+
+        public BoundModelBinder<TModel> Map<TProp>(Expression<Func<TModel, TProp>> propertySelector, string fieldName, TProp defaultValue)
+        {
+            MemberExpression memberExpression = getMember(propertySelector);
+            if (String.IsNullOrWhiteSpace(fieldName))
+            {
+                throw new ArgumentException("The field name to map to was blank.", "fieldName");
+            }
+            return map<TProp>(fieldName, defaultValue, memberExpression);
+        }
+
+        private static MemberExpression getMember<TProp>(Expression<Func<TModel, TProp>> propertySelector)
+        {
+            if (propertySelector == null)
+            {
+                throw new ArgumentNullException("propertySelector");
             }
             MemberExpression memberExpression = propertySelector.Body as MemberExpression;
             if (memberExpression == null || memberExpression.Member.MemberType != MemberTypes.Property)
             {
                 throw new ArgumentException("The property selector did not return a property.", "propertySelector");
             }
+            return memberExpression;
+        }
+
+        private BoundModelBinder<TModel> map<TProp>(string fieldName, TProp value, MemberExpression memberExpression)
+        {
             PropertyInfo propertyInfo = (PropertyInfo)memberExpression.Member;
-            mappers[propertyInfo] = new PropertyBinder() { PropertyInfo = propertyInfo, FieldName = fieldName, DefaultValue = defaultValue };
+            mappers[propertyInfo] = new PropertyBinder() { PropertyInfo = propertyInfo, FieldName = fieldName, DefaultValue = value };
             return this;
         }
 
         public IModelBinder ToBinder()
         {
-            return new ModelBinder(creator, mappers.Values);
+            return new ModelBinder(modelCreator, mappers.Values);
         }
 
         private sealed class PropertyBinder
@@ -80,7 +101,7 @@ namespace MvcUtilities.Binders
                 {
                     try
                     {
-                        value = result.ConvertTo(PropertyInfo.PropertyType);
+                        value = result.ConvertTo(PropertyInfo.PropertyType, null);
                     }
                     catch (Exception exception)
                     {
@@ -105,6 +126,10 @@ namespace MvcUtilities.Binders
 
             public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
             {
+                if (bindingContext == null)
+                {
+                    throw new ArgumentNullException("bindingContext");
+                }
                 bindingContext.ModelMetadata.Model = creator();
                 foreach (PropertyBinder binder in mappers)
                 {

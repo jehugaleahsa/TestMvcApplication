@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ServiceInterfaces.Entities
+namespace DataObjects
 {
     public class Customer
     {

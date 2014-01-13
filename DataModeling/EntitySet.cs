@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Data.EntityClient;
-using DataModeling.DataModel;
-using ServiceInterfaces.Entities;
+using DataObjects;
 
 namespace DataModeling
 {
@@ -15,9 +14,6 @@ namespace DataModeling
         public EntitySet(string connectionString)
         {
             context = new EntityContext(connectionString);
-            context.Configuration.LazyLoadingEnabled = false;
-            context.Configuration.ProxyCreationEnabled = false;
-            context.Configuration.ValidateOnSaveEnabled = false;
         }
 
         ~EntitySet()

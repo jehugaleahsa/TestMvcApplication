@@ -81,8 +81,8 @@ namespace Policies.Tests
             IInvocation invocation = Substitute.For<IInvocation>();
             invocation.Request.Target.Returns(typeof(WithMultipleAttributes));
             invocation.Request.Method.Returns(typeof(WithMultipleAttributes).GetMethod("DoSomething"));
-            const string message = "Error message";
-            invocation.When(i => i.Proceed()).Do(x => { throw new ArgumentNullException(message); });
+            const string parameterName = "x";
+            invocation.When(i => i.Proceed()).Do(x => { throw new ArgumentNullException(parameterName); });
             try
             {
                 wrapper.Intercept(invocation);

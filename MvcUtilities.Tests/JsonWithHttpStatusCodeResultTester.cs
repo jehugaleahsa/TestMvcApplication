@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -49,9 +50,9 @@ namespace MvcUtilities.Tests
         }
 
         [TestMethod]
-        public void ShouldJsonifyData()
+        public void ShouldSerializeDataToJson()
         {
-            using (StringWriter writer = new StringWriter())
+            using (StringWriter writer = new StringWriter(CultureInfo.CurrentCulture))
             {
                 HttpContextBase httpContext = Substitute.For<HttpContextBase>();
                 httpContext.Response.When(c => c.Write(Arg.Any<string>())).Do(c => writer.Write(c.Arg<string>()));

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ServiceInterfaces.Entities
+namespace DataObjects
 {
     public class AddressItem
     {

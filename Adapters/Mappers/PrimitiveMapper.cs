@@ -31,7 +31,7 @@ namespace Adapters.Mappers
 
         public string ToString(DateTime value)
         {
-            return value.ToString("d");
+            return value.ToString("d", null);
         }
 
         public string ToString(Guid value)

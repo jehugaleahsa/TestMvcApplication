@@ -3,7 +3,7 @@
 namespace Policies
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple=true, Inherited=true)]
-    public class ErrorMessageAttribute : Attribute
+    public sealed class ErrorMessageAttribute : Attribute
     {
         public ErrorMessageAttribute(string errorMessage)
         {

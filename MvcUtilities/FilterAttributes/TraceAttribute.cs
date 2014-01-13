@@ -1,10 +1,12 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Policies;
 using ServiceInterfaces;
 
 namespace MvcUtilities.FilterAttributes
 {
-    public class TraceAttribute : ActionFilterAttribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=true, Inherited=true)]
+    public sealed class TraceAttribute : ActionFilterAttribute
     {
         public string LogName { get; set; }
 
@@ -13,6 +15,10 @@ namespace MvcUtilities.FilterAttributes
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            if (filterContext == null)
+            {
+                throw new ArgumentNullException("filterContext");
+            }
             Logger.Trace(LogName,
                 @"Entering {0}Controller.{1}",
                 filterContext.ActionDescriptor.ControllerDescriptor.ControllerName,
@@ -22,6 +28,10 @@ namespace MvcUtilities.FilterAttributes
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
+            if (filterContext == null)
+            {
+                throw new ArgumentNullException("filterContext");
+            }
             if (filterContext.Exception != null && !filterContext.ExceptionHandled)
             {
                 Logger.ErrorException(LogName, filterContext.Exception);
@@ -35,6 +45,10 @@ namespace MvcUtilities.FilterAttributes
 
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
+            if (filterContext == null)
+            {
+                throw new ArgumentNullException("filterContext");
+            }
             if (filterContext.Exception != null && !filterContext.ExceptionHandled)
             {
                 Logger.ErrorException(LogName, filterContext.Exception);

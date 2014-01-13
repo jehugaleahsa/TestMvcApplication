@@ -7,18 +7,18 @@ namespace MvcUtilities
     [Serializable]
     public abstract class CodedException : Exception
     {
-        public CodedException(HttpStatusCode statusCode)
+        protected CodedException(HttpStatusCode statusCode)
         {
             StatusCode = statusCode;
         }
 
-        public CodedException(HttpStatusCode statusCode, string message)
+        protected CodedException(HttpStatusCode statusCode, string message)
             : base(message)
         {
             StatusCode = statusCode;
         }
 
-        public CodedException(HttpStatusCode statusCode, string message, Exception innerException)
+        protected CodedException(HttpStatusCode statusCode, string message, Exception innerException)
             : base(message, innerException)
         {
             StatusCode = statusCode;

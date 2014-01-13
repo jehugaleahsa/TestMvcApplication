@@ -15,7 +15,7 @@ namespace Adapters.Tests
             AdapterException exception = new AdapterException(HttpStatusCode.InternalServerError, "exception message", innerException);
 
             SerializationHelper helper = new SerializationHelper();
-            AdapterException deserialized = helper.RoundTrip(exception);
+            AdapterException deserialized = helper.Roundtrip(exception);
 
             Assert.AreEqual(exception.StatusCode, deserialized.StatusCode, "The status code was not serialized.");
             Assert.AreEqual(exception.Message, deserialized.Message, "The message was not serialized.");

@@ -1,29 +1,13 @@
 using System;
 using System.Web;
-using System.Web.Http;
-using Adapters;
-using DataModeling;
-using DataModeling.Repositories;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-using MvcUtilities.FilterAttributes;
 using Ninject;
-using Ninject.Activation;
-using Ninject.Extensions.Interception.Infrastructure.Language;
-using Ninject.Modules;
-using Ninject.Syntax;
 using Ninject.Web.Common;
-using Policies;
-using ServiceInterfaces;
-using ServiceInterfaces.Repositories;
-using TestMvcApplication.Context;
-using TestMvcApplication.Controllers;
-using System.Data;
-using System.Net;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(TestMvcApplication.NinjectWebCommon), "Start")]
-[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(TestMvcApplication.NinjectWebCommon), "Stop")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof(TestMvcApplication.App_Start.NinjectWebCommon), "Start")]
+[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(TestMvcApplication.App_Start.NinjectWebCommon), "Stop")]
 
-namespace TestMvcApplication
+namespace TestMvcApplication.App_Start
 {
     public static class NinjectWebCommon 
     {
@@ -53,15 +37,11 @@ namespace TestMvcApplication
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            IKernel kernel = new StandardKernel(new NinjectSettings() { InjectAttribute = typeof(Policies.InjectAttribute) });
+            var kernel = new StandardKernel();
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-
+            
             RegisterServices(kernel);
-
-            // Enables dependency lookup for Web API
-            GlobalConfiguration.Configuration.DependencyResolver = new NinjectWebApiDependencyResolver(kernel);
-
             return kernel;
         }
 
@@ -71,59 +51,6 @@ namespace TestMvcApplication
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Load<TestModule>();
         }        
-    }
-
-    public class TestModule : NinjectModule
-    {
-        public override void Load()
-        {
-            Bind<ContextManager>().ToSelf().InRequestScope();
-            Bind<IUrlHelper>().To<ContextManager>();
-            Bind<IPrincipalManager>().To<ContextManager>();
-            Bind<IConfigurationManager>().To<ContextManager>();
-            Bind<ILogger>().To<ContextManager>();
-
-            Bind<EntitySet>().ToMethod(getEntitySet).InRequestScope();
-
-            Bind<TraceAttribute>().ToSelf();
-
-            Bind<ICustomerRepository>().To<CustomerRepository>().WithRepositoryInterceptors();
-            Bind<IAddressItemRepository>().To<AddressItemRepository>().WithRepositoryInterceptors();
-
-            Bind<ICustomerAdapter>().To<CustomerAdapter>().WithAdapterInterceptors();
-            Bind<IAddressItemAdapter>().To<AddressItemAdapter>().WithAdapterInterceptors();
-
-            Bind<ErrorController>().ToSelf();
-            Bind<ClassicController>().ToSelf();
-            Bind<KnockoutController>().ToSelf();
-            Bind<CustomersController>().ToSelf();
-        }
-
-        private static EntitySet getEntitySet(IContext context)
-        {
-            IConfigurationManager manager = context.Kernel.Get<IConfigurationManager>();
-            return new EntitySet(manager.ConnectionString);
-        }
-    }
-
-    internal static class InterceptorHelpers
-    {
-        public static void WithRepositoryInterceptors<TRepository>(this IBindingWhenInNamedWithOrOnSyntax<TRepository> binding)
-        {
-            binding.Intercept().With(new ExceptionWrapper<DataException>((e, m) => new ServiceException(m, e))).InOrder(1);
-            binding.Intercept().With<LogInterceptor>().InOrder(2);
-        }
-
-        public static void WithAdapterInterceptors<TAdapter>(this IBindingWhenInNamedWithOrOnSyntax<TAdapter> binding)
-        {
-            binding
-                .Intercept()
-                .With(new ExceptionWrapper<ServiceException>((e, m) => new AdapterException(HttpStatusCode.InternalServerError, m, e)))
-                .InOrder(1);
-            binding.Intercept().With<TransactionInterceptor>().InOrder(2);
-            binding.Intercept().With<LogInterceptor>().InOrder(3);
-        }
     }
 }

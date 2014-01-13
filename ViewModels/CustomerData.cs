@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using MvcUtilities.Binders;
 using MvcUtilities.ValidationAttributes;
 
-namespace Adapters.Models
+namespace ViewModels
 {
     [DataContract]
     public class CustomerData

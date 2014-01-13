@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Adapters.Mappers;
-using Adapters.Models;
+using ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
-using ServiceInterfaces.Entities;
-using ServiceInterfaces.Repositories;
+using DataObjects;
+using ServiceInterfaces;
 
 namespace Adapters.Tests
 {
@@ -16,7 +17,7 @@ namespace Adapters.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ShouldThrowExceptionIfNullPassedToCtor()
+        public void ShouldThrowExceptionIfNullPassedToConstructor()
         {
             new CustomerAdapter(null);
         }
@@ -58,10 +59,13 @@ namespace Adapters.Tests
             mapper.Convert(dto).Returns(viewModel);
 
             CustomerAdapter adapter = new CustomerAdapter(repository) { CustomerMapper = mapper };
-            CustomerData data = adapter.GetCustomer(Guid.Empty.ToString("N"));
+            PrimitiveMapper primitiveMapper = new PrimitiveMapper();
+            CustomerData data = adapter.GetCustomer(primitiveMapper.ToString(Guid.Empty));
 
             repository.Received().GetCustomer(dto.CustomerId);
             mapper.Received().Convert(dto);
+
+            Assert.IsNotNull(data, "The returned view model was null.");
         }
 
         #endregion
@@ -83,6 +87,9 @@ namespace Adapters.Tests
 
             repository.Received().GetCustomers();
             mapper.Received(1).Convert(customers[0]);
+
+            Assert.IsNotNull(results, "Null was returned by the adapter.");
+            Assert.AreEqual(1, results.Count(), "The wrong number of view models were returned.");
         }
 
         #endregion

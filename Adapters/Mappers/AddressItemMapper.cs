@@ -1,6 +1,6 @@
 ﻿using System;
-using Adapters.Models;
-using ServiceInterfaces.Entities;
+using ViewModels;
+using DataObjects;
 
 namespace Adapters.Mappers
 {
@@ -8,13 +8,17 @@ namespace Adapters.Mappers
     {
         AddressItem Convert(AddressItemData data);
 
-        AddressItemData Convert(AddressItem setting);
+        AddressItemData Convert(AddressItem item);
     }
 
     public class AddressItemMapper : IAddressItemMapper
     {
         public AddressItem Convert(AddressItemData data)
         {
+            if (data == null)
+            {
+                return null;
+            }
             PrimitiveMapper mapper = new PrimitiveMapper();
             AddressItem item = new AddressItem();
             if (!String.IsNullOrWhiteSpace(data.AddressItemId))
@@ -29,6 +33,10 @@ namespace Adapters.Mappers
 
         public AddressItemData Convert(AddressItem item)
         {
+            if (item == null)
+            {
+                return null;
+            }
             PrimitiveMapper mapper = new PrimitiveMapper();
             AddressItemData data = new AddressItemData();
             data.AddressItemId = mapper.ToString(item.AddressItemId);

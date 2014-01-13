@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.Common;
 
-namespace DataModeling.Helpers
+namespace DataModeling
 {
     public class ConnectionManager : IDisposable
     {

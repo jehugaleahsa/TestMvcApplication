@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,10 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
+    <Reference Include="EntityFramework, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
@@ -48,16 +51,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataModel\AddressItemConfiguration.cs" />
-    <Compile Include="DataModel\CustomerConfiguration.cs" />
-    <Compile Include="DataModel\EntityContext.cs" />
-    <Compile Include="Helpers\ConnectionManager.cs" />
-    <Compile Include="Repositories\CustomerRepository.cs" />
+    <Compile Include="AddressItemConfiguration.cs" />
+    <Compile Include="CustomerConfiguration.cs" />
+    <Compile Include="EntityContext.cs" />
+    <Compile Include="ConnectionManager.cs" />
+    <Compile Include="CustomerRepository.cs" />
     <Compile Include="EntitySet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\AddressItemRepository.cs" />
+    <Compile Include="AddressItemRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataObjects\DataObjects.csproj">
+      <Project>{01a2f933-7ed5-41dd-b9f9-048e9568696b}</Project>
+      <Name>DataObjects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Policies\Policies.csproj">
       <Project>{576AB159-E4F1-4E2E-A7A1-54166D3F974C}</Project>
       <Name>Policies</Name>
@@ -69,6 +76,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

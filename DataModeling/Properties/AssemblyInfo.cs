@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -8,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("DataModeling")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HP")]
+[assembly: AssemblyCompany("Truncon")]
 [assembly: AssemblyProduct("DataModeling")]
 [assembly: AssemblyCopyright("Copyright © HP 2013")]
 [assembly: AssemblyTrademark("")]
@@ -35,3 +36,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: InternalsVisibleTo("DatabaseMigration")]
+[assembly: CLSCompliant(true)]

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Web.Mvc;
 
 namespace MvcUtilities.ActionResults
@@ -19,6 +20,10 @@ namespace MvcUtilities.ActionResults
 
         public override void ExecuteResult(ControllerContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             context.HttpContext.Response.StatusCode = StatusCode;
             base.ExecuteResult(context);
         }

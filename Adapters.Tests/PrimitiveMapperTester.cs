@@ -9,7 +9,7 @@ namespace Adapters.Tests
     public class PrimitiveMapperTester
     {
         [TestMethod]
-        public void ShouldThrowAdapterExceptionForBadGuid()
+        public void ShouldThrowAdapterExceptionForInvalidGuid()
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Adapters.Tests
         }
 
         [TestMethod]
-        public void ShouldThrowAdapterExceptionForBadDate()
+        public void ShouldThrowAdapterExceptionForInvalidDate()
         {
             try
             {

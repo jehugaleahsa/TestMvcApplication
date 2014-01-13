@@ -1,6 +1,8 @@
-﻿namespace MvcUtilities.Models
+﻿using System;
+
+namespace MvcUtilities
 {
-    public class Error
+    public class ErrorData
     {
         public string ErrorMessage { get; set; }
 

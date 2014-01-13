@@ -5,7 +5,7 @@ namespace TestUtilities
 {
     public class SerializationHelper
     {
-        public T RoundTrip<T>(T obj)
+        public T Roundtrip<T>(T obj)
         {
             using (MemoryStream stream = new MemoryStream())
             {

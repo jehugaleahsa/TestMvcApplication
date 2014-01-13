@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
-using Adapters.Models;
 using MvcUtilities.Binders;
+using ViewModels;
 
 namespace TestMvcApplication
 {

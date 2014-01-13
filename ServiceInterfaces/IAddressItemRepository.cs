@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using ServiceInterfaces.Entities;
+using DataObjects;
 
-namespace ServiceInterfaces.Repositories
+namespace ServiceInterfaces
 {
     public interface IAddressItemRepository
     {
-        AddressItem GetAddressItem(Guid guid);
+        AddressItem GetAddressItem(Guid itemId);
 
         IEnumerable<AddressItem> GetAddressItems(Customer customer);
 

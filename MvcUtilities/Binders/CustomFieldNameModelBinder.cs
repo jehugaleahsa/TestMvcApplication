@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
@@ -12,6 +11,14 @@ namespace MvcUtilities.Binders
     {
         public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
+            if (controllerContext == null)
+            {
+                throw new ArgumentNullException("controllerContext");
+            }
+            if (bindingContext == null)
+            {
+                throw new ArgumentNullException("bindingContext");
+            }
             object model = Activator.CreateInstance(bindingContext.ModelMetadata.ModelType);
             
             foreach (PropertyInfo propertyInfo in bindingContext.ModelMetadata.ModelType.GetProperties())
@@ -67,13 +74,13 @@ namespace MvcUtilities.Binders
             {
                 try
                 {
-                    object value = result.ConvertTo(propertyInfo.PropertyType);
+                    object value = result.ConvertTo(propertyInfo.PropertyType, null);
                     propertyInfo.SetValue(model, value, null);
                     return true;
                 }
                 catch
                 {
-                    string message = String.Format(CultureInfo.CurrentCulture, "Failed to map {0} to {1}.", fieldName, propertyInfo.Name);
+                    string message = String.Format(null, "Failed to map {0} to {1}.", fieldName, propertyInfo.Name);
                     context.ModelState.AddModelError(propertyInfo.Name, message);
                 }
             }

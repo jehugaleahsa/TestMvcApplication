@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Web.Mvc;
 using Adapters;
-using Adapters.Models;
 using MvcUtilities.FilterAttributes;
+using ViewModels;
 
 namespace TestMvcApplication.Controllers
 {

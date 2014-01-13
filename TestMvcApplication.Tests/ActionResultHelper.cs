@@ -5,7 +5,7 @@ using MvcUtilities.ActionResults;
 
 namespace TestMvcApplication.Tests
 {
-    public class ActionResultHelper
+    public static class ActionResultHelper
     {
         public static void AssertView(ActionResult result, string expectedViewName)
         {

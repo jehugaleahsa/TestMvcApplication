@@ -3,7 +3,7 @@
 namespace MvcUtilities.Binders
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple=true, Inherited=true)]
-    public class FieldNameAttribute : Attribute
+    public sealed class FieldNameAttribute : Attribute
     {
         public FieldNameAttribute(string fieldName)
         {

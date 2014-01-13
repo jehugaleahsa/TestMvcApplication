@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using ServiceInterfaces.Entities;
+using DataObjects;
 
-namespace DataModeling.DataModel
+namespace DataModeling
 {
     internal class AddressItemConfiguration : EntityTypeConfiguration<AddressItem>
     {

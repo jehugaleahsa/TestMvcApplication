@@ -1,14 +1,13 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.ModelConfiguration;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.Objects;
 using System.Linq;
-using ServiceInterfaces.Entities;
+using DataObjects;
 
-namespace DataModeling.DataModel
+namespace DataModeling
 {
     internal class EntityContext : DbContext
     {
@@ -20,6 +19,9 @@ namespace DataModeling.DataModel
         public EntityContext(string connectionString)
             : base(connectionString)
         {
+            Configuration.LazyLoadingEnabled = false;
+            Configuration.ProxyCreationEnabled = false;
+            Configuration.ValidateOnSaveEnabled = false;
         }
 
         public ObjectContext ObjectContext
@@ -33,6 +35,11 @@ namespace DataModeling.DataModel
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            if (modelBuilder == null)
+            {
+                throw new ArgumentNullException("modelBuilder");
+            }
+
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
             addEntityConfigurations(modelBuilder);

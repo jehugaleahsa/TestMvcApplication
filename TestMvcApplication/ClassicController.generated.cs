@@ -158,9 +158,9 @@ namespace TestMvcApplication.Controllers
             return callInfo;
         }
 
-        partial void CreateOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, Adapters.Models.CustomerData data);
+        partial void CreateOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, ViewModels.CustomerData data);
 
-        public override System.Web.Mvc.ActionResult Create(Adapters.Models.CustomerData data)
+        public override System.Web.Mvc.ActionResult Create(ViewModels.CustomerData data)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Create);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "data", data);
@@ -178,9 +178,9 @@ namespace TestMvcApplication.Controllers
             return callInfo;
         }
 
-        partial void EditOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, Adapters.Models.CustomerData data);
+        partial void EditOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, ViewModels.CustomerData data);
 
-        public override System.Web.Mvc.ActionResult Edit(Adapters.Models.CustomerData data)
+        public override System.Web.Mvc.ActionResult Edit(ViewModels.CustomerData data)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Edit);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "data", data);
@@ -198,9 +198,9 @@ namespace TestMvcApplication.Controllers
             return callInfo;
         }
 
-        partial void DeleteOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, Adapters.Models.CustomerData customerData);
+        partial void DeleteOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, ViewModels.CustomerData customerData);
 
-        public override System.Web.Mvc.ActionResult Delete(Adapters.Models.CustomerData customerData)
+        public override System.Web.Mvc.ActionResult Delete(ViewModels.CustomerData customerData)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Delete);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "customerData", customerData);
