@@ -1,9 +1,9 @@
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject.Web;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(TestMvcApplication.App_Start.NinjectWeb), "Start")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof(TestMvcApplication.NinjectWeb), "Start")]
 
-namespace TestMvcApplication.App_Start
+namespace TestMvcApplication
 {
     public static class NinjectWeb 
     {

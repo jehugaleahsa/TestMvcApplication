@@ -37,11 +37,7 @@ namespace DataModeling
 
         public DbConnection Connection
         {
-            get 
-            { 
-                EntityConnection connection = (EntityConnection)context.ObjectContext.Connection;
-                return connection.StoreConnection;
-            }
+            get { return context.ObjectContext.Connection; }
         }
 
         public IEnumerable<TEntity> GetEntities<TEntity>(DbDataReader reader)

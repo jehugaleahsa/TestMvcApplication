@@ -1,13 +1,14 @@
 using System;
 using System.Web;
+using System.Web.Http;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using Ninject.Web.Common;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(TestMvcApplication.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(TestMvcApplication.App_Start.NinjectWebCommon), "Stop")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof(TestMvcApplication.NinjectWebCommon), "Start")]
+[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(TestMvcApplication.NinjectWebCommon), "Stop")]
 
-namespace TestMvcApplication.App_Start
+namespace TestMvcApplication
 {
     public static class NinjectWebCommon 
     {
@@ -37,11 +38,14 @@ namespace TestMvcApplication.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel();
+            IKernel kernel = new StandardKernel(new NinjectSettings() { InjectAttribute = typeof(Policies.InjectAttribute) });
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
-            kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            
+            kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();            
             RegisterServices(kernel);
+
+            // Enables dependency lookup for Web API
+            GlobalConfiguration.Configuration.DependencyResolver = new NinjectWebApiDependencyResolver(kernel);
+
             return kernel;
         }
 
@@ -51,6 +55,7 @@ namespace TestMvcApplication.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            kernel.Load<TestNinjectModule>();
         }        
     }
 }
