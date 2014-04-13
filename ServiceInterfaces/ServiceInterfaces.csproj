@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="IAddressItemRepository.cs" />
     <Compile Include="IConfigurationManager.cs" />
+    <Compile Include="IEntityLoader.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="ICustomerRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
