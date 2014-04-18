@@ -42,7 +42,7 @@ namespace DataModeling
             return reference.IsLoaded;
         }
 
-        public TRelation Load<TRelation>(Expression<Func<TEntity, TRelation>> accessor)
+        public void Load<TRelation>(Expression<Func<TEntity, TRelation>> accessor)
             where TRelation : class
         {
             DbEntityEntry<TEntity> entry = context.Entry(entity);
@@ -51,8 +51,6 @@ namespace DataModeling
             {
                 reference.Load();
             }
-            Func<TEntity, TRelation> compiled = accessor.Compile();
-            return compiled(entity);
         }
 
         public bool IsLoaded<TRelation>(Expression<Func<TEntity, ICollection<TRelation>>> accessor)
@@ -63,7 +61,7 @@ namespace DataModeling
             return collection.IsLoaded;
         }
 
-        public ICollection<TRelation> Load<TRelation>(Expression<Func<TEntity, ICollection<TRelation>>> accessor)
+        public void Load<TRelation>(Expression<Func<TEntity, ICollection<TRelation>>> accessor)
             where TRelation : class
         {
             DbEntityEntry<TEntity> entry = context.Entry(entity);
@@ -72,8 +70,6 @@ namespace DataModeling
             {
                 collection.Load();
             }
-            Func<TEntity, ICollection<TRelation>> compiled = accessor.Compile();
-            return compiled(entity);
         }
 
         public IQueryable<TRelation> LoadQuery<TRelation>(Expression<Func<TEntity, TRelation>> accessor)

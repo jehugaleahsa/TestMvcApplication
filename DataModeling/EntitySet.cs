@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Data.EntityClient;
 using DataObjects;
+using ServiceInterfaces;
 
 namespace DataModeling
 {
@@ -58,6 +59,18 @@ namespace DataModeling
         public IDbSet<AddressItem> AddressItems 
         { 
             get { return context.AddressItems; } 
+        }
+
+        public IEntityLoader<TEntity> GetLoader<TEntity>(TEntity entity)
+            where TEntity : class
+        {
+            return new EntityLoader<TEntity>(context, entity);
+        }
+
+        public IEntityLoader<TEntity> GetLoader<TEntity>(IEnumerable<TEntity> entities)
+            where TEntity : class
+        {
+            return new EntityCollectionLoader<TEntity>(context, entities);
         }
     }
 }

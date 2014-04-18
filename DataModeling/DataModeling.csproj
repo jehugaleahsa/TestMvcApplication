@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="AddressItemConfiguration.cs" />
     <Compile Include="CustomerConfiguration.cs" />
+    <Compile Include="EntityCollectionLoader.cs" />
     <Compile Include="EntityContext.cs" />
     <Compile Include="ConnectionManager.cs" />
     <Compile Include="CustomerRepository.cs" />
