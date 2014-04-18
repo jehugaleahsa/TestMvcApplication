@@ -49,10 +49,15 @@ namespace DataModeling
 
         private void addEntityConfigurations(DbModelBuilder modelBuilder)
         {
-            var types = from type in GetType().Assembly.GetTypes()
-                        where type.BaseType.IsGenericType
-                        where type.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>)
-                        select type;
+            var entityTypes = from type in GetType().Assembly.GetTypes()
+                              where type.BaseType.IsGenericType
+                              where type.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>)
+                              select type;
+            var complexTypes = from type in GetType().Assembly.GetTypes()
+                               where type.BaseType.IsGenericType
+                               where type.BaseType.GetGenericTypeDefinition() == typeof(ComplexTypeConfiguration<>)
+                               select type;
+            var types = entityTypes.Union(complexTypes);
             foreach (Type type in types)
             {
                 dynamic configuration = Activator.CreateInstance(type);

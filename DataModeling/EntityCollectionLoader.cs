@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Metadata.Edm;
 using System.Data.Objects;
 using System.Linq;
 using System.Linq.Expressions;
@@ -111,8 +112,13 @@ namespace DataModeling
 
             if (!keys.Any())
             {
-                // the entity has no keys, so throw an exception
-                throw new InvalidOperationException("Loading is not permitted for entities without keys.");
+                // the entity has no keys, it's probably a complex type, which is illegal
+                // attempt to build filter using every property
+                var e = Expression.Parameter(typeof(TEntity), "e");
+                Expression orFilter = getComplexOrFilter(e);
+                Expression<Func<TEntity, bool>> expression = Expression.Lambda<Func<TEntity, bool>>(orFilter, e);
+                return expression;
+                
             }
             else if (!keys.Skip(1).Any())
             {
@@ -126,7 +132,7 @@ namespace DataModeling
             {
                 // there is a multi-part key, try to build a filter with conjunctions and disjunctions
                 var e = Expression.Parameter(typeof(TEntity), "e");
-                Expression orFilter = getOrFilter(e);
+                Expression orFilter = getCompoundOrFilter(e);
                 Expression<Func<TEntity, bool>> expression = Expression.Lambda<Func<TEntity, bool>>(orFilter, e);
                 return expression;
             }
@@ -136,23 +142,53 @@ namespace DataModeling
         {
             IObjectContextAdapter adapter = context;
             var objectContext = adapter.ObjectContext;
-            var stateManager = objectContext.ObjectStateManager;
+            var workspace = objectContext.MetadataWorkspace;
+            EntityType entity;
+            if (workspace.TryGetItem<EntityType>(typeof(TEntity).FullName, DataSpace.CSpace, out entity))
+            {
+                return entity.KeyMembers.Select(m => m.Name).ToArray();
+            }
+            return new string[0];
+        }
 
-            var keys = stateManager.GetObjectStateEntry(entities.First()).EntityKey.EntityKeyValues.Select(k => k.Key);
-            return keys;
+        private IEnumerable<PropertyInfo> getProperties()
+        {
+            IObjectContextAdapter adapter = context;
+            var objectContext = adapter.ObjectContext;
+            var workspace = objectContext.MetadataWorkspace;
+            Type entityType = typeof(TEntity);
+            string[] propertyNames = new string[0];
+            EntityType entity;
+            ComplexType complex;
+            if (workspace.TryGetItem<EntityType>(entityType.FullName, DataSpace.CSpace, out entity))
+            {
+                propertyNames = entity.KeyMembers.Select(m => m.Name).ToArray();
+            }
+            else if (workspace.TryGetItem<ComplexType>(entityType.FullName, DataSpace.CSpace, out complex))
+            {
+                propertyNames = complex.Properties.Select(m => m.Name).ToArray();
+            }
+            return propertyNames.Select(n => entityType.GetProperty(n)).ToArray();
+        }
+
+        private Expression getComplexOrFilter(ParameterExpression parameter)
+        {
+            var properties = getProperties();
+
+            Expression or = null;
+            foreach (TEntity entity in entities)
+            {
+                Expression and = getCompoundAndExpression(entity, properties, parameter);
+                or = or == null ? and : Expression.OrElse(or, and);
+            }
+            return or;
         }
 
         private Expression getContainsFilter(ParameterExpression parameter)
         {
-            IObjectContextAdapter adapter = context;
-            var objectContext = adapter.ObjectContext;
-            var stateManager = objectContext.ObjectStateManager;
-
-            var entries = entities.Select(e => stateManager.GetObjectStateEntry(e)).ToArray();
-            string keyName = entries.Select(e => e.EntityKey.EntityKeyValues.Select(k => k.Key).Single()).First();
-            PropertyInfo keyProperty = typeof(TEntity).GetProperty(keyName);
+            PropertyInfo keyProperty = getProperties().Single();
             var containsMethod = getContainsMethod(keyProperty);
-            Expression array = getKeyArrayExpressions(entries, keyProperty);
+            Expression array = getArrayOfKeysExpression(keyProperty);
             Expression member = Expression.MakeMemberAccess(parameter, keyProperty);
             Expression contains = Expression.Call(containsMethod, array, member);
             return contains;
@@ -175,51 +211,45 @@ namespace DataModeling
             return containsMethod;
         }
 
-        private Expression getKeyArrayExpressions(IEnumerable<ObjectStateEntry> entries, PropertyInfo keyProperty)
+        private Expression getArrayOfKeysExpression(PropertyInfo keyProperty)
         {
-            var values = from entry in entries
-                         let keyPairs = entry.EntityKey.EntityKeyValues
-                         let value = keyPairs.Select(p => p.Value).Single()
+            var values = from entity in entities
+                         let value = keyProperty.GetValue(entity, null)
                          select Expression.Constant(value);
             Expression array = Expression.NewArrayInit(keyProperty.PropertyType, values.ToArray());
             return array;
         }
 
-        private Expression getOrFilter(ParameterExpression parameter)
+        private Expression getCompoundOrFilter(ParameterExpression parameter)
         {
-            IObjectContextAdapter adapter = context;
-            var objectContext = adapter.ObjectContext;
-            var stateManager = objectContext.ObjectStateManager;
+            var properties = getProperties();
 
             Expression or = null;
             foreach (TEntity entity in entities)
             {
-                var entry = stateManager.GetObjectStateEntry(entity);
-                Expression and = getKeyComparisonExpression(entry, parameter);
+                Expression and = getCompoundAndExpression(entity, properties, parameter);
                 or = or == null ? and : Expression.OrElse(or, and);
             }
             return or;
         }
 
-        private static Expression getKeyComparisonExpression(ObjectStateEntry entry, Expression parameter)
+        private static Expression getCompoundAndExpression(TEntity entity, IEnumerable<PropertyInfo> properties, Expression parameter)
         {
-            var key = entry.EntityKey;
-
             Expression and = null;
-            foreach (var keyPart in key.EntityKeyValues)
+            foreach (var property in properties)
             {
-                Expression equal = getEqualExpression(parameter, keyPart);
+                object value = property.GetValue(entity, null);
+                Expression equal = getEqualExpression(parameter, property, value);
                 and = and == null ? equal : Expression.AndAlso(and, equal);
             }
             return and;
         }
 
-        private static Expression getEqualExpression(Expression parameter, EntityKeyMember keyPart)
+        private static Expression getEqualExpression(Expression parameter, PropertyInfo property, object value)
         {
-            PropertyInfo property = typeof(TEntity).GetProperty(keyPart.Key);
             Expression member = Expression.MakeMemberAccess(parameter, property);
-            Expression value = Expression.Constant(keyPart.Value);
-            Expression equal = Expression.Equal(member, value);
+            Expression constant = Expression.Constant(value);
+            Expression equal = Expression.Equal(member, constant);
             return equal;
         }
     }

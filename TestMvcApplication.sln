@@ -13,12 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Policies", "Policies\Polici
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceInterfaces.Tests", "ServiceInterfaces.Tests\ServiceInterfaces.Tests.csproj", "{282395B1-D2C1-40F9-86EE-DEC57F606F87}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EC83A24C-26DE-4F16-9904-E32604FD76E6}"
-	ProjectSection(SolutionItems) = preProject
-		Local.testsettings = Local.testsettings
-		TestMvcApplication.vsmdi = TestMvcApplication.vsmdi
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Policies.Tests", "Policies.Tests\Policies.Tests.csproj", "{8B194190-9104-44FF-8E6F-24570CEFEF1B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcUtilities", "MvcUtilities\MvcUtilities.csproj", "{6D334141-39BB-42F8-9E37-53C8F2B8614E}"
