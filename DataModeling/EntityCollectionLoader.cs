@@ -17,6 +17,7 @@ namespace DataModeling
     {
         private readonly DbContext context;
         private readonly IEnumerable<TEntity> entities;
+        private readonly EntityType entityType;
 
         internal EntityCollectionLoader(DbContext context, IEnumerable<TEntity> entities)
         {
@@ -32,8 +33,19 @@ namespace DataModeling
             {
                 throw new ArgumentException("Encountered a null entity.", "entities");
             }
+
+            IObjectContextAdapter adapter = context;
+            var objectContext = adapter.ObjectContext;
+            var workspace = objectContext.MetadataWorkspace;
+            EntityType entityType;
+            if (!workspace.TryGetItem<EntityType>(typeof(TEntity).FullName, DataSpace.CSpace, out entityType))
+            {
+                throw new NotSupportedException("The entity type isn't registered with the context or it is complex type.");
+            }
+
             this.context = context;
             this.entities = entities;
+            this.entityType = entityType;
         }
 
         public void Reload()
@@ -140,35 +152,13 @@ namespace DataModeling
 
         private IEnumerable<string> getKeyNames()
         {
-            IObjectContextAdapter adapter = context;
-            var objectContext = adapter.ObjectContext;
-            var workspace = objectContext.MetadataWorkspace;
-            EntityType entity;
-            if (workspace.TryGetItem<EntityType>(typeof(TEntity).FullName, DataSpace.CSpace, out entity))
-            {
-                return entity.KeyMembers.Select(m => m.Name).ToArray();
-            }
-            return new string[0];
+            return entityType.KeyMembers.Select(k => k.Name).ToArray();
         }
 
         private IEnumerable<PropertyInfo> getProperties()
         {
-            IObjectContextAdapter adapter = context;
-            var objectContext = adapter.ObjectContext;
-            var workspace = objectContext.MetadataWorkspace;
-            Type entityType = typeof(TEntity);
-            string[] propertyNames = new string[0];
-            EntityType entity;
-            ComplexType complex;
-            if (workspace.TryGetItem<EntityType>(entityType.FullName, DataSpace.CSpace, out entity))
-            {
-                propertyNames = entity.KeyMembers.Select(m => m.Name).ToArray();
-            }
-            else if (workspace.TryGetItem<ComplexType>(entityType.FullName, DataSpace.CSpace, out complex))
-            {
-                propertyNames = complex.Properties.Select(m => m.Name).ToArray();
-            }
-            return propertyNames.Select(n => entityType.GetProperty(n)).ToArray();
+            string[] propertyNames = entityType.KeyMembers.Select(m => m.Name).ToArray();
+            return propertyNames.Select(n => typeof(TEntity).GetProperty(n)).ToArray();
         }
 
         private Expression getComplexOrFilter(ParameterExpression parameter)
