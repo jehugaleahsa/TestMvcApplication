@@ -66,6 +66,10 @@
       <Project>{82518D3E-70F1-488C-816F-5596FA4A518B}</Project>
       <Name>DataModeling</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataObjects\DataObjects.csproj">
+      <Project>{01a2f933-7ed5-41dd-b9f9-048e9568696b}</Project>
+      <Name>DataObjects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ServiceInterfaces\ServiceInterfaces.csproj">
       <Project>{45c0c712-ecf5-41c8-989c-7d7f75e60b77}</Project>
       <Name>ServiceInterfaces</Name>

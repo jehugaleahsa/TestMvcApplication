@@ -38,9 +38,12 @@ namespace DataModeling
             var objectContext = adapter.ObjectContext;
             var workspace = objectContext.MetadataWorkspace;
             EntityType entityType;
-            if (!workspace.TryGetItem<EntityType>(typeof(TEntity).FullName, DataSpace.CSpace, out entityType))
+            if (!workspace.TryGetItem<EntityType>(typeof(TEntity).FullName, DataSpace.OSpace, out entityType))
             {
-                throw new NotSupportedException("The entity type isn't registered with the context or it is complex type.");
+                const string format = "The entity type {0} is not part of the model for the current context."
+                    + " Verify the entity is configured with the context and not a complex type.";
+                string message = String.Format(null, format, typeof(TEntity).Name);
+                throw new InvalidOperationException(message);
             }
 
             this.context = context;
