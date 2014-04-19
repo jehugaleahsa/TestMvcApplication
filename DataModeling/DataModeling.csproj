@@ -34,14 +34,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TestMvcApplication\bin\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net40\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
@@ -70,6 +71,10 @@
     <ProjectReference Include="..\Policies\Policies.csproj">
       <Project>{576AB159-E4F1-4E2E-A7A1-54166D3F974C}</Project>
       <Name>Policies</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QueryableInterceptors\QueryableInterceptors.csproj">
+      <Project>{d001fcae-749b-44a0-9965-e137afc04ab5}</Project>
+      <Name>QueryableInterceptors</Name>
     </ProjectReference>
     <ProjectReference Include="..\ServiceInterfaces\ServiceInterfaces.csproj">
       <Project>{45C0C712-ECF5-41C8-989C-7D7F75E60B77}</Project>

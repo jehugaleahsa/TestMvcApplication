@@ -4,6 +4,7 @@ using System.Linq;
 using DataObjects;
 using Policies;
 using ServiceInterfaces;
+using QueryableInterceptors;
 
 namespace DataModeling
 {
@@ -31,7 +32,7 @@ namespace DataModeling
         [ErrorMessage("Failed to get the customers.")]
         public IEnumerable<Customer> GetCustomers()
         {
-            return entities.Customers.ToList();
+            return entities.Customers.ToArray();
         }
 
         [Log]

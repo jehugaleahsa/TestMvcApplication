@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
-using System.Data.EntityClient;
 using DataObjects;
 using ServiceInterfaces;
 
