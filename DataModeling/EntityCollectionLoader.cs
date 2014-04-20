@@ -52,7 +52,7 @@ namespace DataModeling
 
         public void Reload()
         {
-            Expression<Func<TEntity, bool>> expression = getFilterExpression();
+            Expression<Func<TEntity, bool>> expression = getFilterExpression(null);
             if (expression == null)
             {
                 return;
@@ -65,7 +65,13 @@ namespace DataModeling
         public void Load<TRelation>(Expression<Func<TEntity, TRelation>> accessor)
             where TRelation : class
         {
-            Expression<Func<TEntity, bool>> expression = getFilterExpression();
+            Func<TEntity, bool> isLoaded = e =>
+            {
+                DbEntityEntry<TEntity> entry = context.Entry(e);
+                DbReferenceEntry<TEntity, TRelation> reference = entry.Reference(accessor);
+                return reference.IsLoaded;
+            };
+            Expression<Func<TEntity, bool>> expression = getFilterExpression(isLoaded);
             if (expression == null)
             {
                 return;
@@ -79,7 +85,13 @@ namespace DataModeling
         public void Load<TRelation>(Expression<Func<TEntity, ICollection<TRelation>>> accessor)
             where TRelation : class
         {
-            Expression<Func<TEntity, bool>> expression = getFilterExpression();
+            Func<TEntity, bool> isLoaded = e =>
+            {
+                DbEntityEntry<TEntity> entry = context.Entry(e);
+                DbCollectionEntry<TEntity, TRelation> collection = entry.Collection(accessor);
+                return collection.IsLoaded;
+            };
+            Expression<Func<TEntity, bool>> expression = getFilterExpression(isLoaded);
             if (expression == null)
             {
                 return;
@@ -94,7 +106,7 @@ namespace DataModeling
             where TRelation : class
         {
             IQueryable<TEntity> query = context.Set<TEntity>();
-            Expression<Func<TEntity, bool>> expression = getFilterExpression();
+            Expression<Func<TEntity, bool>> expression = getFilterExpression(null);
             if (expression != null)
             {
                 query = query.Where(expression);
@@ -106,7 +118,7 @@ namespace DataModeling
             where TRelation : class
         {
             IQueryable<TEntity> query = context.Set<TEntity>();
-            Expression<Func<TEntity, bool>> expression = getFilterExpression();
+            Expression<Func<TEntity, bool>> expression = getFilterExpression(null);
             if (expression != null)
             {
                 query = query.Where(expression);
@@ -115,11 +127,15 @@ namespace DataModeling
             return query.SelectMany(wrapped);
         }
 
-        private Expression<Func<TEntity, bool>> getFilterExpression()
+        private Expression<Func<TEntity, bool>> getFilterExpression(Func<TEntity, bool> isLoaded)
         {
             if (!entities.Any())
             {
                 return null;
+            }
+            if (isLoaded == null)
+            {
+                isLoaded = e => false;
             }
 
             var keys = getKeyNames();
@@ -129,7 +145,8 @@ namespace DataModeling
                 // the entity has no keys, it's probably a complex type, which is illegal
                 // attempt to build filter using every property
                 var e = Expression.Parameter(typeof(TEntity), "e");
-                Expression orFilter = getComplexOrFilter(e);
+                var properties = getAllProperties();
+                Expression orFilter = getCompoundOrFilter(e, properties, isLoaded);
                 Expression<Func<TEntity, bool>> expression = Expression.Lambda<Func<TEntity, bool>>(orFilter, e);
                 return expression;
                 
@@ -138,7 +155,8 @@ namespace DataModeling
             {
                 // the is a single key, so use a Contains filter
                 var e = Expression.Parameter(typeof(TEntity), "e");
-                Expression inFilter = getContainsFilter(e);
+                var keyProperty = getKeyProperties().Single();
+                Expression inFilter = getContainsFilter(e, keyProperty, isLoaded);
                 Expression<Func<TEntity, bool>> expression = Expression.Lambda<Func<TEntity, bool>>(inFilter, e);
                 return expression;
             }
@@ -146,7 +164,8 @@ namespace DataModeling
             {
                 // there is a multi-part key, try to build a filter with conjunctions and disjunctions
                 var e = Expression.Parameter(typeof(TEntity), "e");
-                Expression orFilter = getCompoundOrFilter(e);
+                var keyProperties = getKeyProperties();
+                Expression orFilter = getCompoundOrFilter(e, keyProperties, isLoaded);
                 Expression<Func<TEntity, bool>> expression = Expression.Lambda<Func<TEntity, bool>>(orFilter, e);
                 return expression;
             }
@@ -154,33 +173,25 @@ namespace DataModeling
 
         private IEnumerable<string> getKeyNames()
         {
-            return entityType.KeyMembers.Select(k => k.Name).ToArray();
+            return entityType.KeyMembers.Select(k => k.Name);
         }
 
-        private IEnumerable<PropertyInfo> getProperties()
+        private IEnumerable<PropertyInfo> getKeyProperties()
         {
             string[] propertyNames = entityType.KeyMembers.Select(m => m.Name).ToArray();
             return propertyNames.Select(n => typeof(TEntity).GetProperty(n)).ToArray();
         }
 
-        private Expression getComplexOrFilter(ParameterExpression parameter)
+        private IEnumerable<PropertyInfo> getAllProperties()
         {
-            var properties = getProperties();
-
-            Expression or = null;
-            foreach (TEntity entity in entities)
-            {
-                Expression and = getCompoundAndExpression(entity, properties, parameter);
-                or = or == null ? and : Expression.OrElse(or, and);
-            }
-            return or;
+            string[] propertyNames = entityType.Properties.Select(m => m.Name).ToArray();
+            return propertyNames.Select(n => typeof(TEntity).GetProperty(n)).ToArray();
         }
 
-        private Expression getContainsFilter(ParameterExpression parameter)
+        private Expression getContainsFilter(ParameterExpression parameter, PropertyInfo keyProperty, Func<TEntity, bool> isLoaded)
         {
-            PropertyInfo keyProperty = getProperties().Single();
             var containsMethod = getContainsMethod(keyProperty);
-            Expression array = getArrayOfKeysExpression(keyProperty);
+            Expression array = getArrayOfKeysExpression(keyProperty, isLoaded);
             Expression member = Expression.MakeMemberAccess(parameter, keyProperty);
             Expression contains = Expression.Call(containsMethod, array, member);
             return contains;
@@ -203,21 +214,26 @@ namespace DataModeling
             return containsMethod;
         }
 
-        private Expression getArrayOfKeysExpression(PropertyInfo keyProperty)
+        private Expression getArrayOfKeysExpression(PropertyInfo keyProperty, Func<TEntity, bool> isLoaded)
         {
             var values = from entity in entities
+                         where !isLoaded(entity)
                          let value = keyProperty.GetValue(entity, null)
                          select Expression.Constant(value);
-            Expression array = Expression.NewArrayInit(keyProperty.PropertyType, values.ToArray());
+            values = values.ToArray();
+            Expression array = Expression.NewArrayInit(keyProperty.PropertyType, values);
             return array;
         }
 
-        private Expression getCompoundOrFilter(ParameterExpression parameter)
+        private Expression getCompoundOrFilter(ParameterExpression parameter, IEnumerable<PropertyInfo> properties, Func<TEntity, bool> isLoaded)
         {
-            var properties = getProperties();
-
             Expression or = null;
-            foreach (TEntity entity in entities)
+            var missing = entities.Where(e => !isLoaded(e)).ToArray();
+            if (!missing.Any())
+            {
+                return Expression.Constant(false);
+            }
+            foreach (TEntity entity in missing)
             {
                 Expression and = getCompoundAndExpression(entity, properties, parameter);
                 or = or == null ? and : Expression.OrElse(or, and);
