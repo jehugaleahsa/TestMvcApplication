@@ -66,7 +66,19 @@ namespace DataModeling
             return new EntityLoader<TEntity>(context, entity);
         }
 
-        public IEntityLoader<TEntity> GetLoaderForCollection<TEntity>(IEnumerable<TEntity> entities)
+        public IEntityLoader<TEntity> GetLoader<TEntity>(params TEntity[] entities)
+            where TEntity : class
+        {
+            return new EntityCollectionLoader<TEntity>(context, entities);
+        }
+
+        public IEntityLoader<TEntity> GetLoader<TEntity>(IEnumerable<TEntity> entities)
+            where TEntity : class
+        {
+            return new EntityCollectionLoader<TEntity>(context, entities);
+        }
+
+        public IEntityLoader<TEntity> GetLoader<TEntity>(ICollection<TEntity> entities)
             where TEntity : class
         {
             return new EntityCollectionLoader<TEntity>(context, entities);

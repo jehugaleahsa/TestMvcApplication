@@ -75,10 +75,7 @@ namespace DataModeling
             {
                 return;
             }
-            context.Set<TEntity>()
-                .Where(expression)
-                .Select(accessor)
-                .Load();
+            context.Set<TEntity>().Where(expression).Join(context.Set<TRelation>(), accessor, r => r, (e, r) => r).Load();
         }
 
         public void Load<TRelation>(Expression<Func<TEntity, ICollection<TRelation>>> accessor)
@@ -109,9 +106,7 @@ namespace DataModeling
             {
                 return Enumerable.Empty<TRelation>().AsQueryable();
             }
-            return context.Set<TEntity>()
-                .Where(expression)
-                .Select(accessor);
+            return context.Set<TEntity>().Where(expression).Join(context.Set<TRelation>(), accessor, r => r, (e, r) => r);
         }
 
         public IQueryable<TRelation> LoadQuery<TRelation>(Expression<Func<TEntity, ICollection<TRelation>>> accessor)
