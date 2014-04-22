@@ -77,7 +77,7 @@ namespace DataModeling
             }
             context.Set<TEntity>()
                 .Where(expression)
-                .Include(accessor)
+                .Select(accessor)
                 .Load();
         }
 
@@ -97,7 +97,7 @@ namespace DataModeling
             }
             context.Set<TEntity>()
                 .Where(expression)
-                .Include(accessor)
+                .Select(accessor)
                 .Load();
         }
 
@@ -130,23 +130,23 @@ namespace DataModeling
 
         private Expression<Func<TEntity, bool>> getFilterExpression(Func<TEntity, bool> isLoaded)
         {
-            var missing = entities;
+            var unloaded = entities;
             if (isLoaded != null)
             {
-                missing = missing.Where(e => !isLoaded(e)).ToArray();
+                unloaded = unloaded.Where(e => !isLoaded(e)).ToArray();
             }
-            if (!missing.Any())
+            if (!unloaded.Any())
             {
                 return null;
             }
 
-            ParameterExpression parameter = Expression.Parameter(typeof(TEntity), "e");
-            Expression filter = getFilter(missing, parameter);
-            Expression<Func<TEntity, bool>> expression = Expression.Lambda<Func<TEntity, bool>>(filter, parameter);
+            ParameterExpression eParameter = Expression.Parameter(typeof(TEntity), "e");
+            Expression filter = getFilter(unloaded, eParameter);
+            Expression<Func<TEntity, bool>> expression = Expression.Lambda<Func<TEntity, bool>>(filter, eParameter);
             return expression;
         }
 
-        private Expression getFilter(IEnumerable<TEntity> unloaded, ParameterExpression parameter)
+        private Expression getFilter(IEnumerable<TEntity> unloaded, ParameterExpression eParameter)
         {
             int keyCount = entityType.KeyMembers.Count;
             if (keyCount == 0)
@@ -154,20 +154,20 @@ namespace DataModeling
                 // the entity has no keys, it's probably a complex type, which is illegal
                 // attempt to build filter using every property
                 var properties = getAllProperties();
-                return getCompoundOrFilter(parameter, properties, unloaded);
+                return getCompoundOrFilter(eParameter, properties, unloaded);
 
             }
             else if (keyCount == 1)
             {
                 // the is a single key, so use a Contains filter
                 var keyProperty = getKeyProperties().Single();
-                return getContainsFilter(parameter, keyProperty, unloaded);
+                return getContainsFilter(eParameter, keyProperty, unloaded);
             }
             else
             {
                 // there is a multi-part key, try to build a filter with conjunctions and disjunctions
                 var keyProperties = getKeyProperties();
-                return getCompoundOrFilter(parameter, keyProperties, unloaded);
+                return getCompoundOrFilter(eParameter, keyProperties, unloaded);
             }
         }
 
@@ -184,8 +184,8 @@ namespace DataModeling
         }
 
         private static Expression getContainsFilter(
-            ParameterExpression parameter, 
-            PropertyInfo keyProperty, 
+            ParameterExpression parameter,
+            PropertyInfo keyProperty,
             IEnumerable<TEntity> entities)
         {
             var containsMethod = getContainsMethod(keyProperty);
@@ -223,8 +223,8 @@ namespace DataModeling
         }
 
         private static Expression getCompoundOrFilter(
-            ParameterExpression parameter, 
-            IEnumerable<PropertyInfo> properties, 
+            ParameterExpression parameter,
+            IEnumerable<PropertyInfo> properties,
             IEnumerable<TEntity> entities)
         {
             Expression or = null;
@@ -237,8 +237,8 @@ namespace DataModeling
         }
 
         private static Expression getCompoundAndExpression(
-            TEntity entity, 
-            IEnumerable<PropertyInfo> properties, 
+            TEntity entity,
+            IEnumerable<PropertyInfo> properties,
             Expression parameter)
         {
             Expression and = null;
