@@ -130,23 +130,23 @@ namespace DataModeling
 
         private Expression<Func<TEntity, bool>> getFilterExpression(Func<TEntity, bool> isLoaded)
         {
-            var unloaded = entities;
+            var missing = entities;
             if (isLoaded != null)
             {
-                unloaded = unloaded.Where(isLoaded).ToArray();
+                missing = missing.Where(e => !isLoaded(e)).ToArray();
             }
-            if (!unloaded.Any())
+            if (!missing.Any())
             {
                 return null;
             }
 
-            ParameterExpression e = Expression.Parameter(typeof(TEntity), "e");
-            Expression filter = getFilter(unloaded, e);
-            Expression<Func<TEntity, bool>> expression = Expression.Lambda<Func<TEntity, bool>>(filter, e);
+            ParameterExpression parameter = Expression.Parameter(typeof(TEntity), "e");
+            Expression filter = getFilter(missing, parameter);
+            Expression<Func<TEntity, bool>> expression = Expression.Lambda<Func<TEntity, bool>>(filter, parameter);
             return expression;
         }
 
-        private Expression getFilter(IEnumerable<TEntity> unloaded, ParameterExpression e)
+        private Expression getFilter(IEnumerable<TEntity> unloaded, ParameterExpression parameter)
         {
             int keyCount = entityType.KeyMembers.Count;
             if (keyCount == 0)
@@ -154,20 +154,20 @@ namespace DataModeling
                 // the entity has no keys, it's probably a complex type, which is illegal
                 // attempt to build filter using every property
                 var properties = getAllProperties();
-                return getCompoundOrFilter(e, properties, unloaded);
+                return getCompoundOrFilter(parameter, properties, unloaded);
 
             }
             else if (keyCount == 1)
             {
                 // the is a single key, so use a Contains filter
                 var keyProperty = getKeyProperties().Single();
-                return getContainsFilter(e, keyProperty, unloaded);
+                return getContainsFilter(parameter, keyProperty, unloaded);
             }
             else
             {
                 // there is a multi-part key, try to build a filter with conjunctions and disjunctions
                 var keyProperties = getKeyProperties();
-                return getCompoundOrFilter(e, keyProperties, unloaded);
+                return getCompoundOrFilter(parameter, keyProperties, unloaded);
             }
         }
 
