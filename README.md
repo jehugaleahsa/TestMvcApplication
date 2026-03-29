@@ -1,3 +1,5 @@
+> *Archived 2026-03-28*: This project is very old and will no longer be maintained.
+
 # TestMvcApplication
 
 A repository for ASP.NET MVC patterns and best practices.
